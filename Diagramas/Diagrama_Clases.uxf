@@ -1,0 +1,54 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLClass</id><coordinates><x>240</x><y>100</y><w>210</w><h>120</h></coordinates><panel_attributes>&lt;&lt;Cliente&gt;&gt;
+
+--
+- id_cliente  String  
+- nombre_completo  String
+- telefono   String     
+- email     String
+--</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>790</x><y>550</y><w>210</w><h>120</h></coordinates><panel_attributes>&lt;&lt;Perfume&gt;&gt;
+
+--
+- id_perfume   String
+- nombre_perfume   String
+- precio    Double
+- publico_objetivo   String
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>520</x><y>690</y><w>210</w><h>120</h></coordinates><panel_attributes>&lt;&lt;Stock&gt;&gt;
+
+--
+- id_stock  String
+- localizacion_almacen  String
+- id_perfume (FK)  String
+- id_pedido (FK)   Integer
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>620</x><y>90</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;Empleado&gt;&gt;
+
+--
+- id_empleado   String
+- passwd    String 
+- nombre_completo   String
+- telefono    String
+- email     String
+- cargo  String
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>420</x><y>380</y><w>210</w><h>150</h></coordinates><panel_attributes>&lt;&lt;Pedidos&gt;&gt;
+
+--
+- id_pedido   Integer
+- cantidad_unidades   Integer
+- total_precio    Double
+- estado     String
+- id_cliente (FK)  String
+- id_empleado(FK)  String
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>210</y><w>120</w><h>280</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=*
+</panel_attributes><additional_attributes>10;10;10;250;100;250</additional_attributes></element><element><id>Relation</id><coordinates><x>620</x><y>230</y><w>140</w><h>260</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=*
+</panel_attributes><additional_attributes>110;10;110;230;10;230</additional_attributes></element><element><id>Relation</id><coordinates><x>460</x><y>520</y><w>80</w><h>280</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=*
+</panel_attributes><additional_attributes>10;10;10;250;60;250</additional_attributes></element><element><id>Relation</id><coordinates><x>720</x><y>660</y><w>190</w><h>120</h></coordinates><panel_attributes>lt=-
+m1=1</panel_attributes><additional_attributes>160;10;160;100;10;100</additional_attributes></element></diagram>
