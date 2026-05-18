@@ -1,0 +1,119 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level>
+
+<!-- ═══════════════════════════════════════════════ ENTIDADES ══ -->
+
+<!-- CLIENTE -->
+<element><id>UMLClass</id><coordinates><x>0</x><y>200</y><w>220</w><h>140</h></coordinates>
+<panel_attributes>*cliente*
+--
+PK  id_cliente : VARCHAR(20)
+    nombre_completo : VARCHAR(80)
+    telefono : VARCHAR(20)
+    email : VARCHAR(80)
+--</panel_attributes><additional_attributes></additional_attributes></element>
+
+<!-- EMPLEADO -->
+<element><id>UMLClass</id><coordinates><x>780</x><y>200</y><w>240</w><h>160</h></coordinates>
+<panel_attributes>*empleado*
+--
+PK  id_empleado : VARCHAR(20)
+    passwd : VARCHAR(255)
+    nombre_completo : VARCHAR(80)
+    telefono : VARCHAR(20)
+    email : VARCHAR(80)
+    cargo : VARCHAR(50)
+--</panel_attributes><additional_attributes></additional_attributes></element>
+
+<!-- PEDIDO -->
+<element><id>UMLClass</id><coordinates><x>290</x><y>200</y><w>240</w><h>140</h></coordinates>
+<panel_attributes>*pedido*
+--
+PK  id_pedido : INTEGER (AI)
+FK  id_cliente : VARCHAR(20)
+FK  id_empleado : VARCHAR(20)
+    fecha : DATETIME
+    estado : VARCHAR(25)
+--</panel_attributes><additional_attributes></additional_attributes></element>
+
+<!-- LINEA_PEDIDO -->
+<element><id>UMLClass</id><coordinates><x>290</x><y>450</y><w>260</w><h>150</h></coordinates>
+<panel_attributes>*linea_pedido*
+--
+PK,FK  id_pedido : INTEGER
+PK,FK  id_perfume : VARCHAR(20)
+       cantidad : INTEGER
+       precio_unitario : DECIMAL(10,2)
+       subtotal : DECIMAL(10,2) [generado]
+--</panel_attributes><additional_attributes></additional_attributes></element>
+
+<!-- PERFUME -->
+<element><id>UMLClass</id><coordinates><x>290</x><y>720</y><w>260</w><h>180</h></coordinates>
+<panel_attributes>*perfume*
+--
+PK  id_perfume : VARCHAR(20)
+    nombre_perfume : VARCHAR(50)
+    marca : VARCHAR(50)
+    descripcion : TEXT
+    precio : DECIMAL(10,2)
+    publico_objetivo : VARCHAR(15)
+    imagen_url : VARCHAR(255)
+--</panel_attributes><additional_attributes></additional_attributes></element>
+
+<!-- STOCK -->
+<element><id>UMLClass</id><coordinates><x>700</x><y>720</y><w>240</w><h>130</h></coordinates>
+<panel_attributes>*stock*
+--
+PK  id_stock : VARCHAR(20)
+FK  id_perfume : VARCHAR(20)
+    cantidad : INTEGER
+    localizacion : VARCHAR(40)
+--</panel_attributes><additional_attributes></additional_attributes></element>
+
+<!-- ═══════════════════════════════════════════════ RELACIONES ══ -->
+
+<!-- cliente 1 ── * pedido -->
+<element><id>Relation</id><coordinates><x>210</x><y>260</y><w>100</w><h>30</h></coordinates>
+<panel_attributes>lt=-
+m1=1
+m2=*</panel_attributes><additional_attributes>10;10;80;10</additional_attributes></element>
+
+<!-- empleado 1 ── * pedido -->
+<element><id>Relation</id><coordinates><x>520</x><y>260</y><w>280</w><h>30</h></coordinates>
+<panel_attributes>lt=-
+m1=*
+m2=1</panel_attributes><additional_attributes>10;10;260;10</additional_attributes></element>
+
+<!-- pedido 1 ── * linea_pedido -->
+<element><id>Relation</id><coordinates><x>400</x><y>330</y><w>30</w><h>140</h></coordinates>
+<panel_attributes>lt=-
+m1=1
+m2=*</panel_attributes><additional_attributes>10;10;10;120</additional_attributes></element>
+
+<!-- linea_pedido * ── 1 perfume -->
+<element><id>Relation</id><coordinates><x>400</x><y>590</y><w>30</w><h>150</h></coordinates>
+<panel_attributes>lt=-
+m1=*
+m2=1</panel_attributes><additional_attributes>10;10;10;130</additional_attributes></element>
+
+<!-- perfume 1 ── * stock -->
+<element><id>Relation</id><coordinates><x>540</x><y>790</y><w>180</w><h>30</h></coordinates>
+<panel_attributes>lt=-
+m1=1
+m2=*</panel_attributes><additional_attributes>10;10;160;10</additional_attributes></element>
+
+<!-- ═══════════════════════════════════════════════ NOTAS ══ -->
+<element><id>UMLNote</id><coordinates><x>0</x><y>720</y><w>240</w><h>100</h></coordinates>
+<panel_attributes>Localización asignada
+automáticamente por Java
+según publico_objetivo:
+Mujer→Estante A
+Hombre→Estante B
+Unisex→Almacén Norte</panel_attributes><additional_attributes></additional_attributes></element>
+
+<element><id>UMLNote</id><coordinates><x>700</x><y>450</y><w>240</w><h>80</h></coordinates>
+<panel_attributes>subtotal es columna
+GENERATED: calculada por
+MySQL automáticamente
+(cantidad × precio_unitario)</panel_attributes><additional_attributes></additional_attributes></element>
+
+</diagram>
