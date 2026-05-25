@@ -1,0 +1,15 @@
+# Compilados Java
+bin/
+*.class
+
+# Eclipse
+.metadata/
+
+# IntelliJ
+.idea/
+
+# Maven
+target/
+
+# Logs
+*.log
