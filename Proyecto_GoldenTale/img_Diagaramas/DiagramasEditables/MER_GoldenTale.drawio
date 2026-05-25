@@ -1,0 +1,428 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="FZUWZw-Rni0t1cQ4_Z9X" name="Página-1">
+    <mxGraphModel dx="1837" dy="2041" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="E_CLI" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;" value="Cliente" vertex="1">
+          <mxGeometry height="50" width="130" x="160" y="467.5" as="geometry" />
+        </mxCell>
+        <mxCell id="E_EMP" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;" value="Empleado" vertex="1">
+          <mxGeometry height="50" width="130" x="1000" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="E_PED" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;" value="Pedido" vertex="1">
+          <mxGeometry height="50" width="130" x="600" y="403" as="geometry" />
+        </mxCell>
+        <mxCell id="E_PAG" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;" value="Pago" vertex="1">
+          <mxGeometry height="50" width="130" x="280" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="E_LP" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;" value="Linea_pedido" vertex="1">
+          <mxGeometry height="50" width="130" x="610" y="687.5" as="geometry" />
+        </mxCell>
+        <mxCell id="E_PER" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;" value="Perfume" vertex="1">
+          <mxGeometry height="50" width="130" x="1100" y="651" as="geometry" />
+        </mxCell>
+        <mxCell id="E_STK" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1;fillColor=#ffffff;strokeColor=#000000;" value="Stock" vertex="1">
+          <mxGeometry height="50" width="130" x="490" y="940" as="geometry" />
+        </mxCell>
+        <mxCell id="R_REA" parent="1" style="shape=mxgraph.erd.relationship;whiteSpace=wrap;html=1;fontSize=12;fontStyle=2;fillColor=#ffffff;strokeColor=#000000;" value="Realiza" vertex="1">
+          <mxGeometry height="50" width="110" x="390" y="483" as="geometry" />
+        </mxCell>
+        <mxCell id="R_GES" parent="1" style="shape=mxgraph.erd.relationship;whiteSpace=wrap;html=1;fontSize=12;fontStyle=2;fillColor=#ffffff;strokeColor=#000000;" value="Gestiona" vertex="1">
+          <mxGeometry height="50" width="110" x="1010" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="R_ABO" parent="1" style="shape=mxgraph.erd.relationship;whiteSpace=wrap;html=1;fontSize=12;fontStyle=2;fillColor=#ffffff;strokeColor=#000000;" value="Abona" vertex="1">
+          <mxGeometry height="50" width="110" x="290" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="R_GEN" parent="1" style="shape=mxgraph.erd.relationship;whiteSpace=wrap;html=1;fontSize=12;fontStyle=2;fillColor=#ffffff;strokeColor=#000000;" value="Genera" vertex="1">
+          <mxGeometry height="50" width="110" x="500" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="R_CON" parent="1" style="shape=mxgraph.erd.relationship;whiteSpace=wrap;html=1;fontSize=12;fontStyle=2;fillColor=#ffffff;strokeColor=#000000;" value="Contiene" vertex="1">
+          <mxGeometry height="50" width="110" x="620" y="567" as="geometry" />
+        </mxCell>
+        <mxCell id="R_INC" parent="1" style="shape=mxgraph.erd.relationship;whiteSpace=wrap;html=1;fontSize=12;fontStyle=2;fillColor=#ffffff;strokeColor=#000000;" value="Incluye" vertex="1">
+          <mxGeometry height="50" width="110" x="820" y="694.5" as="geometry" />
+        </mxCell>
+        <mxCell id="R_HAY" parent="1" style="shape=mxgraph.erd.relationship;whiteSpace=wrap;html=1;fontSize=12;fontStyle=2;fillColor=#ffffff;strokeColor=#000000;" value="Hay" vertex="1">
+          <mxGeometry height="50" width="110" x="920" y="951" as="geometry" />
+        </mxCell>
+        <mxCell id="L1" edge="1" parent="1" source="E_CLI" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="R_REA" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="L2" edge="1" parent="1" source="R_REA" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="E_PED" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="L3" edge="1" parent="1" source="E_EMP" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="R_GES" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="L4" edge="1" parent="1" source="R_GES" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;entryX=0.65;entryY=-0.013;entryDx=0;entryDy=0;entryPerimeter=0;" target="E_PED" value="N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1065" y="260" />
+              <mxPoint x="685" y="260" />
+            </Array>
+            <mxPoint x="810" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L5" edge="1" parent="1" source="E_CLI" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="R_ABO" value="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="350" y="482" />
+              <mxPoint x="350" y="330" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L6" edge="1" parent="1" source="R_ABO" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="E_PAG" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="L7" edge="1" parent="1" source="E_PED" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="R_GEN" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="L8" edge="1" parent="1" source="R_GEN" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="E_PAG" value="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="255" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L9" edge="1" parent="1" source="E_PED" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="R_CON" value="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="690" y="540" />
+              <mxPoint x="690" y="540" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L10" edge="1" parent="1" source="R_CON" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="E_LP" value="N">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="675" y="644.5000000000005" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L11" edge="1" parent="1" source="E_LP" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="R_INC" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="L12" edge="1" parent="1" source="R_INC" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="E_PER" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="L13" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" value="N">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="920" y="960" />
+            </Array>
+            <mxPoint x="620" y="960" as="sourcePoint" />
+            <mxPoint x="920" y="960" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="L14" edge="1" parent="1" source="R_HAY" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;" target="E_PER" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="L15" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;fontSize=14;fontStyle=1;dashed=1;entryX=1;entryY=1;entryDx=0;entryDy=0;" target="E_PAG" value="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="410" y="73" />
+            </Array>
+            <mxPoint x="1000" y="72.5" as="sourcePoint" />
+            <mxPoint x="410" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_CLI1" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fontStyle=4;fillColor=#ffffff;strokeColor=#000000;" value="PK_id_cliente" vertex="1">
+          <mxGeometry height="40" width="120" x="10" y="353" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_CLI1" edge="1" parent="1" source="A_CLI1" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_CLI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_CLI2" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="nombre_cliente" vertex="1">
+          <mxGeometry height="40" width="120" x="10" y="413" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_CLI2" edge="1" parent="1" source="A_CLI2" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_CLI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_CLI3" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="apellido_cliente" vertex="1">
+          <mxGeometry height="40" width="120" x="10" y="473" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_CLI3" edge="1" parent="1" source="A_CLI3" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_CLI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_CLI4" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="direccion_cliente" vertex="1">
+          <mxGeometry height="40" width="120" x="10" y="533" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_CLI4" edge="1" parent="1" source="A_CLI4" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_CLI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_CLI5" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="email_cliente" vertex="1">
+          <mxGeometry height="40" width="120" x="10" y="593" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_CLI5" edge="1" parent="1" source="A_CLI5" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_CLI">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_CLI6" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="telf_cliente" vertex="1">
+          <mxGeometry height="40" width="120" x="10" y="644" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_CLI6" edge="1" parent="1" source="A_CLI6" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_CLI">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="225" y="650.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_EMP1" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fontStyle=4;fillColor=#ffffff;strokeColor=#000000;" value="PK_id_empleado" vertex="1">
+          <mxGeometry height="40" width="130" x="1220" y="5" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_EMP1" edge="1" parent="1" source="A_EMP1" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="E_EMP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_EMP2" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="nombre_empleado" vertex="1">
+          <mxGeometry height="40" width="130" x="1220" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_EMP2" edge="1" parent="1" source="A_EMP2" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_EMP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_EMP3" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="apellido_empleado" vertex="1">
+          <mxGeometry height="40" width="130" x="1220" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_EMP3" edge="1" parent="1" source="A_EMP3" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="E_EMP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_EMP4" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="email_empleado" vertex="1">
+          <mxGeometry height="40" width="130" x="1180" y="-140" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_EMP4" edge="1" parent="1" source="A_EMP4" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="E_EMP">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1210" y="-10" />
+              <mxPoint x="1065" y="-10" />
+            </Array>
+            <mxPoint x="1098" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_EMP5" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="telf_empleado" vertex="1">
+          <mxGeometry height="40" width="120" x="930" y="-140" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_EMP5" edge="1" parent="1" source="A_EMP5" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_EMP">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="990" y="-10" />
+              <mxPoint x="1065" y="-10" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_EMP6" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="cargo_empleado" vertex="1">
+          <mxGeometry height="40" width="120" x="800" y="-140" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_EMP6" edge="1" parent="1" source="A_EMP6" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_EMP">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="-10" />
+              <mxPoint x="1065" y="-10" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_EMP7" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="passwd_empleado" vertex="1">
+          <mxGeometry height="40" width="120" x="670" y="-140" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_EMP7" edge="1" parent="1" source="A_EMP7" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_EMP">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="715" y="-10" />
+              <mxPoint x="1065" y="-10" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_EMP8" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="direccion_empleado" vertex="1">
+          <mxGeometry height="40" width="120" x="1050" y="-140" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_EMP8" edge="1" parent="1" source="A_EMP8" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_EMP">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1110" y="-10" />
+              <mxPoint x="1065" y="-10" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_PAG1" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fontStyle=4;fillColor=#ffffff;strokeColor=#000000;" value="PK_id_pago" vertex="1">
+          <mxGeometry height="40" width="110" x="70" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PAG1" edge="1" parent="1" source="A_PAG1" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PAG">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PAG2" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="total" vertex="1">
+          <mxGeometry height="40" width="90" x="80" y="5" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PAG2" edge="1" parent="1" source="A_PAG2" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PAG">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PAG3" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="forma_pago" vertex="1">
+          <mxGeometry height="40" width="100" x="70" y="-45" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PAG3" edge="1" parent="1" source="A_PAG3" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" target="E_PAG">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="170" y="-20" />
+              <mxPoint x="345" y="-20" />
+            </Array>
+            <mxPoint x="200" y="-20" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_PAG4" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="FK_id_pedido" vertex="1">
+          <mxGeometry height="40" width="110" x="70" y="-95" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PAG4" edge="1" parent="1" source="A_PAG4" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PAG">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PED1" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fontStyle=4;fillColor=#ffffff;strokeColor=#000000;" value="PK_id_pedido" vertex="1">
+          <mxGeometry height="40" width="120" x="770" y="353" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PED1" edge="1" parent="1" source="A_PED1" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="E_PED">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PED2" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="FK_id_cliente" vertex="1">
+          <mxGeometry height="40" width="120" x="770" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PED2" edge="1" parent="1" source="A_PED2" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PED">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PED3" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="FK_id_empleado" vertex="1">
+          <mxGeometry height="40" width="120" x="770" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PED3" edge="1" parent="1" source="A_PED3" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PED">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PED4" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="fecha_pedido" vertex="1">
+          <mxGeometry height="40" width="120" x="770" y="493" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PED4" edge="1" parent="1" source="A_PED4" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="E_PED">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="750" y="523" />
+              <mxPoint x="750" y="428" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_PED5" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="estado_pedido" vertex="1">
+          <mxGeometry height="40" width="120" x="770" y="310" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PED5" edge="1" parent="1" source="A_PED5" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="E_PED">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_LP1" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fontStyle=4;fillColor=#ffffff;strokeColor=#000000;" value="PK_FK_id_pedido" vertex="1">
+          <mxGeometry height="40" width="130" x="430" y="647.5" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_LP1" edge="1" parent="1" source="A_LP1" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_LP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_LP2" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fontStyle=4;fillColor=#ffffff;strokeColor=#000000;" value="PK_FK_id_perfume" vertex="1">
+          <mxGeometry height="40" width="130" x="430" y="697.5" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_LP2" edge="1" parent="1" source="A_LP2" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_LP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_LP3" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="cantidad" vertex="1">
+          <mxGeometry height="40" width="110" x="430" y="747.5" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_LP3" edge="1" parent="1" source="A_LP3" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_LP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_LP4" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="precio_unitario" vertex="1">
+          <mxGeometry height="40" width="120" x="430" y="797.5" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_LP4" edge="1" parent="1" source="A_LP4" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_LP">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_LP5" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fontStyle=2;fillColor=#f5f5f5;strokeColor=#000000;" value="subtotal *" vertex="1">
+          <mxGeometry height="40" width="110" x="290" y="728.5" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_LP5" edge="1" parent="1" source="A_LP5" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_LP">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="660" y="749" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="A_PER1" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fontStyle=4;fillColor=#ffffff;strokeColor=#000000;" value="PK_id_perfume" vertex="1">
+          <mxGeometry height="40" width="130" x="1270" y="571" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PER1" edge="1" parent="1" source="A_PER1" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PER2" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="nombre_perfume" vertex="1">
+          <mxGeometry height="40" width="130" x="1270" y="621" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PER2" edge="1" parent="1" source="A_PER2" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PER3" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="marca_perfume" vertex="1">
+          <mxGeometry height="40" width="130" x="1270" y="671" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PER3" edge="1" parent="1" source="A_PER3" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PER4" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="categoria_perfume" vertex="1">
+          <mxGeometry height="40" width="130" x="1270" y="721" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PER4" edge="1" parent="1" source="A_PER4" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PER5" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="descripcion_perfume" vertex="1">
+          <mxGeometry height="40" width="140" x="1270" y="771" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PER5" edge="1" parent="1" source="A_PER5" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PER6" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="precio_perfume" vertex="1">
+          <mxGeometry height="40" width="120" x="1265" y="473" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PER6" edge="1" parent="1" source="A_PER6" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PER7" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="ml_perfume" vertex="1">
+          <mxGeometry height="40" width="110" x="1280" y="871" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PER7" edge="1" parent="1" source="A_PER7" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PER8" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="publico_objetivo" vertex="1">
+          <mxGeometry height="40" width="120" x="1270" y="821" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PER8" edge="1" parent="1" source="A_PER8" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_PER9" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="imagen_url" vertex="1">
+          <mxGeometry height="40" width="110" x="1270" y="521" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_PER9" edge="1" parent="1" source="A_PER9" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_PER">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_STK1" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fontStyle=4;fillColor=#ffffff;strokeColor=#000000;" value="PK_id_stock" vertex="1">
+          <mxGeometry height="40" width="110" x="595" y="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_STK1" edge="1" parent="1" source="A_STK1" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_STK">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_STK2" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="FK_id_perfume" vertex="1">
+          <mxGeometry height="40" width="110" x="350" y="995" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_STK2" edge="1" parent="1" source="A_STK2" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;exitX=1;exitY=0.75;exitDx=0;exitDy=0;" target="E_STK">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_STK3" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="cantidad_stock" vertex="1">
+          <mxGeometry height="40" width="110" x="400" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_STK3" edge="1" parent="1" source="A_STK3" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_STK">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="A_STK4" parent="1" style="shape=mxgraph.erd.attribute;whiteSpace=wrap;html=1;fontSize=10;fillColor=#ffffff;strokeColor=#000000;" value="localizacion" vertex="1">
+          <mxGeometry height="40" width="110" x="520" y="1090" as="geometry" />
+        </mxCell>
+        <mxCell id="LA_STK4" edge="1" parent="1" source="A_STK4" style="edgeStyle=orthogonalEdgeStyle;endArrow=none;" target="E_STK">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="NOTA" parent="1" style="text;html=1;strokeColor=#666666;fillColor=#f5f5f5;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=10;fontColor=#333333;" value="* subtotal: atributo derivado&#xa;(calculado automáticamente&#xa;por MySQL: cantidad × precio_unitario)" vertex="1">
+          <mxGeometry height="60" width="220" x="190" y="777.5" as="geometry" />
+        </mxCell>
+        <mxCell id="nbpfITJMXmGekxlQHmQ6-4" edge="1" parent="1" source="E_PED" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="E_PED">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
