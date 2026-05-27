@@ -1,4 +1,4 @@
-package com.goldentale.vistaEmpleado;
+	package com.goldentale.vistaEmpleado;
 
 import javax.swing.*;
 import java.awt.*;
