@@ -1,5 +1,5 @@
 package com.goldentale.model;
 
-public class Empleado {
+public class Usuario {
 
 }
