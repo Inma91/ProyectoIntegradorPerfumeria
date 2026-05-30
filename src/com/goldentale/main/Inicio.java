@@ -3,6 +3,7 @@ package com.goldentale.main;
 import java.awt.EventQueue;
 
 import com.goldentale.controlador.Controlador;
+import com.goldentale.vistaEmpleado.AnadirPerfumeVista;
 import com.goldentale.vistaEmpleado.LoginVista;
 import com.goldentale.vistaEmpleado.VistaPrincipal;
 
@@ -23,7 +24,7 @@ public class Inicio {
 				//EmpleadoDashboardVista empdv = new EmpleadoDashboardVista();
 				
 				//Vista para que el empleado añada un nuevo perfume
-				//AniadirPerfumeVista apv = new AniadirPerfumeVista(); 
+				AnadirPerfumeVista apv = new AnadirPerfumeVista(); 
 				
 				//Vista para que el empleado modifique los datos de algún perfume
 				//ModificarPerfumeVista mpv = new ModificarPerfumeVista();
@@ -38,12 +39,12 @@ public class Inicio {
 				//ClienteDashboardVista clidv = new ClienteDashboardVista();
 				
 				//Controlador c = new Controlador (vp, lgv, empdv, apv, mpv, sv, gvp);
-				Controlador c = new Controlador (vp, lgv);
+				Controlador c = new Controlador (vp, lgv, apv);
 				
 				vp.setControlador(c); 
 				lgv.setControlador(c); 
 				//empdv.setControlador(c);
-				//apv.setControlador(c); 
+				apv.setControlador(c); 
 				//mpv.setControlador(c);
 				//sv.setControlador(c);
 				//gpv.setControlador(c);
