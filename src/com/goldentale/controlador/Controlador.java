@@ -2,7 +2,6 @@ package com.goldentale.controlador;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import com.goldentale.vistaPrincipalLyR.VLogin;
 import com.goldentale.vistaPrincipalLyR.VPGoldenTale;
 import com.goldentale.vistaPrincipalLyR.VRegistroUsuario;
@@ -27,14 +26,13 @@ public class Controlador implements ActionListener {
 
 		if (vpgt != null) {
 
-			if (ev.getSource().equals(vpgt.getBtnInicio()) ||
-				ev.getSource().equals(vpgt.getBtnLateralLogin())) {
+			if (ev.getSource().equals(vpgt.getBtnInicio()) || ev.getSource().equals(vpgt.getBtnLateralLogin())) {
 
 				VLogin login = new VLogin();
 				login.setVisible(true);
 
-			} else if (ev.getSource().equals(vpgt.getBtnIrRegistro()) ||
-					   ev.getSource().equals(vpgt.getBtnLateralRegistro())) {
+			} else if (ev.getSource().equals(vpgt.getBtnIrRegistro())
+					|| ev.getSource().equals(vpgt.getBtnLateralRegistro())) {
 
 				VRegistroUsuario registro = new VRegistroUsuario();
 				registro.setVisible(true);
