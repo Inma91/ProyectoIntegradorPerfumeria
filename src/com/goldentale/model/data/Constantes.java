@@ -1,14 +1,12 @@
-package com.goldentale.util;
+package com.goldentale.model.data;
 
-import com.goldentale.model.Usuario;
-import java.awt.Color;
 import java.awt.Font;
+import com.goldentale.model.db.Usuario;
 
 /**
- * Constantes globales de la aplicación Golden Tale. Usa Swing (java.awt) en
- * lugar de JavaFX.
+ * Constantes globales de la aplicación Golden Tale.
  *
- * @author Bradon Gaviria
+ * @author Brandon Gaviria
  * @author Inmaculada Gil
  * @author David Moreno
  */
@@ -23,18 +21,23 @@ public class Constantes {
 	// ── Título ────────────────────────────────────────────────────────
 	public static final String TITULO_APLICACION = "Golden Tale";
 
-	// ── Roles de usuario ──────────────────────────────────────────────
-	/**
-	 * Valor del campo 'rol' en la tabla usuario para clientes. Uso:
-	 * usuario.getRol().equals(Constantes.ROL_CLIENTE)
-	 */
-	public static final String ROL_CLIENTE = "cliente";
+	// ── Fuentes ───────────────────────────────────────────────────────
+	public static final Font SANS_34 = new Font("SansSerif", Font.PLAIN, 34);
+	public static final Font SANS_20 = new Font("SansSerif", Font.PLAIN, 20);
+	public static final Font SANS_18 = new Font("SansSerif", Font.PLAIN, 18);
+	public static final Font SANS_18_NEGRITA = new Font("SansSerif", Font.BOLD, 18);
+	public static final Font SANS_16 = new Font("SansSerif", Font.PLAIN, 16);
+	public static final Font SANS_16_NEGRITA = new Font("SansSerif", Font.BOLD, 16);
+	public static final Font SANS_14 = new Font("SansSerif", Font.PLAIN, 14);
+	public static final Font SANS_13 = new Font("SansSerif", Font.PLAIN, 13);
+	public static final Font SANS_12 = new Font("SansSerif", Font.PLAIN, 12);
+	public static final Font SANS_11 = new Font("SansSerif", Font.PLAIN, 11);
 
-	/**
-	 * Valor del campo 'rol' en la tabla usuario para empleados. Uso:
-	 * usuario.getRol().equals(Constantes.ROL_EMPLEADO) o: usuario instanceof
-	 * Empleado
-	 */
+	// ── Tabla ─────────────────────────────────────────────────────────
+	public static final int ALTURA_FILAS_TABLA = 30;
+
+	// ── Roles de usuario ──────────────────────────────────────────────
+	public static final String ROL_CLIENTE = "cliente";
 	public static final String ROL_EMPLEADO = "empleado";
 
 	// ── Estados de pedido ─────────────────────────────────────────────
@@ -62,42 +65,14 @@ public class Constantes {
 	public static final String[] CATEGORIAS_PERFUME = { "Floral", "Oriental", "Cítrico", "Acuático", "Amaderado" };
 
 	// ── Localización automática en almacén (según ml del frasco) ──────
-	/**
-	 * Frascos de 50ml o menos van al Estante A.
-	 */
-	public static final String LOC_PEQUENO = "Estante A";
-
-	/**
-	 * Frascos de 75ml van al Estante B.
-	 */
-	public static final String LOC_MEDIANO = "Estante B";
-
-	/**
-	 * Frascos de 100ml o más van al Estante C.
-	 */
-	public static final String LOC_GRANDE = "Estante C";
-
-	/**
-	 * Umbral máximo (inclusive) para Estante A.
-	 */
+	public static final String LOC_PEQUENO = "Estante A"; // <= 50ml
+	public static final String LOC_MEDIANO = "Estante B"; // 75ml
+	public static final String LOC_GRANDE = "Estante C"; // >= 100ml
 	public static final int ML_LIMITE_PEQUENO = 50;
-
-	/**
-	 * Valor exacto para Estante B.
-	 */
 	public static final int ML_LIMITE_MEDIANO = 75;
 
 	// ── Umbrales de stock ─────────────────────────────────────────────
-	/**
-	 * Cantidad por debajo de la cual se considera stock bajo. Se usa para colorear
-	 * la celda en rojo/amarillo en la tabla.
-	 */
 	public static final int STOCK_MINIMO_ALERTA = 5;
-
-	/**
-	 * Referencia de stock máximo para calcular el porcentaje de la barra de stock
-	 * en la pantalla de almacén.
-	 */
 	public static final int STOCK_MAXIMO_REFERENCIA = 20;
 
 	// ── Columnas de las JTable ────────────────────────────────────────
@@ -109,13 +84,7 @@ public class Constantes {
 	// ── Variable de sesión ────────────────────────────────────────────
 	/**
 	 * Almacena el usuario autenticado durante toda la sesión. Puede ser una
-	 * instancia de Cliente o Empleado (herencia).
-	 *
-	 * Para saber el tipo: if (Constantes.usuarioAutenticado instanceof Empleado
-	 * emp) { ... } if (Constantes.usuarioAutenticado instanceof Cliente cli) { ...
-	 * }
-	 *
-	 * Se pone a null al cerrar sesión.
+	 * instancia de Cliente o Empleado (herencia). Se pone a null al cerrar sesión.
 	 */
 	public static Usuario usuarioAutenticado;
 }

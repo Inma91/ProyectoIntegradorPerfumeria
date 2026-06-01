@@ -2,25 +2,23 @@ package com.goldentale.main;
 
 import java.awt.EventQueue;
 
+import com.goldentale.controlador.Controlador;
+import com.goldentale.vistaPrincipalLyR.VPGoldenTale;
+
 public class Inicio {
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			
+
 			@Override
 			public void run() {
-				//Vista General
-				//VPrincipal vp = new VPrincipal(); 
-				
-				//Controlador c = new Controlador (vp, ); 
-				
-				//vp.setControlador(c); 
-				
-				//vp.hacerVisible(); 
-				
+
+				VPGoldenTale vpgt = new VPGoldenTale();
+
+				Controlador c = new Controlador(vpgt);
+
+				vpgt.setVisible(true);
 			}
 		});
-
 	}
-
 }
