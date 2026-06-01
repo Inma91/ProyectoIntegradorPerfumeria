@@ -1,4 +1,4 @@
-package com.goldentale.model;
+package com.goldentale.model.db;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

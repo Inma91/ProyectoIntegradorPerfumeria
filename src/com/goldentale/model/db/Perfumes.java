@@ -1,7 +1,8 @@
 package com.goldentale.model.db;
 
 public class Perfumes {
-
+	
+	//ATRIBUTO DEL PERFUME
 	private int idPerfume;
 	private String nombre;
 	private String marca;
@@ -13,10 +14,7 @@ public class Perfumes {
 	private int stock;
 	private String localizacion;
 
-	public Perfumes() {
-		// TODO conectar con DAO
-	}
-
+	//CONSTRUCTOR
 	public Perfumes(int idPerfume, String nombre, String marca, String categoria, String publico, int ml, double precio,
 			String descripcion, int stock, String localizacion) {
 		this.idPerfume = idPerfume;
@@ -30,7 +28,7 @@ public class Perfumes {
 		this.stock = stock;
 		this.localizacion = localizacion;
 	}
-
+	//Getters y setters por si acaso
 	public int getIdPerfume() {
 		return idPerfume;
 	}

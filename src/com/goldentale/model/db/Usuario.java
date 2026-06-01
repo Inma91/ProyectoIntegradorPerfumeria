@@ -1,7 +1,8 @@
 package com.goldentale.model.db;
 
 public class Usuario {
-
+	
+	//ATRIBUTO DEL USUARIO
 	private int idUsuario;
 	private String nombre;
 	private String apellido;
@@ -11,10 +12,7 @@ public class Usuario {
 	private String password;
 	private String rol;
 
-	public Usuario() {
-		// TODO validar desde base de datos
-	}
-
+	//CONSTRUCTOR
 	public Usuario(int idUsuario, String nombre, String apellido, String direccion, String telefono, String email,
 			String password, String rol) {
 		this.idUsuario = idUsuario;
@@ -26,7 +24,7 @@ public class Usuario {
 		this.password = password;
 		this.rol = rol;
 	}
-
+	//Getters y setters
 	public int getIdUsuario() {
 		return idUsuario;
 	}
