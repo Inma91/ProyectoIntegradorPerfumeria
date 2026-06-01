@@ -2,8 +2,8 @@ package com.goldentale.vistaEmpleado;
 
 import javax.swing.*;
 import com.goldentale.controlador.Controlador;
-import com.goldentale.model.Perfumes;
-import com.goldentale.util.Constantes;
+import com.goldentale.model.db.Perfumes;
+import com.goldentale.model.data.Constantes;
 import java.awt.*;
 
 /**

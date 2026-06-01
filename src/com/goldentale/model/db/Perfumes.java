@@ -11,24 +11,30 @@ public class Perfumes {
 	private int ml;
 	private double precio;
 	private String descripcion;
-	private int stock;
+	private String stock;
 	private String localizacion;
 
 	//CONSTRUCTOR
-	public Perfumes(int idPerfume, String nombre, String marca, String categoria, String publico, int ml, double precio,
-			String descripcion, int stock, String localizacion) {
+	public Perfumes(int idPerfume, String nombre, String marca, String categoria, String publico, double precio2, double precio,
+			String descripcion, String localizacion2, String stock2) {
 		this.idPerfume = idPerfume;
 		this.nombre = nombre;
 		this.marca = marca;
 		this.categoria = categoria;
 		this.publico = publico;
-		this.ml = ml;
+		this.ml = (int) precio2;
 		this.precio = precio;
 		this.descripcion = descripcion;
-		this.stock = stock;
-		this.localizacion = localizacion;
+		this.stock = localizacion2;
+		this.localizacion = stock2;
 	}
 	//Getters y setters por si acaso
+	
+	public Perfumes(Object object, String nombre2, String marca2, String categoria2, String descripcion2,
+			double precio2, int ml2, String publico2, String localizacion2, int stock2) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getIdPerfume() {
 		return idPerfume;
 	}
@@ -93,11 +99,11 @@ public class Perfumes {
 		this.descripcion = descripcion;
 	}
 
-	public int getStock() {
+	public String getStock() {
 		return stock;
 	}
 
-	public void setStock(int stock) {
+	public void setStock(String stock) {
 		this.stock = stock;
 	}
 
