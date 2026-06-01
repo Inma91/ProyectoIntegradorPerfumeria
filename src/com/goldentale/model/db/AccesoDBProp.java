@@ -1,4 +1,4 @@
-package com.goldentale.model;
+package com.goldentale.model.db;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
