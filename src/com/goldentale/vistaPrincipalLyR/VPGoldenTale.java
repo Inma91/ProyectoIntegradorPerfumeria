@@ -1,57 +1,66 @@
 package com.goldentale.vistaPrincipalLyR;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
-
 import com.goldentale.controlador.Controlador;
 import com.goldentale.model.data.Constantes;
 import com.goldentale.model.util.ComponentesUI;
 import com.goldentale.model.util.ComponentesUI.PanelRedondeado;
 import com.goldentale.model.util.Tema;
+import com.goldentale.vistaCliente.VCarritoCompra;
+import com.goldentale.vistaCliente.VCatalogoCliente;
+import com.goldentale.vistaCliente.VMisPedidos;
+import com.goldentale.vistaCliente.VPago;
+import com.goldentale.vistaEmpleado.VAniadirPerfume;
+import com.goldentale.vistaEmpleado.VEmpleadoDashboard;
+import com.goldentale.vistaEmpleado.VModificarPerfume;
+import com.goldentale.vistaEmpleado.VStock;
 
-@SuppressWarnings("serial")
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+
+/**
+ * Ventana principal de Golden Tale. Contiene navbar, sidebar dinámico y área
+ * central con CardLayout. El panel de inicio (bienvenida) se construye aquí
+ * directamente.
+ *
+ * @author Brandon Gaviria
+ * @author Inmaculada Gil
+ * @author David Moreno
+ */
 public class VPGoldenTale extends JFrame {
 
-	private JPanel panelNavbar;
+	// ── Navbar ────────────────────────────────────────────────────────
 	private JLabel lblNavNombre;
 	private JLabel lblNavEstado;
 
+	// ── Sidebar ───────────────────────────────────────────────────────
 	private JPanel panelLateral;
-	private JLabel lblMenuTitulo;
+
+	// Botones pre-login
 	private JButton btnLateralInicio;
 	private JButton btnLateralLogin;
 	private JButton btnLateralRegistro;
 
-	private JPanel panelCentral;
-	private JLabel lblLogo;
-	private JLabel lblNombreApp;
-	private JLabel lblEslogan;
-	private JSeparator separador;
-	private JButton btnInicio;
-	private JButton btnIrRegistro;
+	// Botones cliente
+	private JButton btnClienteCatalogo;
+	private JButton btnClienteCarrito;
+	private JButton btnClienteMisPedidos;
+	private JButton btnClienteCerrarSesion;
 
-	private JPanel panelPie;
-	private JLabel lblPie;
+	// Botones empleado
+	private JButton btnEmpleadoDashboard;
+	private JButton btnEmpleadoAnadir;
+	private JButton btnEmpleadoModificar;
+	private JButton btnEmpleadoStock;
+	private JButton btnEmpleadoCerrarSesion;
+
+	// ── Panel de inicio (bienvenida) ──────────────────────────────────
+	private JButton btnIniciarSesion;
+	private JButton btnRegistrarse;
+
+	// ── Área central (CardLayout) ─────────────────────────────────────
+	private CardLayout cardLayout;
+	private JPanel areaCentral;
 
 	public VPGoldenTale() {
 		super(Constantes.TITULO_APLICACION);
@@ -59,35 +68,16 @@ public class VPGoldenTale extends JFrame {
 	}
 
 	private void inicializarComponentes() {
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(Constantes.ANCHURA_APLICACION, Constantes.ALTURA_APLICACION);
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
 		getContentPane().setBackground(Tema.FONDO);
 
-		String rootFolder = System.getProperty("user.dir");
-		Path imagePath = Paths.get(rootFolder, "img", "logo.png");
-		ImageIcon originalIcon = new ImageIcon(imagePath.toString());
-		setIconImage(originalIcon.getImage());
+		add(construirNavbar(), BorderLayout.NORTH);
 
-		panelNavbar = new JPanel(new BorderLayout());
-		panelNavbar.setBackground(Tema.MORADO);
-		panelNavbar.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
-		panelNavbar.setPreferredSize(new Dimension(0, 56));
-
-		lblNavNombre = new JLabel(Constantes.TITULO_APLICACION);
-		lblNavNombre.setFont(Tema.fuenteNegrita(16));
-		lblNavNombre.setForeground(Color.WHITE);
-		panelNavbar.add(lblNavNombre, BorderLayout.WEST);
-
-		lblNavEstado = new JLabel("Bienvenido a " + Constantes.TITULO_APLICACION);
-		lblNavEstado.setFont(Tema.fuenteNormal(12));
-		lblNavEstado.setForeground(new Color(220, 210, 245));
-		lblNavEstado.setHorizontalAlignment(SwingConstants.RIGHT);
-		panelNavbar.add(lblNavEstado, BorderLayout.EAST);
-		add(panelNavbar, BorderLayout.NORTH);
-
+		// ── Sidebar ───────────────────────────────────────────────────
 		panelLateral = new JPanel();
 		panelLateral.setBackground(Tema.FONDO_LATERAL);
 		panelLateral.setLayout(new BoxLayout(panelLateral, BoxLayout.Y_AXIS));
@@ -95,121 +85,247 @@ public class VPGoldenTale extends JFrame {
 		panelLateral
 				.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Tema.BORDE),
 						BorderFactory.createEmptyBorder(18, 12, 18, 12)));
-
-		lblMenuTitulo = new JLabel("MENU");
-		lblMenuTitulo.setFont(Tema.fuenteNegrita(10));
-		lblMenuTitulo.setForeground(Tema.TEXTO_CLARO);
-		lblMenuTitulo.setAlignmentX(LEFT_ALIGNMENT);
-		panelLateral.add(lblMenuTitulo);
-		panelLateral.add(Box.createVerticalStrut(8));
-
-		btnLateralInicio = ComponentesUI.botonSecundario("Inicio");
-		btnLateralLogin = ComponentesUI.botonSecundario("Iniciar sesion");
-		btnLateralRegistro = ComponentesUI.botonSecundario("Registrarse");
-		prepararBotonLateral(btnLateralInicio);
-		prepararBotonLateral(btnLateralLogin);
-		prepararBotonLateral(btnLateralRegistro);
-		panelLateral.add(btnLateralInicio);
-		panelLateral.add(Box.createVerticalStrut(8));
-		panelLateral.add(btnLateralLogin);
-		panelLateral.add(Box.createVerticalStrut(8));
-		panelLateral.add(btnLateralRegistro);
-		panelLateral.add(Box.createVerticalGlue());
 		add(panelLateral, BorderLayout.WEST);
 
-		panelCentral = new JPanel(new GridBagLayout());
-		panelCentral.setBackground(Tema.FONDO);
-		panelCentral.setBorder(BorderFactory.createEmptyBorder(35, 45, 35, 45));
+		// ── Área central ──────────────────────────────────────────────
+		cardLayout = new CardLayout();
+		areaCentral = new JPanel(cardLayout);
+		areaCentral.setBackground(Tema.FONDO);
+
+		// El panel de inicio se construye aquí y se añade directamente
+		areaCentral.add(construirPanelInicio(), Constantes.VISTA_INICIO);
+
+		add(areaCentral, BorderLayout.CENTER);
+	}
+
+	// ── Navbar ────────────────────────────────────────────────────────
+
+	private JPanel construirNavbar() {
+		JPanel navbar = new JPanel(new BorderLayout());
+		navbar.setBackground(Tema.MORADO);
+		navbar.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+		navbar.setPreferredSize(new Dimension(0, 56));
+
+		lblNavNombre = new JLabel(Constantes.TITULO_APLICACION);
+		lblNavNombre.setFont(Tema.fuenteNegrita(16));
+		lblNavNombre.setForeground(Color.WHITE);
+
+		lblNavEstado = new JLabel("Bienvenido a " + Constantes.TITULO_APLICACION);
+		lblNavEstado.setFont(Tema.fuenteNormal(12));
+		lblNavEstado.setForeground(new Color(220, 210, 245));
+		lblNavEstado.setHorizontalAlignment(SwingConstants.RIGHT);
+
+		navbar.add(lblNavNombre, BorderLayout.WEST);
+		navbar.add(lblNavEstado, BorderLayout.EAST);
+		return navbar;
+	}
+
+	// ── Panel de inicio ───────────────────────────────────────────────
+
+	private JPanel construirPanelInicio() {
+		JPanel fondo = new JPanel(new GridBagLayout());
+		fondo.setBackground(Tema.FONDO);
 
 		PanelRedondeado tarjeta = new PanelRedondeado(18, Color.WHITE, Tema.BORDE);
 		tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
-		tarjeta.setPreferredSize(new Dimension(520, 430));
-		tarjeta.setBorder(BorderFactory.createEmptyBorder(34, 46, 34, 46));
+		tarjeta.setPreferredSize(new Dimension(520, 340));
+		tarjeta.setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50));
 
-		Path logoPath = Paths.get(rootFolder, "img", "logo.png");
-		ImageIcon logoIcon = new ImageIcon(logoPath.toString());
-		lblLogo = new JLabel(logoIcon);
-		lblLogo.setPreferredSize(new Dimension(90, 90));
-		lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+		// Logo emoji
+		JLabel lblLogo = new JLabel("🧴");
+		lblLogo.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 52));
 		lblLogo.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(lblLogo);
-		tarjeta.add(Box.createVerticalStrut(16));
+		tarjeta.add(Box.createVerticalStrut(14));
 
-		lblNombreApp = new JLabel(Constantes.TITULO_APLICACION);
+		// Título
+		JLabel lblNombreApp = new JLabel(Constantes.TITULO_APLICACION);
 		lblNombreApp.setFont(Tema.fuenteNegrita(34));
 		lblNombreApp.setForeground(Tema.TEXTO_OSCURO);
-		lblNombreApp.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNombreApp.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(lblNombreApp);
 
-		lblEslogan = new JLabel("Tu perfumeria de confianza");
+		JLabel lblEslogan = new JLabel("Tu perfumería de confianza");
 		lblEslogan.setFont(Tema.fuenteNormal(16));
 		lblEslogan.setForeground(Tema.TEXTO_MEDIO);
 		lblEslogan.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(lblEslogan);
-		tarjeta.add(Box.createVerticalStrut(18));
+		tarjeta.add(Box.createVerticalStrut(20));
 
-		separador = new JSeparator();
-		separador.setMaximumSize(new Dimension(300, 2));
-		separador.setForeground(Tema.BORDE);
-		tarjeta.add(separador);
-		tarjeta.add(Box.createVerticalStrut(22));
+		JSeparator sep = new JSeparator();
+		sep.setMaximumSize(new Dimension(300, 2));
+		sep.setForeground(Tema.BORDE);
+		tarjeta.add(sep);
+		tarjeta.add(Box.createVerticalStrut(24));
 
+		// Botones
 		JPanel filaBotones = new JPanel(new GridLayout(1, 2, 12, 0));
 		filaBotones.setOpaque(false);
 		filaBotones.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
-		btnInicio = ComponentesUI.botonPrincipal("Iniciar sesion");
-		btnIrRegistro = ComponentesUI.botonSecundario("Registrarse");
-		btnIrRegistro.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		filaBotones.add(btnInicio);
-		filaBotones.add(btnIrRegistro);
+		btnIniciarSesion = ComponentesUI.botonPrincipal("Iniciar sesión");
+		btnRegistrarse = ComponentesUI.botonSecundario("Registrarse");
+		filaBotones.add(btnIniciarSesion);
+		filaBotones.add(btnRegistrarse);
 		tarjeta.add(filaBotones);
-
-		JLabel nota = new JLabel("Catalogo, pedidos y stock en una sola aplicacion");
-		nota.setFont(Tema.fuenteNormal(11));
-		nota.setForeground(Tema.TEXTO_CLARO);
-		nota.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(Box.createVerticalStrut(18));
-		tarjeta.add(nota);
 
-		panelCentral.add(tarjeta);
-		add(panelCentral, BorderLayout.CENTER);
+		JLabel lblNota = new JLabel("Catálogo, pedidos y stock en una sola aplicación");
+		lblNota.setFont(Tema.fuenteNormal(11));
+		lblNota.setForeground(Tema.TEXTO_CLARO);
+		lblNota.setAlignmentX(CENTER_ALIGNMENT);
+		tarjeta.add(lblNota);
 
-		panelPie = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 8));
-		panelPie.setBackground(Tema.FONDO);
-		panelPie.setPreferredSize(new Dimension(0, 35));
-		lblPie = new JLabel(Constantes.TITULO_APLICACION + " v1.0 - Proyecto Integrador DAM 2024-2025");
-		lblPie.setFont(Tema.fuenteNormal(11));
-		lblPie.setForeground(Tema.TEXTO_CLARO);
-		panelPie.add(lblPie);
-		add(panelPie, BorderLayout.SOUTH);
-
-		Controlador c = new Controlador(this);
-		btnInicio.addActionListener(c);
-		btnIrRegistro.addActionListener(c);
-		btnLateralInicio.addActionListener(c);
-		btnLateralLogin.addActionListener(c);
-		btnLateralRegistro.addActionListener(c);
-
-		UIManager.put("OptionPane.yesButtonText", "Si");
-		UIManager.put("OptionPane.noButtonText", "No");
-		UIManager.put("OptionPane.cancelButtonText", "Cancelar");
+		fondo.add(tarjeta);
+		return fondo;
 	}
 
-	private void prepararBotonLateral(JButton boton) {
-		boton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
-		boton.setPreferredSize(new Dimension(150, 36));
-		boton.setAlignmentX(LEFT_ALIGNMENT);
+	// ── Añadir vistas al CardLayout ───────────────────────────────────
+
+	public void añadirVistas(VLogin panelLogin, VRegistroUsuario panelRegistro, VCatalogoCliente panelCatalogo,
+			VCarritoCompra panelCarrito, VMisPedidos panelMisPedidos, VPago panelPago,
+			VEmpleadoDashboard panelDashboard, VAniadirPerfume panelAnadir, VModificarPerfume panelModificar,
+			VStock panelStock) {
+
+		areaCentral.add(panelLogin, Constantes.VISTA_LOGIN);
+		areaCentral.add(panelRegistro, Constantes.VISTA_REGISTRO);
+		areaCentral.add(panelCatalogo, Constantes.VISTA_CATALOGO);
+		areaCentral.add(panelCarrito, Constantes.VISTA_CARRITO);
+		areaCentral.add(panelMisPedidos, Constantes.VISTA_MIS_PEDIDOS);
+		areaCentral.add(panelPago, Constantes.VISTA_PAGO);
+		areaCentral.add(panelDashboard, Constantes.VISTA_DASHBOARD);
+		areaCentral.add(panelAnadir, Constantes.VISTA_ANADIR);
+		areaCentral.add(panelModificar, Constantes.VISTA_MODIFICAR);
+		areaCentral.add(panelStock, Constantes.VISTA_STOCK);
+	}
+
+	// ── setControlador ────────────────────────────────────────────────
+
+	public void setControlador(Controlador controlador) {
+		btnIniciarSesion.addActionListener(controlador);
+		btnRegistrarse.addActionListener(controlador);
+	}
+
+	// ── Gestión del sidebar ───────────────────────────────────────────
+
+	public void mostrarSidebarPreLogin(ActionListener listener) {
+		panelLateral.removeAll();
+		agregarEtiquetaSeccion("MENÚ");
+
+		btnLateralInicio = ComponentesUI.botonSidebar("  Inicio");
+		btnLateralLogin = ComponentesUI.botonSidebar("  Iniciar sesión");
+		btnLateralRegistro = ComponentesUI.botonSidebar("  Registrarse");
+
+		btnLateralInicio.addActionListener(listener);
+		btnLateralLogin.addActionListener(listener);
+		btnLateralRegistro.addActionListener(listener);
+
+		panelLateral.add(btnLateralInicio);
+		panelLateral.add(Box.createVerticalStrut(6));
+		panelLateral.add(btnLateralLogin);
+		panelLateral.add(Box.createVerticalStrut(6));
+		panelLateral.add(btnLateralRegistro);
+		panelLateral.add(Box.createVerticalGlue());
+
+		panelLateral.revalidate();
+		panelLateral.repaint();
+	}
+
+	public void mostrarSidebarCliente(String nombreCliente, ActionListener listener) {
+		panelLateral.removeAll();
+		lblNavEstado.setText(nombreCliente);
+
+		agregarEtiquetaSeccion("MI CUENTA");
+
+		btnClienteCatalogo = ComponentesUI.botonSidebar("  Catálogo");
+		btnClienteCarrito = ComponentesUI.botonSidebar("  Mi carrito");
+		btnClienteMisPedidos = ComponentesUI.botonSidebar("  Mis pedidos");
+
+		btnClienteCatalogo.addActionListener(listener);
+		btnClienteCarrito.addActionListener(listener);
+		btnClienteMisPedidos.addActionListener(listener);
+
+		panelLateral.add(btnClienteCatalogo);
+		panelLateral.add(Box.createVerticalStrut(6));
+		panelLateral.add(btnClienteCarrito);
+		panelLateral.add(Box.createVerticalStrut(6));
+		panelLateral.add(btnClienteMisPedidos);
+		panelLateral.add(Box.createVerticalGlue());
+
+		agregarEtiquetaSeccion("SESIÓN");
+		btnClienteCerrarSesion = ComponentesUI.botonSidebar("  Cerrar sesión");
+		btnClienteCerrarSesion.addActionListener(listener);
+		panelLateral.add(btnClienteCerrarSesion);
+		panelLateral.add(Box.createVerticalStrut(8));
+
+		panelLateral.revalidate();
+		panelLateral.repaint();
+	}
+
+	public void mostrarSidebarEmpleado(String nombreEmpleado, ActionListener listener) {
+		panelLateral.removeAll();
+		lblNavEstado.setText(nombreEmpleado);
+
+		agregarEtiquetaSeccion("PRINCIPAL");
+		btnEmpleadoDashboard = ComponentesUI.botonSidebar("  Dashboard");
+		btnEmpleadoDashboard.addActionListener(listener);
+		panelLateral.add(btnEmpleadoDashboard);
+		panelLateral.add(Box.createVerticalStrut(6));
+
+		agregarEtiquetaSeccion("CATÁLOGO");
+		btnEmpleadoAnadir = ComponentesUI.botonSidebar("  Añadir perfume");
+		btnEmpleadoModificar = ComponentesUI.botonSidebar("  Modificar stock");
+		btnEmpleadoAnadir.addActionListener(listener);
+		btnEmpleadoModificar.addActionListener(listener);
+		panelLateral.add(btnEmpleadoAnadir);
+		panelLateral.add(Box.createVerticalStrut(6));
+		panelLateral.add(btnEmpleadoModificar);
+		panelLateral.add(Box.createVerticalStrut(6));
+
+		agregarEtiquetaSeccion("ALMACÉN");
+		btnEmpleadoStock = ComponentesUI.botonSidebar("  Control stock");
+		btnEmpleadoStock.addActionListener(listener);
+		panelLateral.add(btnEmpleadoStock);
+		panelLateral.add(Box.createVerticalGlue());
+
+		agregarEtiquetaSeccion("SESIÓN");
+		btnEmpleadoCerrarSesion = ComponentesUI.botonSidebar("  Cerrar sesión");
+		btnEmpleadoCerrarSesion.addActionListener(listener);
+		panelLateral.add(btnEmpleadoCerrarSesion);
+		panelLateral.add(Box.createVerticalStrut(8));
+
+		panelLateral.revalidate();
+		panelLateral.repaint();
+	}
+
+	private void agregarEtiquetaSeccion(String texto) {
+		JLabel lbl = new JLabel(texto);
+		lbl.setFont(Tema.fuenteNegrita(10));
+		lbl.setForeground(Tema.TEXTO_CLARO);
+		lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lbl.setBorder(BorderFactory.createEmptyBorder(10, 4, 4, 0));
+		panelLateral.add(lbl);
+	}
+
+	// ── Navegación ────────────────────────────────────────────────────
+
+	public void mostrarVista(String claveVista) {
+		cardLayout.show(areaCentral, claveVista);
 	}
 
 	public void hacerVisible() {
 		setVisible(true);
 	}
 
-	public JLabel getLblNavEstado() {
-		return lblNavEstado;
+	// ── Getters panel inicio ──────────────────────────────────────────
+	public JButton getBtnIniciarSesion() {
+		return btnIniciarSesion;
 	}
 
+	public JButton getBtnRegistrarse() {
+		return btnRegistrarse;
+	}
+
+	// ── Getters sidebar pre-login ─────────────────────────────────────
 	public JButton getBtnLateralInicio() {
 		return btnLateralInicio;
 	}
@@ -222,19 +338,46 @@ public class VPGoldenTale extends JFrame {
 		return btnLateralRegistro;
 	}
 
-	public JLabel getLblLogo() {
-		return lblLogo;
+	// ── Getters sidebar cliente ───────────────────────────────────────
+	public JButton getBtnClienteCatalogo() {
+		return btnClienteCatalogo;
 	}
 
-	public JLabel getLblNombreApp() {
-		return lblNombreApp;
+	public JButton getBtnClienteCarrito() {
+		return btnClienteCarrito;
 	}
 
-	public JButton getBtnInicio() {
-		return btnInicio;
+	public JButton getBtnClienteMisPedidos() {
+		return btnClienteMisPedidos;
 	}
 
-	public JButton getBtnIrRegistro() {
-		return btnIrRegistro;
+	public JButton getBtnClienteCerrarSesion() {
+		return btnClienteCerrarSesion;
+	}
+
+	// ── Getters sidebar empleado ──────────────────────────────────────
+	public JButton getBtnEmpleadoDashboard() {
+		return btnEmpleadoDashboard;
+	}
+
+	public JButton getBtnEmpleadoAnadir() {
+		return btnEmpleadoAnadir;
+	}
+
+	public JButton getBtnEmpleadoModificar() {
+		return btnEmpleadoModificar;
+	}
+
+	public JButton getBtnEmpleadoStock() {
+		return btnEmpleadoStock;
+	}
+
+	public JButton getBtnEmpleadoCerrarSesion() {
+		return btnEmpleadoCerrarSesion;
+	}
+
+	// ── Getters navbar ────────────────────────────────────────────────
+	public JLabel getLblNavEstado() {
+		return lblNavEstado;
 	}
 }

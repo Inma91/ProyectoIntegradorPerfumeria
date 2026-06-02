@@ -1,46 +1,35 @@
 package com.goldentale.vistaEmpleado;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
+import com.goldentale.controlador.Controlador;
 import com.goldentale.model.data.Constantes;
 import com.goldentale.model.util.ComponentesUI;
 import com.goldentale.model.util.ComponentesUI.PanelRedondeado;
 import com.goldentale.model.util.Tema;
 
-public class VModificarPerfume extends JFrame {
+import javax.swing.*;
+import java.awt.*;
 
-	private JPanel panelNavbar;
-	private JLabel lblNombreApp;
-	private JButton btnVolver;
-	private JLabel lblTitulo;
-	private JPanel panelBusqueda;
-	private JLabel lblBusquedaTitulo;
-	private JLabel lblBuscarNombre;
+/**
+ * Panel Modificar Perfume (stock) — vista del empleado. Permite buscar un
+ * perfume por nombre y ml, y añadir stock.
+ *
+ * @author Brandon Gaviria
+ * @author Inmaculada Gil
+ * @author David Moreno
+ */
+public class VModificarPerfume extends JPanel {
+
+	// ── Búsqueda ──────────────────────────────────────────────────────
 	private JTextField txtBuscarNombre;
-	private JLabel lblBuscarMl;
 	private JTextField txtBuscarMl;
 	private JButton btnBuscar;
 	private JLabel lblResultado;
+
+	// ── Panel de modificación (oculto hasta encontrar el perfume) ─────
 	private JPanel panelModificacion;
 	private JLabel lblDatosPerfume;
 	private JLabel lblStockActual;
-	private JLabel lblCantidadAñadir;
-	private JTextField txtCantidadAñadir;
+	private JTextField txtCantidadAnadir;
 	private JLabel lblPreview;
 	private JLabel lblError;
 	private JLabel lblExito;
@@ -48,55 +37,44 @@ public class VModificarPerfume extends JFrame {
 	private JButton btnCancelar;
 
 	public VModificarPerfume() {
-		super(Constantes.TITULO_APLICACION + " - Modificar perfume");
 		inicializarComponentes();
 	}
 
 	private void inicializarComponentes() {
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(700, 610);
-		setLocationRelativeTo(null);
-		setLayout(new BorderLayout());
-		getContentPane().setBackground(Tema.FONDO);
+		setLayout(new GridBagLayout());
+		setBackground(Tema.FONDO);
 
-		btnVolver = ComponentesUI.botonSecundario("Volver");
-		btnVolver.setPreferredSize(new Dimension(100, 32));
-		panelNavbar = ComponentesUI.navbar(Constantes.TITULO_APLICACION, btnVolver);
-		lblNombreApp = (JLabel) panelNavbar.getComponent(0);
-		add(panelNavbar, BorderLayout.NORTH);
-
-		JPanel fondo = new JPanel(new GridBagLayout());
-		fondo.setBackground(Tema.FONDO);
 		PanelRedondeado tarjeta = new PanelRedondeado(16, Color.WHITE, Tema.BORDE);
-		tarjeta.setPreferredSize(new Dimension(560, 470));
+		tarjeta.setPreferredSize(new Dimension(560, 480));
 		tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
 		tarjeta.setBorder(BorderFactory.createEmptyBorder(24, 28, 24, 28));
 
-		lblTitulo = new JLabel("Modificar stock de perfume");
+		// ── Título ────────────────────────────────────────────────────
+		JLabel lblTitulo = new JLabel("Modificar stock de perfume");
 		lblTitulo.setFont(Tema.fuenteNegrita(22));
 		lblTitulo.setForeground(Tema.TEXTO_OSCURO);
 		lblTitulo.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(lblTitulo);
 		tarjeta.add(Box.createVerticalStrut(18));
 
-		panelBusqueda = new JPanel(new GridLayout(0, 2, 12, 10));
-		panelBusqueda.setOpaque(false);
-		lblBusquedaTitulo = new JLabel("Busqueda superior");
+		// ── Búsqueda ──────────────────────────────────────────────────
+		JLabel lblBusquedaTitulo = new JLabel("Búsqueda del perfume");
 		lblBusquedaTitulo.setFont(Tema.fuenteNegrita(12));
 		lblBusquedaTitulo.setForeground(Tema.TEXTO_MEDIO);
-		lblBuscarNombre = ComponentesUI.etiquetaFormulario("Nombre");
+		tarjeta.add(lblBusquedaTitulo);
+		tarjeta.add(Box.createVerticalStrut(8));
+
+		JPanel panelBusqueda = new JPanel(new GridLayout(0, 2, 12, 10));
+		panelBusqueda.setOpaque(false);
 		txtBuscarNombre = ComponentesUI.campoTexto("Velvet Rose");
-		lblBuscarMl = ComponentesUI.etiquetaFormulario("Mililitros");
 		txtBuscarMl = ComponentesUI.campoTexto("50");
 		btnBuscar = ComponentesUI.botonPrincipal("Buscar");
-		panelBusqueda.add(lblBuscarNombre);
+		panelBusqueda.add(ComponentesUI.etiquetaFormulario("Nombre"));
 		panelBusqueda.add(txtBuscarNombre);
-		panelBusqueda.add(lblBuscarMl);
+		panelBusqueda.add(ComponentesUI.etiquetaFormulario("Mililitros"));
 		panelBusqueda.add(txtBuscarMl);
 		panelBusqueda.add(new JLabel(""));
 		panelBusqueda.add(btnBuscar);
-		tarjeta.add(lblBusquedaTitulo);
-		tarjeta.add(Box.createVerticalStrut(8));
 		tarjeta.add(panelBusqueda);
 		tarjeta.add(Box.createVerticalStrut(10));
 
@@ -106,6 +84,7 @@ public class VModificarPerfume extends JFrame {
 		tarjeta.add(lblResultado);
 		tarjeta.add(Box.createVerticalStrut(14));
 
+		// ── Panel de modificación (oculto inicialmente) ───────────────
 		panelModificacion = new PanelRedondeado(12, Tema.FONDO, Tema.BORDE_CLARO);
 		panelModificacion.setLayout(new BoxLayout(panelModificacion, BoxLayout.Y_AXIS));
 		panelModificacion.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
@@ -114,17 +93,21 @@ public class VModificarPerfume extends JFrame {
 		lblDatosPerfume = new JLabel("Perfume encontrado");
 		lblDatosPerfume.setFont(Tema.fuenteNegrita(13));
 		lblDatosPerfume.setForeground(Tema.TEXTO_OSCURO);
+
 		lblStockActual = new JLabel("Stock actual: 0 uds");
 		lblStockActual.setFont(Tema.fuenteNormal(12));
 		lblStockActual.setForeground(Tema.TEXTO_MEDIO);
-		lblCantidadAñadir = ComponentesUI.etiquetaFormulario("Cantidad a anadir");
-		txtCantidadAñadir = ComponentesUI.campoTexto("10");
-		lblPreview = new JLabel("Stock actual: 0 uds, tras anadir: 0 uds");
+
+		txtCantidadAnadir = ComponentesUI.campoTexto("10");
+
+		lblPreview = new JLabel("Stock actual: 0 uds → tras añadir: 0 uds");
 		lblPreview.setFont(Tema.fuenteNormal(12));
 		lblPreview.setForeground(Tema.MORADO);
+
 		lblError = new JLabel(" ");
 		lblError.setFont(Tema.fuenteNormal(12));
 		lblError.setForeground(Tema.ERROR);
+
 		lblExito = new JLabel(" ");
 		lblExito.setFont(Tema.fuenteNormal(12));
 		lblExito.setForeground(Tema.EXITO);
@@ -133,9 +116,9 @@ public class VModificarPerfume extends JFrame {
 		panelModificacion.add(Box.createVerticalStrut(4));
 		panelModificacion.add(lblStockActual);
 		panelModificacion.add(Box.createVerticalStrut(12));
-		panelModificacion.add(lblCantidadAñadir);
+		panelModificacion.add(ComponentesUI.etiquetaFormulario("Cantidad a añadir"));
 		panelModificacion.add(Box.createVerticalStrut(4));
-		panelModificacion.add(txtCantidadAñadir);
+		panelModificacion.add(txtCantidadAnadir);
 		panelModificacion.add(Box.createVerticalStrut(8));
 		panelModificacion.add(lblPreview);
 		panelModificacion.add(lblError);
@@ -151,13 +134,27 @@ public class VModificarPerfume extends JFrame {
 		panelModificacion.add(fila);
 
 		tarjeta.add(panelModificacion);
-		fondo.add(tarjeta);
-		add(new JScrollPane(fondo), BorderLayout.CENTER);
+		add(tarjeta);
 	}
 
-	public JButton getBtnVolver() {
-		return btnVolver;
+	// ── Métodos de ayuda ──────────────────────────────────────────────
+
+	public void mostrarError(String msg) {
+		lblError.setText(msg);
+		lblExito.setText(" ");
 	}
+
+	public void mostrarExito(String msg) {
+		lblExito.setText(msg);
+		lblError.setText(" ");
+	}
+
+	public void limpiarFeedback() {
+		lblError.setText(" ");
+		lblExito.setText(" ");
+	}
+
+	// ── Getters ───────────────────────────────────────────────────────
 
 	public JTextField getTxtBuscarNombre() {
 		return txtBuscarNombre;
@@ -187,8 +184,8 @@ public class VModificarPerfume extends JFrame {
 		return lblStockActual;
 	}
 
-	public JTextField getTxtCantidadAñadir() {
-		return txtCantidadAñadir;
+	public JTextField getTxtCantidadAnadir() {
+		return txtCantidadAnadir;
 	}
 
 	public JLabel getLblPreview() {
@@ -209,5 +206,11 @@ public class VModificarPerfume extends JFrame {
 
 	public JButton getBtnCancelar() {
 		return btnCancelar;
+	}
+	
+	public void setControlador(Controlador controlador) {
+	    btnBuscar.addActionListener(controlador);
+	    btnGuardar.addActionListener(controlador);
+	    btnCancelar.addActionListener(controlador);
 	}
 }

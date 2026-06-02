@@ -1,22 +1,22 @@
 package com.goldentale.model.db;
 
+/**
+ * Entidad Stock. Representa el stock de un perfume en el almacén.
+ */
 public class Stock {
 
-	//ATRIBUTOS
 	private String id;
-    private String idPerfume;
-    private int cantidad;
-    private String localizacion;
-	
-    //CONSTRUCTOR
-    public Stock(String id, String idPerfume, int cantidad, String localizacion) {
+	private String idPerfume;
+	private int cantidad;
+	private String localizacion;
+
+	public Stock(String id, String idPerfume, int cantidad, String localizacion) {
 		this.id = id;
 		this.idPerfume = idPerfume;
 		this.cantidad = cantidad;
 		this.localizacion = localizacion;
 	}
 
-    //Getters y Setters por si acaso
 	public String getId() {
 		return id;
 	}
@@ -29,8 +29,8 @@ public class Stock {
 		return idPerfume;
 	}
 
-	public void setIdPerfume(String idPerfume) {
-		this.idPerfume = idPerfume;
+	public void setIdPerfume(String ip) {
+		this.idPerfume = ip;
 	}
 
 	public int getCantidad() {
@@ -45,16 +45,13 @@ public class Stock {
 		return localizacion;
 	}
 
-	public void setLocalizacion(String localizacion) {
-		this.localizacion = localizacion;
+	public void setLocalizacion(String loc) {
+		this.localizacion = loc;
 	}
 
-	//toString
 	@Override
 	public String toString() {
 		return "Stock [id=" + id + ", idPerfume=" + idPerfume + ", cantidad=" + cantidad + ", localizacion="
 				+ localizacion + "]";
 	}
-    
-    
 }

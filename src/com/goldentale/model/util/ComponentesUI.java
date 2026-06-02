@@ -1,38 +1,23 @@
 package com.goldentale.model.util;
 
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.border.LineBorder;
+import javax.swing.*;
+import javax.swing.border.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
+/**
+ * Fábrica de componentes visuales reutilizables para Golden Tale. Todos los
+ * componentes siguen la paleta definida en {@link Tema}.
+ */
 public class ComponentesUI {
 
+	// ── Panel redondeado ──────────────────────────────────────────────────────
+
 	public static class PanelRedondeado extends JPanel {
-		private int radio;
-		private Color fondo;
-		private Color borde;
+		private final int radio;
+		private final Color fondo;
+		private final Color borde;
 
 		public PanelRedondeado(int radio, Color fondo) {
 			this(radio, fondo, null);
@@ -45,6 +30,7 @@ public class ComponentesUI {
 			setOpaque(false);
 		}
 
+		@Override
 		protected void paintComponent(Graphics g) {
 			Graphics2D g2 = (Graphics2D) g.create();
 			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -60,16 +46,15 @@ public class ComponentesUI {
 		}
 	}
 
+	// ── Botones ───────────────────────────────────────────────────────────────
+
 	public static JButton botonPrincipal(String texto) {
 		JButton boton = new JButton(texto) {
+			@Override
 			protected void paintComponent(Graphics g) {
 				Graphics2D g2 = (Graphics2D) g.create();
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				if (getModel().isPressed() || getModel().isRollover()) {
-					g2.setColor(Tema.MORADO_CLARO);
-				} else {
-					g2.setColor(Tema.MORADO);
-				}
+				g2.setColor(getModel().isPressed() || getModel().isRollover() ? Tema.MORADO_CLARO : Tema.MORADO);
 				g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
 				g2.setColor(Color.WHITE);
 				FontMetrics fm = g2.getFontMetrics();
@@ -89,14 +74,11 @@ public class ComponentesUI {
 
 	public static JButton botonSecundario(String texto) {
 		JButton boton = new JButton(texto) {
+			@Override
 			protected void paintComponent(Graphics g) {
 				Graphics2D g2 = (Graphics2D) g.create();
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				if (getModel().isRollover()) {
-					g2.setColor(new Color(240, 235, 255));
-				} else {
-					g2.setColor(Color.WHITE);
-				}
+				g2.setColor(getModel().isRollover() ? new Color(240, 235, 255) : Color.WHITE);
 				g2.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
 				g2.setColor(Tema.BORDE);
 				g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
@@ -115,8 +97,47 @@ public class ComponentesUI {
 		return boton;
 	}
 
+	/**
+	 * Botón lateral del sidebar: sin borde, fondo transparente, highlight en hover
+	 * y estado activo en morado.
+	 */
+	public static JButton botonSidebar(String texto) {
+		JButton boton = new JButton(texto) {
+			@Override
+			protected void paintComponent(Graphics g) {
+				Graphics2D g2 = (Graphics2D) g.create();
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				boolean activo = Boolean.TRUE.equals(getClientProperty("activo"));
+				if (activo) {
+					g2.setColor(Tema.SELECCION);
+					g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
+				} else if (getModel().isRollover()) {
+					g2.setColor(new Color(230, 225, 220));
+					g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
+				}
+				g2.setColor(activo ? Tema.MORADO : Tema.TEXTO_OSCURO);
+				FontMetrics fm = g2.getFontMetrics();
+				g2.drawString(getText(), 12, (getHeight() + fm.getAscent() - fm.getDescent()) / 2);
+				g2.dispose();
+			}
+		};
+		boton.setFont(Tema.fuenteNormal(13));
+		boton.setHorizontalAlignment(SwingConstants.LEFT);
+		boton.setFocusPainted(false);
+		boton.setBorderPainted(false);
+		boton.setContentAreaFilled(false);
+		boton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		boton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
+		boton.setPreferredSize(new Dimension(150, 36));
+		boton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		return boton;
+	}
+
+	// ── Campos de texto ───────────────────────────────────────────────────────
+
 	public static JTextField campoTexto(final String placeholder) {
 		JTextField campo = new JTextField() {
+			@Override
 			protected void paintComponent(Graphics g) {
 				Graphics2D g2 = (Graphics2D) g.create();
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -124,7 +145,7 @@ public class ComponentesUI {
 				g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
 				g2.dispose();
 				super.paintComponent(g);
-				if (getText().length() == 0 && !isFocusOwner()) {
+				if (getText().isEmpty() && !isFocusOwner()) {
 					Graphics2D g3 = (Graphics2D) g.create();
 					Insets ins = getInsets();
 					g3.setColor(Tema.TEXTO_CLARO);
@@ -161,6 +182,25 @@ public class ComponentesUI {
 		return area;
 	}
 
+	// ── Etiquetas ─────────────────────────────────────────────────────────────
+
+	public static JLabel etiquetaFormulario(String texto) {
+		JLabel label = new JLabel(texto);
+		label.setFont(Tema.fuenteNegrita(12));
+		label.setForeground(Tema.TEXTO_OSCURO);
+		return label;
+	}
+
+	public static JLabel etiquetaSeccion(String texto) {
+		JLabel label = new JLabel(texto);
+		label.setFont(Tema.fuenteNegrita(12));
+		label.setForeground(Tema.TEXTO_MEDIO);
+		label.setAlignmentX(Component.LEFT_ALIGNMENT);
+		return label;
+	}
+
+	// ── Tarjeta de métrica ────────────────────────────────────────────────────
+
 	public static JPanel tarjetaMetrica(String titulo, String valor, String detalle, Color colorValor) {
 		PanelRedondeado tarjeta = new PanelRedondeado(12, Color.WHITE, Tema.BORDE_CLARO);
 		tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
@@ -189,12 +229,7 @@ public class ComponentesUI {
 		return tarjeta;
 	}
 
-	public static JLabel etiquetaFormulario(String texto) {
-		JLabel label = new JLabel(texto);
-		label.setFont(Tema.fuenteNegrita(12));
-		label.setForeground(Tema.TEXTO_OSCURO);
-		return label;
-	}
+	// ── Tabla ─────────────────────────────────────────────────────────────────
 
 	public static void prepararTabla(JTable tabla) {
 		tabla.setFont(Tema.fuenteNormal(12));
@@ -211,8 +246,17 @@ public class ComponentesUI {
 		tabla.getTableHeader().setForeground(Tema.TEXTO_MEDIO);
 		tabla.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Tema.BORDE));
 
-		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-		renderer.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable t, Object v, boolean sel, boolean foc, int row,
+					int col) {
+				super.getTableCellRendererComponent(t, v, sel, foc, row, col);
+				setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+				setBackground(sel ? Tema.SELECCION : (row % 2 == 0 ? Color.WHITE : new Color(251, 249, 246)));
+				setForeground(Tema.TEXTO_OSCURO);
+				return this;
+			}
+		};
 		tabla.setDefaultRenderer(Object.class, renderer);
 	}
 
@@ -223,6 +267,12 @@ public class ComponentesUI {
 		return scroll;
 	}
 
+	// ── Navbar ────────────────────────────────────────────────────────────────
+
+	/**
+	 * Barra superior morada con título a la izquierda y un botón opcional a la
+	 * derecha.
+	 */
 	public static JPanel navbar(String titulo, JButton botonDerecha) {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.setBackground(Tema.MORADO);

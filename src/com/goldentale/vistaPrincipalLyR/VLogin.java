@@ -1,120 +1,79 @@
 package com.goldentale.vistaPrincipalLyR;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
-import com.goldentale.model.data.Constantes;
+import com.goldentale.controlador.Controlador;
 import com.goldentale.model.util.ComponentesUI;
 import com.goldentale.model.util.ComponentesUI.PanelRedondeado;
 import com.goldentale.model.util.Tema;
+import com.goldentale.model.data.Constantes;
 
-public class VLogin extends JFrame {
+import javax.swing.*;
+import java.awt.*;
 
-	private JPanel panelCabecera;
-	private JLabel lblNombreApp;
-	private JLabel lblSubtitulo;
-	private JLabel lblRol;
-	private JPanel panelSelectorRol;
-	private JButton btnRolCliente;
-	private JButton btnRolEmpleado;
-	private JLabel lblId;
-	private JTextField txtId;
-	private JLabel lblPassword;
+/**
+ * Panel de inicio de sesión. Login por correo y contraseña. El rol se determina
+ * automáticamente según el usuario encontrado en BD.
+ *
+ * @author Brandon Gaviria
+ * @author Inmaculada Gil
+ * @author David Moreno
+ */
+public class VLogin extends JPanel {
+
+	private JTextField txtEmail;
 	private JPasswordField txtPassword;
 	private JButton btnMostrarPassword;
 	private JButton btnIniciarSesion;
 	private JButton btnRegistrarse;
 	private JLabel lblError;
-	private String rolSeleccionado;
 
 	public VLogin() {
-		super(Constantes.TITULO_APLICACION + " - Login");
 		inicializarComponentes();
 	}
 
 	private void inicializarComponentes() {
-		rolSeleccionado = Constantes.ROL_CLIENTE;
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(430, 560);
-		setResizable(false);
-		setLocationRelativeTo(null);
-		getContentPane().setBackground(Tema.FONDO);
-		setLayout(new BorderLayout());
-
-		panelCabecera = ComponentesUI.navbar(Constantes.TITULO_APLICACION, null);
-		add(panelCabecera, BorderLayout.NORTH);
-
-		JPanel fondo = new JPanel(new GridBagLayout());
-		fondo.setBackground(Tema.FONDO);
+		setLayout(new GridBagLayout());
+		setBackground(Tema.FONDO);
 
 		PanelRedondeado tarjeta = new PanelRedondeado(16, Color.WHITE, Tema.BORDE);
 		tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
-		tarjeta.setPreferredSize(new Dimension(340, 440));
+		tarjeta.setPreferredSize(new Dimension(340, 380));
 		tarjeta.setBorder(BorderFactory.createEmptyBorder(28, 38, 24, 38));
 
-		lblNombreApp = new JLabel(Constantes.TITULO_APLICACION);
+		// ── Título ────────────────────────────────────────────────────
+		JLabel lblNombreApp = new JLabel(Constantes.TITULO_APLICACION);
 		lblNombreApp.setFont(Tema.fuenteNegrita(24));
 		lblNombreApp.setForeground(Tema.TEXTO_OSCURO);
 		lblNombreApp.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(lblNombreApp);
 
-		lblSubtitulo = new JLabel("Sistema de perfumeria");
+		JLabel lblSubtitulo = new JLabel("Sistema de perfumería");
 		lblSubtitulo.setFont(Tema.fuenteNormal(12));
 		lblSubtitulo.setForeground(Tema.TEXTO_CLARO);
 		lblSubtitulo.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(lblSubtitulo);
-		tarjeta.add(Box.createVerticalStrut(22));
+		tarjeta.add(Box.createVerticalStrut(28));
 
-		lblRol = ComponentesUI.etiquetaFormulario("Tipo de acceso");
-		lblRol.setAlignmentX(LEFT_ALIGNMENT);
-		tarjeta.add(lblRol);
-		tarjeta.add(Box.createVerticalStrut(6));
-
-		panelSelectorRol = new JPanel(new GridLayout(1, 2, 8, 0));
-		panelSelectorRol.setOpaque(false);
-		panelSelectorRol.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
-		btnRolCliente = ComponentesUI.botonSecundario("Cliente");
-		btnRolEmpleado = ComponentesUI.botonSecundario("Empleado");
-		panelSelectorRol.add(btnRolCliente);
-		panelSelectorRol.add(btnRolEmpleado);
-		tarjeta.add(panelSelectorRol);
-		tarjeta.add(Box.createVerticalStrut(18));
-
-		lblId = ComponentesUI.etiquetaFormulario("ID de usuario");
-		lblId.setAlignmentX(LEFT_ALIGNMENT);
-		tarjeta.add(lblId);
+		// ── Email ─────────────────────────────────────────────────────
+		JLabel lblEmail = ComponentesUI.etiquetaFormulario("Correo electrónico");
+		lblEmail.setAlignmentX(LEFT_ALIGNMENT);
+		tarjeta.add(lblEmail);
 		tarjeta.add(Box.createVerticalStrut(4));
+		txtEmail = ComponentesUI.campoTexto("correo@goldentale.com");
+		txtEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
+		tarjeta.add(txtEmail);
+		tarjeta.add(Box.createVerticalStrut(14));
 
-		txtId = ComponentesUI.campoTexto("Ej: C001 o E001");
-		txtId.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
-		tarjeta.add(txtId);
-		tarjeta.add(Box.createVerticalStrut(12));
-
-		lblPassword = ComponentesUI.etiquetaFormulario("Contrasena");
+		// ── Contraseña ────────────────────────────────────────────────
+		JLabel lblPassword = ComponentesUI.etiquetaFormulario("Contraseña");
 		lblPassword.setAlignmentX(LEFT_ALIGNMENT);
 		tarjeta.add(lblPassword);
 		tarjeta.add(Box.createVerticalStrut(4));
-
 		txtPassword = ComponentesUI.campoPassword();
 		txtPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
 		tarjeta.add(txtPassword);
 		tarjeta.add(Box.createVerticalStrut(8));
 
+		// ── Mostrar contraseña ────────────────────────────────────────
 		JPanel filaMostrar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 		filaMostrar.setOpaque(false);
 		filaMostrar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
@@ -124,6 +83,7 @@ public class VLogin extends JFrame {
 		tarjeta.add(filaMostrar);
 		tarjeta.add(Box.createVerticalStrut(14));
 
+		// ── Error ─────────────────────────────────────────────────────
 		lblError = new JLabel(" ");
 		lblError.setFont(Tema.fuenteNormal(12));
 		lblError.setForeground(Tema.ERROR);
@@ -131,33 +91,38 @@ public class VLogin extends JFrame {
 		tarjeta.add(lblError);
 		tarjeta.add(Box.createVerticalStrut(8));
 
-		btnIniciarSesion = ComponentesUI.botonPrincipal("Iniciar sesion");
+		// ── Botones ───────────────────────────────────────────────────
+		btnIniciarSesion = ComponentesUI.botonPrincipal("Iniciar sesión");
 		btnIniciarSesion.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		tarjeta.add(btnIniciarSesion);
 		tarjeta.add(Box.createVerticalStrut(10));
 
-		btnRegistrarse = ComponentesUI.botonSecundario("Nuevo cliente");
+		btnRegistrarse = ComponentesUI.botonSecundario("¿No tienes cuenta? Regístrate");
 		btnRegistrarse.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
 		tarjeta.add(btnRegistrarse);
 
-		fondo.add(tarjeta);
-		add(fondo, BorderLayout.CENTER);
+		add(tarjeta);
 	}
 
-	public JPanel getPanelSelectorRol() {
-		return panelSelectorRol;
+	// ── Métodos de ayuda ──────────────────────────────────────────────
+
+	public void mostrarError(String msg) {
+		lblError.setText(msg);
 	}
 
-	public JButton getBtnRolCliente() {
-		return btnRolCliente;
+	public void limpiarError() {
+		lblError.setText(" ");
 	}
 
-	public JButton getBtnRolEmpleado() {
-		return btnRolEmpleado;
+	public void setControlador(Controlador controlador) {
+		btnIniciarSesion.addActionListener(controlador);
+		btnRegistrarse.addActionListener(controlador);
+		btnMostrarPassword.addActionListener(controlador);
 	}
 
-	public JTextField getTxtId() {
-		return txtId;
+	// ── Getters ───────────────────────────────────────────────────────
+	public JTextField getTxtEmail() {
+		return txtEmail;
 	}
 
 	public JPasswordField getTxtPassword() {
@@ -178,13 +143,5 @@ public class VLogin extends JFrame {
 
 	public JLabel getLblError() {
 		return lblError;
-	}
-
-	public String getRolSeleccionado() {
-		return rolSeleccionado;
-	}
-
-	public void setRolSeleccionado(String rol) {
-		this.rolSeleccionado = rol;
 	}
 }

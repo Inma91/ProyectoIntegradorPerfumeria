@@ -3,6 +3,10 @@ package com.goldentale.model.util;
 import java.awt.Color;
 import java.awt.Font;
 
+/**
+ * Constantes visuales de Golden Tale. Paleta de colores, tipografías y helpers
+ * de fuente.
+ */
 public class Tema {
 
 	public static final Color MORADO = new Color(94, 60, 171);
