@@ -1,40 +1,62 @@
 package com.goldentale.model.db;
 
+/**
+ * Entidad Perfume. Representa un perfume del catálogo.
+ *
+ * @author Brandon Gaviria
+ * @author Inmaculada Gil
+ * @author David Moreno
+ */
 public class Perfumes {
-	
-	//ATRIBUTO DEL PERFUME
+
 	private int idPerfume;
 	private String nombre;
 	private String marca;
 	private String categoria;
-	private String publico;
-	private int ml;
-	private double precio;
 	private String descripcion;
-	private int stock;
+	private double precio;
+	private int ml;
+	private String publico;
 	private String localizacion;
+	private int stock;
 
-	//CONSTRUCTOR
-	public Perfumes(int idPerfume, String nombre, String marca, String categoria, String publico, int ml, double precio,
-			String descripcion, int stock, String localizacion) {
-		this.idPerfume = idPerfume;
+	/**
+	 * Constructor completo.
+	 *
+	 * @param idPerfume    ID en la base de datos (null si es nuevo y el ID lo
+	 *                     genera la BD).
+	 * @param nombre       Nombre comercial del perfume.
+	 * @param marca        Casa de perfumería.
+	 * @param categoria    Categoría olfativa (Floral, Oriental, etc.).
+	 * @param descripcion  Notas olfativas y descripción (puede ser vacía).
+	 * @param precio       Precio en euros.
+	 * @param ml           Volumen del frasco en mililitros.
+	 * @param publico      Público objetivo (Mujer, Hombre, Unisex).
+	 * @param localizacion Estante asignado en el almacén.
+	 * @param stock        Unidades disponibles.
+	 */
+	public Perfumes(Object idPerfume, String nombre, String marca, String categoria, String descripcion, double precio,
+			int ml, String publico, String localizacion, int stock) {
+		this.idPerfume = (idPerfume instanceof Integer) ? (Integer) idPerfume : 0;
 		this.nombre = nombre;
 		this.marca = marca;
 		this.categoria = categoria;
-		this.publico = publico;
-		this.ml = ml;
-		this.precio = precio;
 		this.descripcion = descripcion;
-		this.stock = stock;
+		this.precio = precio;
+		this.ml = ml;
+		this.publico = publico;
 		this.localizacion = localizacion;
+		this.stock = stock;
 	}
-	//Getters y setters por si acaso
+
+	// ── Getters y setters ─────────────────────────────────────────────
+
 	public int getIdPerfume() {
 		return idPerfume;
 	}
 
-	public void setIdPerfume(int idPerfume) {
-		this.idPerfume = idPerfume;
+	public void setIdPerfume(int id) {
+		this.idPerfume = id;
 	}
 
 	public String getNombre() {
@@ -57,24 +79,16 @@ public class Perfumes {
 		return categoria;
 	}
 
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
+	public void setCategoria(String c) {
+		this.categoria = c;
 	}
 
-	public String getPublico() {
-		return publico;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-	public void setPublico(String publico) {
-		this.publico = publico;
-	}
-
-	public int getMl() {
-		return ml;
-	}
-
-	public void setMl(int ml) {
-		this.ml = ml;
+	public void setDescripcion(String d) {
+		this.descripcion = d;
 	}
 
 	public double getPrecio() {
@@ -85,12 +99,28 @@ public class Perfumes {
 		this.precio = precio;
 	}
 
-	public String getDescripcion() {
-		return descripcion;
+	public int getMl() {
+		return ml;
 	}
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setMl(int ml) {
+		this.ml = ml;
+	}
+
+	public String getPublico() {
+		return publico;
+	}
+
+	public void setPublico(String publico) {
+		this.publico = publico;
+	}
+
+	public String getLocalizacion() {
+		return localizacion;
+	}
+
+	public void setLocalizacion(String loc) {
+		this.localizacion = loc;
 	}
 
 	public int getStock() {
@@ -101,11 +131,8 @@ public class Perfumes {
 		this.stock = stock;
 	}
 
-	public String getLocalizacion() {
-		return localizacion;
-	}
-
-	public void setLocalizacion(String localizacion) {
-		this.localizacion = localizacion;
+	@Override
+	public String toString() {
+		return nombre + " (" + marca + ") - " + ml + "ml - " + String.format("%.2f€", precio);
 	}
 }

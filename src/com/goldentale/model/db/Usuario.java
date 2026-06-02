@@ -1,8 +1,14 @@
 package com.goldentale.model.db;
 
+/**
+ * Entidad Usuario. Base para Cliente y Empleado (herencia por rol).
+ *
+ * @author Brandon Gaviria
+ * @author Inmaculada Gil
+ * @author David Moreno
+ */
 public class Usuario {
-	
-	//ATRIBUTO DEL USUARIO
+
 	private int idUsuario;
 	private String nombre;
 	private String apellido;
@@ -12,7 +18,6 @@ public class Usuario {
 	private String password;
 	private String rol;
 
-	//CONSTRUCTOR
 	public Usuario(int idUsuario, String nombre, String apellido, String direccion, String telefono, String email,
 			String password, String rol) {
 		this.idUsuario = idUsuario;
@@ -24,13 +29,15 @@ public class Usuario {
 		this.password = password;
 		this.rol = rol;
 	}
-	//Getters y setters
+
+	// ── Getters y setters ─────────────────────────────────────────────
+
 	public int getIdUsuario() {
 		return idUsuario;
 	}
 
-	public void setIdUsuario(int idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setIdUsuario(int id) {
+		this.idUsuario = id;
 	}
 
 	public String getNombre() {
@@ -45,40 +52,40 @@ public class Usuario {
 		return apellido;
 	}
 
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
+	public void setApellido(String a) {
+		this.apellido = a;
 	}
 
 	public String getDireccion() {
 		return direccion;
 	}
 
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
+	public void setDireccion(String d) {
+		this.direccion = d;
 	}
 
 	public String getTelefono() {
 		return telefono;
 	}
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
+	public void setTelefono(String t) {
+		this.telefono = t;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setEmail(String e) {
+		this.email = e;
 	}
 
 	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPassword(String p) {
+		this.password = p;
 	}
 
 	public String getRol() {
@@ -87,5 +94,10 @@ public class Usuario {
 
 	public void setRol(String rol) {
 		this.rol = rol;
+	}
+
+	/** Nombre completo: nombre + apellido. */
+	public String getNombreCompleto() {
+		return nombre + " " + apellido;
 	}
 }

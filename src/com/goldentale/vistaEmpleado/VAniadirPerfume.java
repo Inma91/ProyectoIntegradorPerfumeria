@@ -1,54 +1,33 @@
 package com.goldentale.vistaEmpleado;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
+import com.goldentale.controlador.Controlador;
 import com.goldentale.model.data.Constantes;
-import com.goldentale.model.util.*;
+import com.goldentale.model.util.ComponentesUI;
 import com.goldentale.model.util.ComponentesUI.PanelRedondeado;
 import com.goldentale.model.util.Tema;
 
-public class VAniadirPerfume extends JFrame {
+import javax.swing.*;
+import java.awt.*;
 
-	private JPanel panelNavbar;
-	private JLabel lblNombreApp;
-	private JButton btnVolver;
-	private JLabel lblTitulo;
-	private JPanel panelFormulario;
-	private JLabel lblNombre;
+/**
+ * Panel Añadir Perfume — vista del empleado. Formulario para dar de alta un
+ * nuevo perfume. La localización se asigna automáticamente según los ml
+ * introducidos.
+ *
+ * @author Brandon Gaviria
+ * @author Inmaculada Gil
+ * @author David Moreno
+ */
+public class VAniadirPerfume extends JPanel {
+
 	private JTextField txtNombre;
-	private JLabel lblMarca;
 	private JTextField txtMarca;
-	private JLabel lblCategoria;
 	private JComboBox<String> comboCategoria;
-	private JLabel lblPrecio;
 	private JTextField txtPrecio;
-	private JLabel lblMl;
 	private JTextField txtMl;
-	private JLabel lblPublico;
 	private JComboBox<String> comboPublico;
-	private JLabel lblLocalizacionTitulo;
 	private JLabel lblLocalizacion;
-	private JLabel lblDescripcion;
 	private JTextArea txtDescripcion;
-	private JScrollPane scrollDescripcion;
-	private JLabel lblStock;
 	private JTextField txtStock;
 	private JLabel lblError;
 	private JLabel lblExito;
@@ -56,100 +35,90 @@ public class VAniadirPerfume extends JFrame {
 	private JButton btnLimpiar;
 
 	public VAniadirPerfume() {
-		super(Constantes.TITULO_APLICACION + " - Anadir perfume");
 		inicializarComponentes();
 	}
 
 	private void inicializarComponentes() {
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(720, 690);
-		setLocationRelativeTo(null);
-		setLayout(new BorderLayout());
-		getContentPane().setBackground(Tema.FONDO);
-
-		btnVolver = ComponentesUI.botonSecundario("Volver");
-		btnVolver.setPreferredSize(new Dimension(100, 32));
-		panelNavbar = ComponentesUI.navbar(Constantes.TITULO_APLICACION, btnVolver);
-		lblNombreApp = (JLabel) panelNavbar.getComponent(0);
-		add(panelNavbar, BorderLayout.NORTH);
-
-		JPanel fondo = new JPanel(new GridBagLayout());
-		fondo.setBackground(Tema.FONDO);
+		setLayout(new GridBagLayout());
+		setBackground(Tema.FONDO);
 
 		PanelRedondeado tarjeta = new PanelRedondeado(16, Color.WHITE, Tema.BORDE);
-		tarjeta.setPreferredSize(new Dimension(590, 560));
+		tarjeta.setPreferredSize(new Dimension(590, 580));
 		tarjeta.setBorder(BorderFactory.createEmptyBorder(24, 28, 24, 28));
 		tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
 
-		lblTitulo = new JLabel("Anadir nuevo perfume");
+		// ── Título ────────────────────────────────────────────────────
+		JLabel lblTitulo = new JLabel("Añadir nuevo perfume");
 		lblTitulo.setFont(Tema.fuenteNegrita(22));
 		lblTitulo.setForeground(Tema.TEXTO_OSCURO);
 		lblTitulo.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(lblTitulo);
 		tarjeta.add(Box.createVerticalStrut(18));
 
-		panelFormulario = new JPanel(new GridLayout(0, 2, 14, 10));
-		panelFormulario.setOpaque(false);
-		lblNombre = ComponentesUI.etiquetaFormulario("Nombre");
+		// ── Formulario ────────────────────────────────────────────────
+		JPanel formulario = new JPanel(new GridLayout(0, 2, 14, 10));
+		formulario.setOpaque(false);
+
 		txtNombre = ComponentesUI.campoTexto("Velvet Rose");
-		lblMarca = ComponentesUI.etiquetaFormulario("Marca");
 		txtMarca = ComponentesUI.campoTexto("Maison Luxe");
-		lblCategoria = ComponentesUI.etiquetaFormulario("Categoria");
-		comboCategoria = new JComboBox<String>(Constantes.CATEGORIAS_PERFUME);
-		lblPrecio = ComponentesUI.etiquetaFormulario("Precio");
+		comboCategoria = new JComboBox<>(Constantes.CATEGORIAS_PERFUME);
 		txtPrecio = ComponentesUI.campoTexto("89.99");
-		lblMl = ComponentesUI.etiquetaFormulario("Mililitros");
 		txtMl = ComponentesUI.campoTexto("50");
-		lblPublico = ComponentesUI.etiquetaFormulario("Publico");
-		comboPublico = new JComboBox<String>(Constantes.PUBLICOS_OBJETIVO);
-		lblStock = ComponentesUI.etiquetaFormulario("Stock inicial");
+		comboPublico = new JComboBox<>(Constantes.PUBLICOS_OBJETIVO);
 		txtStock = ComponentesUI.campoTexto("12");
 
-		panelFormulario.add(lblNombre);
-		panelFormulario.add(txtNombre);
-		panelFormulario.add(lblMarca);
-		panelFormulario.add(txtMarca);
-		panelFormulario.add(lblCategoria);
-		panelFormulario.add(comboCategoria);
-		panelFormulario.add(lblPrecio);
-		panelFormulario.add(txtPrecio);
-		panelFormulario.add(lblMl);
-		panelFormulario.add(txtMl);
-		panelFormulario.add(lblPublico);
-		panelFormulario.add(comboPublico);
-		panelFormulario.add(lblStock);
-		panelFormulario.add(txtStock);
-		tarjeta.add(panelFormulario);
+		formulario.add(ComponentesUI.etiquetaFormulario("Nombre"));
+		formulario.add(txtNombre);
+		formulario.add(ComponentesUI.etiquetaFormulario("Marca"));
+		formulario.add(txtMarca);
+		formulario.add(ComponentesUI.etiquetaFormulario("Categoría"));
+		formulario.add(comboCategoria);
+		formulario.add(ComponentesUI.etiquetaFormulario("Precio (€)"));
+		formulario.add(txtPrecio);
+		formulario.add(ComponentesUI.etiquetaFormulario("Mililitros"));
+		formulario.add(txtMl);
+		formulario.add(ComponentesUI.etiquetaFormulario("Público"));
+		formulario.add(comboPublico);
+		formulario.add(ComponentesUI.etiquetaFormulario("Stock inicial"));
+		formulario.add(txtStock);
+
+		tarjeta.add(formulario);
 		tarjeta.add(Box.createVerticalStrut(14));
 
-		lblLocalizacionTitulo = ComponentesUI.etiquetaFormulario("Localizacion automatica");
-		lblLocalizacion = new JLabel(Constantes.LOC_PEQUENO + " - pendiente de calcular");
+		// ── Localización automática ───────────────────────────────────
+		JLabel lblLocTitulo = ComponentesUI.etiquetaFormulario("Localización automática");
+		tarjeta.add(lblLocTitulo);
+		tarjeta.add(Box.createVerticalStrut(4));
+
+		lblLocalizacion = new JLabel(Constantes.LOC_PEQUENO + " — pendiente de calcular");
 		lblLocalizacion.setFont(Tema.fuenteNegrita(13));
 		lblLocalizacion.setForeground(Tema.MORADO);
-		tarjeta.add(lblLocalizacionTitulo);
-		tarjeta.add(Box.createVerticalStrut(4));
 		tarjeta.add(lblLocalizacion);
 		tarjeta.add(Box.createVerticalStrut(12));
 
-		lblDescripcion = ComponentesUI.etiquetaFormulario("Descripcion");
-		txtDescripcion = ComponentesUI.areaTexto();
-		scrollDescripcion = new JScrollPane(txtDescripcion);
-		scrollDescripcion.setPreferredSize(new Dimension(0, 80));
-		tarjeta.add(lblDescripcion);
+		// ── Descripción ───────────────────────────────────────────────
+		tarjeta.add(ComponentesUI.etiquetaFormulario("Descripción"));
 		tarjeta.add(Box.createVerticalStrut(4));
-		tarjeta.add(scrollDescripcion);
+		txtDescripcion = ComponentesUI.areaTexto();
+		JScrollPane scrollDesc = new JScrollPane(txtDescripcion);
+		scrollDesc.setPreferredSize(new Dimension(0, 80));
+		scrollDesc.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+		tarjeta.add(scrollDesc);
 		tarjeta.add(Box.createVerticalStrut(10));
 
+		// ── Feedback ──────────────────────────────────────────────────
 		lblError = new JLabel(" ");
 		lblError.setFont(Tema.fuenteNormal(12));
 		lblError.setForeground(Tema.ERROR);
 		tarjeta.add(lblError);
+
 		lblExito = new JLabel(" ");
 		lblExito.setFont(Tema.fuenteNormal(12));
 		lblExito.setForeground(Tema.EXITO);
 		tarjeta.add(lblExito);
 		tarjeta.add(Box.createVerticalStrut(8));
 
+		// ── Botones ───────────────────────────────────────────────────
 		JPanel fila = new JPanel(new GridLayout(1, 2, 10, 0));
 		fila.setOpaque(false);
 		fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -158,13 +127,60 @@ public class VAniadirPerfume extends JFrame {
 		fila.add(btnLimpiar);
 		fila.add(btnGuardar);
 		tarjeta.add(fila);
-		fondo.add(tarjeta);
-		add(new JScrollPane(fondo), BorderLayout.CENTER);
+
+		JScrollPane scroll = new JScrollPane(tarjeta);
+		scroll.setBorder(null);
+		scroll.setOpaque(false);
+		scroll.getViewport().setOpaque(false);
+		add(scroll);
 	}
 
-	public JButton getBtnVolver() {
-		return btnVolver;
+	// ── Métodos de ayuda ──────────────────────────────────────────────
+
+	public void mostrarError(String msg) {
+		lblError.setText(msg);
+		lblExito.setText(" ");
 	}
+
+	public void mostrarExito(String msg) {
+		lblExito.setText(msg);
+		lblError.setText(" ");
+	}
+
+	/**
+	 * Calcula y actualiza la etiqueta de localización según los ml introducidos.
+	 * Llamar desde el controlador al cambiar txtMl.
+	 */
+	public void actualizarLocalizacion() {
+		try {
+			int ml = Integer.parseInt(txtMl.getText().trim());
+			if (ml <= Constantes.ML_LIMITE_PEQUENO) {
+				lblLocalizacion.setText(Constantes.LOC_PEQUENO);
+			} else if (ml <= Constantes.ML_LIMITE_MEDIANO) {
+				lblLocalizacion.setText(Constantes.LOC_MEDIANO);
+			} else {
+				lblLocalizacion.setText(Constantes.LOC_GRANDE);
+			}
+		} catch (NumberFormatException e) {
+			lblLocalizacion.setText("— introduce mililitros válidos");
+		}
+	}
+
+	public void limpiarFormulario() {
+		txtNombre.setText("");
+		txtMarca.setText("");
+		comboCategoria.setSelectedIndex(0);
+		txtPrecio.setText("");
+		txtMl.setText("");
+		lblLocalizacion.setText(Constantes.LOC_PEQUENO + " — pendiente de calcular");
+		txtStock.setText("");
+		comboPublico.setSelectedIndex(0);
+		txtDescripcion.setText("");
+		lblError.setText(" ");
+		lblExito.setText(" ");
+	}
+
+	// ── Getters ───────────────────────────────────────────────────────
 
 	public JTextField getTxtNombre() {
 		return txtNombre;
@@ -216,5 +232,10 @@ public class VAniadirPerfume extends JFrame {
 
 	public JButton getBtnLimpiar() {
 		return btnLimpiar;
+	}
+
+	public void setControlador(Controlador controlador) {
+		btnGuardar.addActionListener(controlador);
+		btnLimpiar.addActionListener(controlador);
 	}
 }

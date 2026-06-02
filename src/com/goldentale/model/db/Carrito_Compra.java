@@ -1,5 +1,8 @@
 package com.goldentale.model.db;
 
+/**
+ * Entidad línea de carrito de compra.
+ */
 public class Carrito_Compra {
 
 	private int idCarrito;
@@ -7,10 +10,6 @@ public class Carrito_Compra {
 	private Perfumes perfume;
 	private int cantidad;
 	private double precioUnidad;
-
-	public Carrito_Compra() {
-		// TODO cargar datos reales
-	}
 
 	public Carrito_Compra(int idCarrito, Usuario usuario, Perfumes perfume, int cantidad, double precioUnidad) {
 		this.idCarrito = idCarrito;
@@ -28,24 +27,24 @@ public class Carrito_Compra {
 		return idCarrito;
 	}
 
-	public void setIdCarrito(int idCarrito) {
-		this.idCarrito = idCarrito;
+	public void setIdCarrito(int id) {
+		this.idCarrito = id;
 	}
 
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUsuario(Usuario u) {
+		this.usuario = u;
 	}
 
 	public Perfumes getPerfume() {
 		return perfume;
 	}
 
-	public void setPerfume(Perfumes perfume) {
-		this.perfume = perfume;
+	public void setPerfume(Perfumes p) {
+		this.perfume = p;
 	}
 
 	public int getCantidad() {
@@ -60,7 +59,7 @@ public class Carrito_Compra {
 		return precioUnidad;
 	}
 
-	public void setPrecioUnidad(double precioUnidad) {
-		this.precioUnidad = precioUnidad;
+	public void setPrecioUnidad(double precio) {
+		this.precioUnidad = precio;
 	}
 }

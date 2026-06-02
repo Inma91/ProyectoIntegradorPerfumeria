@@ -1,5 +1,8 @@
 package com.goldentale.model.db;
 
+/**
+ * Entidad Pedido.
+ */
 public class Pedido {
 
 	private int idPedido;
@@ -8,10 +11,6 @@ public class Pedido {
 	private String estado;
 	private String metodoPago;
 	private double total;
-
-	public Pedido() {
-		// TODO implementar consulta JDBC
-	}
 
 	public Pedido(int idPedido, Usuario usuario, String fecha, String estado, String metodoPago, double total) {
 		this.idPedido = idPedido;
@@ -26,16 +25,16 @@ public class Pedido {
 		return idPedido;
 	}
 
-	public void setIdPedido(int idPedido) {
-		this.idPedido = idPedido;
+	public void setIdPedido(int id) {
+		this.idPedido = id;
 	}
 
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setUsuario(Usuario u) {
+		this.usuario = u;
 	}
 
 	public String getFecha() {
@@ -58,8 +57,8 @@ public class Pedido {
 		return metodoPago;
 	}
 
-	public void setMetodoPago(String metodoPago) {
-		this.metodoPago = metodoPago;
+	public void setMetodoPago(String mp) {
+		this.metodoPago = mp;
 	}
 
 	public double getTotal() {

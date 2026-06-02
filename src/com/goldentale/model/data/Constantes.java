@@ -21,7 +21,7 @@ public class Constantes {
 	// ── Título ────────────────────────────────────────────────────────
 	public static final String TITULO_APLICACION = "Golden Tale";
 
-	// ── Fuentes ───────────────────────────────────────────────────────
+	// ── Fuentes (legacy, usar Tema.fuenteNormal/Negrita preferiblemente) ──
 	public static final Font SANS_34 = new Font("SansSerif", Font.PLAIN, 34);
 	public static final Font SANS_20 = new Font("SansSerif", Font.PLAIN, 20);
 	public static final Font SANS_18 = new Font("SansSerif", Font.PLAIN, 18);
@@ -65,9 +65,9 @@ public class Constantes {
 	public static final String[] CATEGORIAS_PERFUME = { "Floral", "Oriental", "Cítrico", "Acuático", "Amaderado" };
 
 	// ── Localización automática en almacén (según ml del frasco) ──────
-	public static final String LOC_PEQUENO = "Estante A"; // <= 50ml
-	public static final String LOC_MEDIANO = "Estante B"; // 75ml
-	public static final String LOC_GRANDE = "Estante C"; // >= 100ml
+	public static final String LOC_PEQUENO = "Estante A"; // <= 50 ml
+	public static final String LOC_MEDIANO = "Estante B"; // 75 ml
+	public static final String LOC_GRANDE = "Estante C"; // >= 100 ml
 	public static final int ML_LIMITE_PEQUENO = 50;
 	public static final int ML_LIMITE_MEDIANO = 75;
 
@@ -81,10 +81,25 @@ public class Constantes {
 	public static final String[] COLS_LINEAS_PEDIDO = { "Perfume", "Cantidad", "Precio ud.", "Subtotal" };
 	public static final String[] COLS_STOCK = { "Perfume", "Ubicación", "Cantidad", "Estado" };
 
+	// ── Claves del CardLayout (vistas) ────────────────────────────────
+	public static final String VISTA_INICIO = "inicio";
+	public static final String VISTA_LOGIN = "login";
+	public static final String VISTA_REGISTRO = "registro";
+	// Vistas cliente
+	public static final String VISTA_CATALOGO = "catalogo";
+	public static final String VISTA_CARRITO = "carrito";
+	public static final String VISTA_MIS_PEDIDOS = "misPedidos";
+	public static final String VISTA_PAGO = "pago";
+	// Vistas empleado
+	public static final String VISTA_DASHBOARD = "dashboard";
+	public static final String VISTA_ANADIR = "anadirPerfume";
+	public static final String VISTA_MODIFICAR = "modificarPerfume";
+	public static final String VISTA_STOCK = "stock";
+
 	// ── Variable de sesión ────────────────────────────────────────────
 	/**
-	 * Almacena el usuario autenticado durante toda la sesión. Puede ser una
-	 * instancia de Cliente o Empleado (herencia). Se pone a null al cerrar sesión.
+	 * Usuario autenticado durante la sesión. Puede ser Cliente o Empleado (herencia
+	 * de Usuario). Se pone a null al cerrar sesión.
 	 */
 	public static Usuario usuarioAutenticado;
 }
