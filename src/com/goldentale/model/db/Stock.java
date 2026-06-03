@@ -5,31 +5,31 @@ package com.goldentale.model.db;
  */
 public class Stock {
 
-	private String id;
-	private String idPerfume;
+	private int id;
+	private int idPerfume;
 	private int cantidad;
 	private String localizacion;
 
-	public Stock(String id, String idPerfume, int cantidad, String localizacion) {
+	public Stock(int id, int idPerfume, int cantidad, String localizacion) {
 		this.id = id;
 		this.idPerfume = idPerfume;
 		this.cantidad = cantidad;
 		this.localizacion = localizacion;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	public String getIdPerfume() {
+	public int getIdPerfume() {
 		return idPerfume;
 	}
 
-	public void setIdPerfume(String ip) {
+	public void setIdPerfume(int ip) {
 		this.idPerfume = ip;
 	}
 
@@ -51,7 +51,6 @@ public class Stock {
 
 	@Override
 	public String toString() {
-		return "Stock [id=" + id + ", idPerfume=" + idPerfume + ", cantidad=" + cantidad + ", localizacion="
-				+ localizacion + "]";
+		return "Stock del perfume " + idPerfume + " = " + cantidad + " unidades en " + localizacion + " del almacén.";
 	}
 }

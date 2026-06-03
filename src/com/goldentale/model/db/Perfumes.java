@@ -17,8 +17,6 @@ public class Perfumes {
 	private double precio;
 	private int ml;
 	private String publico;
-	private String localizacion;
-	private int stock;
 
 	/**
 	 * Constructor completo.
@@ -32,12 +30,10 @@ public class Perfumes {
 	 * @param precio       Precio en euros.
 	 * @param ml           Volumen del frasco en mililitros.
 	 * @param publico      Público objetivo (Mujer, Hombre, Unisex).
-	 * @param localizacion Estante asignado en el almacén.
-	 * @param stock        Unidades disponibles.
 	 */
-	public Perfumes(Object idPerfume, String nombre, String marca, String categoria, String descripcion, double precio,
-			int ml, String publico, String localizacion, int stock) {
-		this.idPerfume = (idPerfume instanceof Integer) ? (Integer) idPerfume : 0;
+	public Perfumes(int idPerfume, String nombre, String marca, String categoria, String descripcion, double precio,
+			int ml, String publico) {
+		this.idPerfume = idPerfume;
 		this.nombre = nombre;
 		this.marca = marca;
 		this.categoria = categoria;
@@ -45,8 +41,6 @@ public class Perfumes {
 		this.precio = precio;
 		this.ml = ml;
 		this.publico = publico;
-		this.localizacion = localizacion;
-		this.stock = stock;
 	}
 
 	// ── Getters y setters ─────────────────────────────────────────────
@@ -113,22 +107,6 @@ public class Perfumes {
 
 	public void setPublico(String publico) {
 		this.publico = publico;
-	}
-
-	public String getLocalizacion() {
-		return localizacion;
-	}
-
-	public void setLocalizacion(String loc) {
-		this.localizacion = loc;
-	}
-
-	public int getStock() {
-		return stock;
-	}
-
-	public void setStock(int stock) {
-		this.stock = stock;
 	}
 
 	@Override

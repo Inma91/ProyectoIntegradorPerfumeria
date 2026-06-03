@@ -21,7 +21,6 @@ public class PerfumesDAO {
 	static final String COL_PRECIO = "precio";
 	static final String COL_ML = "ml";
 	static final String COL_PUBLICO = "publico_objetivo";
-	static final String COL_IMAGEN = "imagen_url";
 
 	static final String COL_ID_STOCK = "id_stock";
 	static final String COL_CANTIDAD = "cantidad";
@@ -35,11 +34,47 @@ public class PerfumesDAO {
 
 	/**
 	 * Devuelve todos los perfumes del catálogo con su stock. TODO: implementar
-	 * consulta JDBC (JOIN perfume + stock).
+	 * consulta JDBC (JOIN perfume + stock). LO TENGO QUE DAR UNA VUELTA!!!!!!!!!!!!!!!!!!!!
 	 */
+
 	public ArrayList<Perfumes> getAll() {
-		// TODO: implementar consulta JDBC
-		return new ArrayList<>();
+	    ArrayList<Perfumes> listaPerfumes = new ArrayList<Perfumes>();
+
+	    String query = "SELECT " + COL_ID_PERFUME + " , " + COL_NOMBRE + " , " + COL_MARCA + " , " + COL_CATEGORIA + " , " 
+	            + COL_DESCRIPCION + " , " + COL_PRECIO + " , " + COL_ML + " , " + COL_PUBLICO + " FROM " + NOM_TABLA_PERFUME;
+
+	    Connection con = null;
+	    Statement stmt = null;
+	    ResultSet rslt = null;
+
+	    try {
+	        con = acc.getConexion();
+
+	        stmt = con.createStatement();
+	        rslt = stmt.executeQuery(query);
+
+	        while (rslt.next()) {
+	            listaPerfumes.add(new Perfumes(rslt.getInt(1),rslt.getString(2), rslt.getString(3), 
+	            		rslt.getString(4), rslt.getString(5), rslt.getDouble(6),rslt.getInt(7), rslt.getString(8)));
+	        }
+
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rslt != null)
+	                rslt.close();
+	            if (stmt != null)
+	                stmt.close();
+	            if (con != null)
+	                con.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return listaPerfumes;
 	}
 
 	/**
