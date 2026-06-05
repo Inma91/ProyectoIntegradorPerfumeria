@@ -8,7 +8,7 @@ package com.goldentale.model.db;
  * @author David Moreno
  */
 public class Perfumes {
-
+	//Atributos
 	private int idPerfume;
 	private String nombre;
 	private String marca;
@@ -31,6 +31,8 @@ public class Perfumes {
 	 * @param ml           Volumen del frasco en mililitros.
 	 * @param publico      Público objetivo (Mujer, Hombre, Unisex).
 	 */
+	
+	//Constructor
 	public Perfumes(int idPerfume, String nombre, String marca, String categoria, String descripcion, double precio,
 			int ml, String publico) {
 		this.idPerfume = idPerfume;
@@ -43,7 +45,7 @@ public class Perfumes {
 		this.publico = publico;
 	}
 
-	// ── Getters y setters ─────────────────────────────────────────────
+	//Getters y setters
 
 	public int getIdPerfume() {
 		return idPerfume;
@@ -111,6 +113,8 @@ public class Perfumes {
 
 	@Override
 	public String toString() {
-		return nombre + " (" + marca + ") - " + ml + "ml - " + String.format("%.2f€", precio);
+		return "Perfumes: " + nombre + ", " + marca +  ", " + categoria + ", " + ml + "ml" + ", " + publico + ", " + precio + "€";
 	}
+
+	
 }

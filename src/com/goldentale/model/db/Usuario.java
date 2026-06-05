@@ -8,7 +8,8 @@ package com.goldentale.model.db;
  * @author David Moreno
  */
 public class Usuario {
-
+	
+	//Atributos
 	private int idUsuario;
 	private String nombre;
 	private String apellido;
@@ -18,6 +19,7 @@ public class Usuario {
 	private String password;
 	private String rol;
 
+	//Constructor
 	public Usuario(int idUsuario, String nombre, String apellido, String direccion, String telefono, String email,
 			String password, String rol) {
 		this.idUsuario = idUsuario;
@@ -30,8 +32,7 @@ public class Usuario {
 		this.rol = rol;
 	}
 
-	// ── Getters y setters ─────────────────────────────────────────────
-
+	//Getters y setters
 	public int getIdUsuario() {
 		return idUsuario;
 	}
@@ -95,9 +96,23 @@ public class Usuario {
 	public void setRol(String rol) {
 		this.rol = rol;
 	}
-
-	/** Nombre completo: nombre + apellido. */
+	
+	//Nombre Completo
 	public String getNombreCompleto() {
-		return nombre + " " + apellido;
+		return "Nombre: " + nombre + " " + "Apellido: " + apellido;
 	}
+
+	//toString
+	@Override
+	public String toString() {
+		return "Usuario " + 
+				"\n Nombre: " + nombre + 
+				"\n Apellido: " + apellido + 
+				"\n Dirección: " + direccion +
+				"\n Telefono: " + telefono + 
+				"\n email: " + email + 
+				"\n password: " + password +
+				"\n rol: " + rol; 
+	}
+	
 }

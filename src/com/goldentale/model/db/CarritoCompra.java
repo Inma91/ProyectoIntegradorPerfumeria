@@ -3,7 +3,7 @@ package com.goldentale.model.db;
 /**
  * Entidad línea de carrito de compra.
  */
-public class Carrito_Compra {
+public class CarritoCompra {
 
 	private int idCarrito;
 	private Usuario usuario;
@@ -11,7 +11,7 @@ public class Carrito_Compra {
 	private int cantidad;
 	private double precioUnidad;
 
-	public Carrito_Compra(int idCarrito, Usuario usuario, Perfumes perfume, int cantidad, double precioUnidad) {
+	public CarritoCompra(int idCarrito, Usuario usuario, Perfumes perfume, int cantidad, double precioUnidad) {
 		this.idCarrito = idCarrito;
 		this.usuario = usuario;
 		this.perfume = perfume;

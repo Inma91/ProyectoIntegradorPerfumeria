@@ -5,11 +5,13 @@ package com.goldentale.model.db;
  */
 public class Stock {
 
+	//Atributos
 	private int id;
 	private int idPerfume;
 	private int cantidad;
 	private String localizacion;
 
+	//Constructor
 	public Stock(int id, int idPerfume, int cantidad, String localizacion) {
 		this.id = id;
 		this.idPerfume = idPerfume;
@@ -17,6 +19,7 @@ public class Stock {
 		this.localizacion = localizacion;
 	}
 
+	//Getters and setters
 	public int getId() {
 		return id;
 	}
@@ -49,6 +52,7 @@ public class Stock {
 		this.localizacion = loc;
 	}
 
+	//toString
 	@Override
 	public String toString() {
 		return "Stock del perfume " + idPerfume + " = " + cantidad + " unidades en " + localizacion + " del almacén.";

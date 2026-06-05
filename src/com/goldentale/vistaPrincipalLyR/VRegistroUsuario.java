@@ -5,6 +5,7 @@ import com.goldentale.model.util.ComponentesUI;
 import com.goldentale.model.util.ComponentesUI.PanelRedondeado;
 import com.goldentale.model.util.Tema;
 import com.goldentale.model.data.Constantes;
+import com.goldentale.model.db.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -152,6 +153,20 @@ public class VRegistroUsuario extends JPanel {
 		txtConfirmarPassword.setText("");
 		lblError.setText(" ");
 		lblExito.setText(" ");
+	}
+	
+	//Obtener todos los datos de y en Usuario
+	public Usuario obtenerDatos() {
+		int id = 0; // (AUTOINCREMENT)
+		String nombre = txtNombre.getText().trim();
+		String apellido = txtApellido.getText().trim();
+		String direccion = txtDireccion.getText().trim();
+		String telefono = txtTelefono.getText().trim();
+		String email = txtEmail.getText().trim();
+		String password = new String(txtPassword.getPassword()).trim();
+		String rol = Constantes.ROL_CLIENTE;
+
+		return new Usuario(id, nombre, apellido, direccion, telefono, email, password, rol);
 	}
 
 	public void setControlador(Controlador controlador) {
