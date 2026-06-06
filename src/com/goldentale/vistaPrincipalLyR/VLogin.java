@@ -113,6 +113,12 @@ public class VLogin extends JPanel {
 	public void limpiarError() {
 		lblError.setText(" ");
 	}
+	
+	public void limpiarFormulario() {
+		txtEmail.setText("");
+		txtPassword.setText("");
+		lblError.setText(" ");
+	}
 
 	public void setControlador(Controlador controlador) {
 		btnIniciarSesion.addActionListener(controlador);

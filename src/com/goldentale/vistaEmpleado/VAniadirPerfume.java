@@ -2,6 +2,7 @@ package com.goldentale.vistaEmpleado;
 
 import com.goldentale.controlador.Controlador;
 import com.goldentale.model.data.Constantes;
+import com.goldentale.model.db.Perfumes;
 import com.goldentale.model.util.ComponentesUI;
 import com.goldentale.model.util.ComponentesUI.PanelRedondeado;
 import com.goldentale.model.util.Tema;
@@ -166,6 +167,91 @@ public class VAniadirPerfume extends JPanel {
 		}
 	}
 
+	/**
+	 * Lee los campos del formulario, los valida y construye un objeto Perfumes 
+	 * listo para enviar al DAO.
+	 *
+	 * @return Perfumes con los datos del formulario, o null si hay errores de validación.
+	 */
+	public Perfumes obtenerDatos() {
+		// 1. Limpiar mensajes previos antes de validar
+		mostrarError(" ");
+		mostrarExito(" ");
+
+		// 2. Validar campos de texto básicos (Nombre y Marca)
+		String nombre = txtNombre.getText().trim();
+		if (nombre.isEmpty()) {
+			mostrarError("El nombre del perfume no puede estar vacío.");
+			return null;
+		}
+
+		String marca = txtMarca.getText().trim();
+		if (marca.isEmpty()) {
+			mostrarError("La marca no puede estar vacía.");
+			return null;
+		}
+
+		// 3. Validar variables numéricas (Precio, Mililitros, Stock)
+		String precioTxt = txtPrecio.getText().trim();
+		String mlTxt = txtMl.getText().trim();
+		String stockTxt = txtStock.getText().trim();
+
+		if (precioTxt.isEmpty() || mlTxt.isEmpty() || stockTxt.isEmpty()) {
+			mostrarError("Precio, mililitros y stock son campos obligatorios.");
+			return null;
+		}
+
+		double precio = 0.0;
+		int ml = 0;
+		int stock = 0;
+
+		// Validar Precio
+		try {
+			precioTxt = precioTxt.replace(",", "."); // Convierte comas por si acaso
+			precio = Double.parseDouble(precioTxt);
+			if (precio <= 0) {
+				mostrarError("Error en Precio: Debe ser un valor mayor que 0.");
+				return null;
+			}
+		} catch (NumberFormatException e) {
+			mostrarError("Error en Precio: No puede contener letras (usa el punto '.' para decimales).");
+			return null;
+		}
+
+		// Validar Mililitros
+		try {
+			ml = Integer.parseInt(mlTxt);
+			if (ml <= 0) {
+				mostrarError("Error en Mililitros: Deben ser mayores que 0.");
+				return null;
+			}
+		} catch (NumberFormatException e) {
+			mostrarError("Error en Mililitros: Debe ser un número entero sin letras.");
+			return null;
+		}
+
+		// Validar Stock
+		try {
+			stock = Integer.parseInt(stockTxt);
+			if (stock < 0) {
+				mostrarError("Error en Stock: El stock inicial no puede ser negativo.");
+				return null;
+			}
+		} catch (NumberFormatException e) {
+			mostrarError("Error en Stock: Debe ser un número entero sin letras.");
+			return null;
+		}
+
+		// 4. Recoger el resto de datos
+		String categoria = (String) comboCategoria.getSelectedItem();
+		String descripcion = txtDescripcion.getText().trim();
+		String publico = (String) comboPublico.getSelectedItem();
+
+		int id = 0; // lo asigna la BBDD (AUTOINCREMENT)
+
+		return new Perfumes(id, nombre, marca, categoria, descripcion, precio, ml, publico);
+	}
+	
 	public void limpiarFormulario() {
 		txtNombre.setText("");
 		txtMarca.setText("");
