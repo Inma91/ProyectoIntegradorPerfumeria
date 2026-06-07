@@ -15,6 +15,7 @@ import java.awt.*;
  * @author Brandon Gaviria
  * @author Inmaculada Gil
  * @author David Moreno
+ * @see Controlador
  */
 public class VCarritoCompra extends JPanel {
 
@@ -26,10 +27,18 @@ public class VCarritoCompra extends JPanel {
 	private JButton btnVaciarCarrito;
 	private JButton btnFinalizarCompra;
 
+	/**
+	 * Construye el panel e inicializa todos los componentes visuales del carrito de compra.
+	 */
 	public VCarritoCompra() {
 		inicializarComponentes();
 	}
 
+	/**
+	 * Inicializa y configura la disposición de todos los componentes gráficos
+	 * de la interfaz, incluyendo la tabla de productos, el cálculo visual del
+	 * total y los botones de acción para gestionar las líneas del carrito.
+	 */
 	private void inicializarComponentes() {
 		setLayout(new BorderLayout());
 		setBackground(Tema.FONDO);
@@ -39,14 +48,12 @@ public class VCarritoCompra extends JPanel {
 		contenido.setLayout(new BoxLayout(contenido, BoxLayout.Y_AXIS));
 		contenido.setBackground(Tema.FONDO);
 
-		// ── Título ────────────────────────────────────────────────────
 		JLabel lblTitulo = new JLabel("MI CARRITO");
 		lblTitulo.setFont(Tema.fuenteNegrita(14));
 		lblTitulo.setForeground(Tema.TEXTO_OSCURO);
 		contenido.add(lblTitulo);
 		contenido.add(Box.createVerticalStrut(12));
 
-		// ── Tabla ─────────────────────────────────────────────────────
 		modeloTablaCarrito = new DefaultTableModel(new String[] { "Perfume", "Cantidad", "Precio ud.", "Subtotal" },
 				0) {
 			@Override
@@ -61,14 +68,12 @@ public class VCarritoCompra extends JPanel {
 		contenido.add(scrollTablaCarrito);
 		contenido.add(Box.createVerticalStrut(14));
 
-		// ── Total ─────────────────────────────────────────────────────
 		lblTotal = new JLabel("Total: 89.99 EUR");
 		lblTotal.setFont(Tema.fuenteNegrita(22));
 		lblTotal.setForeground(Tema.MORADO);
 		contenido.add(lblTotal);
 		contenido.add(Box.createVerticalStrut(12));
 
-		// ── Botones de acción ─────────────────────────────────────────
 		JPanel acciones = new JPanel(new GridLayout(1, 3, 10, 0));
 		acciones.setOpaque(false);
 		acciones.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -82,8 +87,6 @@ public class VCarritoCompra extends JPanel {
 
 		add(contenido, BorderLayout.CENTER);
 	}
-
-	// ── Getters ───────────────────────────────────────────────────────
 
 	public JTable getTablaCarrito() {
 		return tablaCarrito;
@@ -109,6 +112,12 @@ public class VCarritoCompra extends JPanel {
 		return btnFinalizarCompra;
 	}
 
+	/**
+	 * Registra el controlador como listener encargado de capturar los eventos
+	 * de los botones de interacción del carrito de compra.
+	 *
+	 * @param controlador Controlador que gestionará los eventos.
+	 */
 	public void setControlador(Controlador controlador) {
 		btnEliminarLinea.addActionListener(controlador);
 		btnVaciarCarrito.addActionListener(controlador);
