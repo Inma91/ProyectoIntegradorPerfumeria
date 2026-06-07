@@ -19,6 +19,7 @@ public class Perfumes {
 	private String publico;
 
 	/**
+
 	 * Constructor completo.
 	 *
 	 * @param idPerfume    ID en la base de datos (null si es nuevo y el ID lo
@@ -31,10 +32,12 @@ public class Perfumes {
 	 * @param ml           Volumen del frasco en mililitros.
 	 * @param publico      Público objetivo (Mujer, Hombre, Unisex).
 	 */
+
 	
 	//Constructor
 	public Perfumes(int idPerfume, String nombre, String marca, String categoria, String descripcion, double precio,
 			int ml, String publico) {
+
 		this.idPerfume = idPerfume;
 		this.nombre = nombre;
 		this.marca = marca;
@@ -115,6 +118,4 @@ public class Perfumes {
 	public String toString() {
 		return "Perfumes: " + nombre + ", " + marca +  ", " + categoria + ", " + ml + "ml" + ", " + publico + ", " + precio + "€";
 	}
-
-	
 }
