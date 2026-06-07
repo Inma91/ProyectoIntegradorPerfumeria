@@ -5,6 +5,7 @@ import com.goldentale.model.util.ComponentesUI;
 import com.goldentale.model.util.ComponentesUI.PanelRedondeado;
 import com.goldentale.model.util.Tema;
 import com.goldentale.model.data.Constantes;
+import com.goldentale.model.db.Usuario;
 
 import javax.swing.*;
 import java.awt.*;
@@ -152,6 +153,132 @@ public class VRegistroUsuario extends JPanel {
 		txtConfirmarPassword.setText("");
 		lblError.setText(" ");
 		lblExito.setText(" ");
+	}
+
+	/**
+	 * Lee los campos del formulario, valida que cumplen los requisitos y construye
+	 * un objeto Usuario listo para enviar al DAO.
+	 *
+	 * @return Usuario si todo es válido, null si hay algún error. En caso de null,
+	 *         el motivo se muestra en lblError.
+	 */
+	public Usuario obtenerDatos() {
+		int id = 0; // lo asigna la BBDD (AUTOINCREMENT)
+		String nombre = txtNombre.getText().trim();
+		String apellido = txtApellido.getText().trim();
+		String direccion = txtDireccion.getText().trim();
+		String telefono = txtTelefono.getText().trim();
+		String email = txtEmail.getText().trim();
+		String password = new String(txtPassword.getPassword()).trim();
+		String rol = Constantes.ROL_CLIENTE;
+
+		// Validar antes de construir el Usuario
+		String error = validar(nombre, apellido, direccion, telefono, email, password);
+		if (error != null) {
+			mostrarError(error);
+			return null;
+		}
+
+		return new Usuario(id, nombre, apellido, direccion, telefono, email, password, rol);
+	}
+
+	/**
+	 * Comprueba que los datos del formulario son válidos.
+	 *
+	 * @return null si todo está bien, o un mensaje de error si algo falla.
+	 */
+	private String validar(String nombre, String apellido, String direccion, String telefono, String email,
+			String password) {
+
+		// Campos no vacíos
+		if (nombre.isEmpty() || apellido.isEmpty() || direccion.isEmpty() || telefono.isEmpty() || email.isEmpty()
+				|| password.isEmpty()) {
+			return "Todos los campos son obligatorios.";
+		}
+
+		// Formato de email
+		if (!emailEsValido(email)) {
+			return "El formato del correo electrónico no es válido.";
+		}
+
+		// Nombre y apellido: solo letras, espacios y guiones
+		if (!nombreEsValido(nombre)) {
+			return "El nombre solo puede contener letras, espacios o guiones.";
+		}
+		if (!nombreEsValido(apellido)) {
+			return "El apellido solo puede contener letras, espacios o guiones.";
+		}
+
+		// Teléfono: solo dígitos y opcionalmente un + al principio
+		if (!telefonoEsValido(telefono)) {
+			return "El teléfono solo puede contener números y opcionalmente un + al inicio.";
+		}
+
+		return null;
+	}
+
+	private boolean emailEsValido(String email) {
+		int posArroba = email.indexOf('@');
+		int ultimaArroba = email.lastIndexOf('@');
+		if (posArroba == -1 || posArroba != ultimaArroba) {
+			return false;
+		}
+
+		String antes = email.substring(0, posArroba);
+		if (antes.isEmpty()) {
+			return false;
+		}
+
+		String despues = email.substring(posArroba + 1);
+		int posPunto = despues.indexOf('.');
+		if (posPunto == -1) {
+			return false;
+		}
+		if (posPunto == 0 || posPunto == despues.length() - 1) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean nombreEsValido(String nombre) {
+		// Permite letras (mayúsculas y minúsculas), acentos, ñ, espacios y guiones
+		for (int i = 0; i < nombre.length(); i++) {
+			char c = nombre.charAt(i);
+
+			boolean esLetra = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+			boolean esEspacioOGuion = (c == ' ' || c == '-');
+			boolean esLetraEspecial = "áéíóúÁÉÍÓÚñÑüÜàèìòùÀÈÌÒÙâêîôûÂÊÎÔÛ".indexOf(c) != -1;
+
+			if (!esLetra && !esEspacioOGuion && !esLetraEspecial) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private boolean telefonoEsValido(String telefono) {
+		// Si empieza con +, validamos el resto del string
+		String parteNumerica = telefono;
+		if (telefono.startsWith("+")) {
+			parteNumerica = telefono.substring(1);
+		}
+
+		// Tiene que haber al menos un dígito después del +
+		if (parteNumerica.isEmpty()) {
+			return false;
+		}
+
+		// Todo el resto deben ser dígitos
+		for (int i = 0; i < parteNumerica.length(); i++) {
+			char c = parteNumerica.charAt(i);
+			if (c < '0' || c > '9') {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public void setControlador(Controlador controlador) {

@@ -37,7 +37,7 @@ public class Inicio {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
+                
                 // Ventana principal (incluye el panel de inicio internamente)
                 VPGoldenTale ventana = new VPGoldenTale();
 
