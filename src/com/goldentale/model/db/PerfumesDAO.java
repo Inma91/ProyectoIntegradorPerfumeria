@@ -468,6 +468,62 @@ public class PerfumesDAO {
 
 			return info;
 		}
+		
+		
+		public int obtenerStockDisponible(int idPerfume) {
+
+			int stockDisponible = 0;
+
+			String query = "SELECT " + ConstantesTablas.COL_LINEA_CANTIDAD
+					+ " FROM " + ConstantesTablas.TABLA_STOCK
+					+ " WHERE id_perfume = ?";
+
+			Connection con = null;
+			PreparedStatement stmt = null;
+			ResultSet rslt = null;
+
+			try {
+
+				con = acc.getConexion();
+
+				stmt = con.prepareStatement(query);
+				stmt.setInt(1, idPerfume);
+
+				rslt = stmt.executeQuery();
+
+				if (rslt.next()) {
+					stockDisponible = rslt.getInt(1);
+				}
+
+			} catch (ClassNotFoundException e) {
+
+				e.printStackTrace();
+
+			} catch (SQLException e) {
+
+				e.printStackTrace();
+
+			} finally {
+
+				try {
+
+					if (rslt != null)
+						rslt.close();
+
+					if (stmt != null)
+						stmt.close();
+
+					if (con != null)
+						con.close();
+
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
+			}
+
+			return stockDisponible;
+		}
 
 	/**
 	 * Actualiza el stock de un perfume existente y su precio: modifica la cantidad del stock y el precio del perfume.

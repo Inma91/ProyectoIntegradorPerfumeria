@@ -401,6 +401,7 @@ public class Controlador implements ActionListener {
 
 		Constantes.usuarioAutenticado = nuevoUsuario;
 		ventana.mostrarSidebarCliente(nuevoUsuario.getNombreCompleto(), this);
+		cargarCatalogoCliente();
 		ventana.mostrarVista(Constantes.VISTA_CATALOGO);
 	}
 
@@ -606,6 +607,14 @@ public class Controlador implements ActionListener {
 		Integer nuevaCantidad = null;
 		if (cantidadASumar != null) {
 			nuevaCantidad = stockActual + cantidadASumar;
+		}
+		
+		if (nuevaCantidad != null && nuevaCantidad < 0) {
+
+			panelModificar.mostrarError(
+					"El stock final no puede ser negativo.");
+
+			return;
 		}
 
 		// 5. JOption de confirmación con el resumen de los cambios
@@ -986,6 +995,28 @@ public class Controlador implements ActionListener {
 
 			// 4. Guardar el pedido en la BBDD a través del DAO
 			int idUsuario = Constantes.usuarioAutenticado.getIdUsuario();
+			
+			// Revalidar stock real antes de procesar el pedido
+			for (CarritoCompra item : carritoActivo) {
+
+				int stockReal = perfumesDAO.obtenerStockDisponible(
+						item.getPerfume().getIdPerfume());
+
+				if (item.getCantidad() > stockReal) {
+
+					JOptionPane.showMessageDialog(
+							ventana,
+							"El perfume '" + item.getPerfume().getNombre()
+									+ "' ya no tiene suficiente stock disponible.\n"
+									+ "Stock actual: " + stockReal + " unidades.",
+							"Stock insuficiente",
+							JOptionPane.WARNING_MESSAGE);
+
+					cargarCatalogoCliente();
+					return;
+				}
+			}
+			
 			boolean exitoBBDD = pedidosDAO.insertarPedido(idUsuario, totalPrecioCarrito, formaPago, direccionEntrega,
 					carritoActivo);
 
