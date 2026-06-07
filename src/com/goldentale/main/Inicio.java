@@ -27,68 +27,67 @@ import com.goldentale.vistaEmpleado.VStock;
  */
 public class Inicio {
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
 
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+			@Override
+			public void run() {
+				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
-                // Ventana principal (incluye el panel de inicio internamente)
-                VPGoldenTale ventana = new VPGoldenTale();
+				// Ventana principal (incluye el panel de inicio internamente)
+				VPGoldenTale ventana = new VPGoldenTale();
 
-                // Vistas
-                VLogin             panelLogin      = new VLogin();
-                VRegistroUsuario   panelRegistro   = new VRegistroUsuario();
-                VCatalogoCliente   panelCatalogo   = new VCatalogoCliente();
-                VCarritoCompra     panelCarrito    = new VCarritoCompra();
-                VMisPedidos        panelMisPedidos = new VMisPedidos();
-                VPago              panelPago       = new VPago();
-                VEmpleadoDashboard panelDashboard  = new VEmpleadoDashboard();
-                VAniadirPerfume    panelAnadir     = new VAniadirPerfume();
-                VModificarPerfume  panelModificar  = new VModificarPerfume();
-                VStock             panelStock      = new VStock();
+				// Vistas
+				VLogin panelLogin = new VLogin();
+				VRegistroUsuario panelRegistro = new VRegistroUsuario();
+				VCatalogoCliente panelCatalogo = new VCatalogoCliente();
+				VCarritoCompra panelCarrito = new VCarritoCompra();
+				VMisPedidos panelMisPedidos = new VMisPedidos();
+				VPago panelPago = new VPago();
+				VEmpleadoDashboard panelDashboard = new VEmpleadoDashboard();
+				VAniadirPerfume panelAnadir = new VAniadirPerfume();
+				VModificarPerfume panelModificar = new VModificarPerfume();
+				VStock panelStock = new VStock();
 
-                // Controlador
-                Controlador controlador = new Controlador(ventana);
-                controlador.setPanelLogin(panelLogin);
-                controlador.setPanelRegistro(panelRegistro);
-                controlador.setPanelCatalogo(panelCatalogo);
-                controlador.setPanelCarrito(panelCarrito);
-                controlador.setPanelMisPedidos(panelMisPedidos);
-                controlador.setPanelPago(panelPago);
-                controlador.setPanelDashboard(panelDashboard);
-                controlador.setPanelAnadir(panelAnadir);
-                controlador.setPanelModificar(panelModificar);
-                controlador.setPanelStock(panelStock);
+				// Controlador
+				Controlador controlador = new Controlador(ventana);
+				controlador.setPanelLogin(panelLogin);
+				controlador.setPanelRegistro(panelRegistro);
+				controlador.setPanelCatalogo(panelCatalogo);
+				controlador.setPanelCarrito(panelCarrito);
+				controlador.setPanelMisPedidos(panelMisPedidos);
+				controlador.setPanelPago(panelPago);
+				controlador.setPanelDashboard(panelDashboard);
+				controlador.setPanelAnadir(panelAnadir);
+				controlador.setPanelModificar(panelModificar);
+				controlador.setPanelStock(panelStock);
 
-                // setControlador en cada vista
-                ventana.setControlador(controlador);
-                panelLogin.setControlador(controlador);
-                panelRegistro.setControlador(controlador);
-                panelCatalogo.setControlador(controlador);
-                panelCarrito.setControlador(controlador);
-                panelMisPedidos.setControlador(controlador);
-                panelPago.setControlador(controlador);
-                panelDashboard.setControlador(controlador);
-                panelAnadir.setControlador(controlador);
-                panelModificar.setControlador(controlador);
-                panelStock.setControlador(controlador);
+				// setControlador en cada vista
+				ventana.setControlador(controlador);
+				panelLogin.setControlador(controlador);
+				panelRegistro.setControlador(controlador);
+				panelCatalogo.setControlador(controlador);
+				panelCarrito.setControlador(controlador);
+				panelMisPedidos.setControlador(controlador);
+				panelPago.setControlador(controlador);
+				panelDashboard.setControlador(controlador);
+				panelAnadir.setControlador(controlador);
+				panelModificar.setControlador(controlador);
+				panelStock.setControlador(controlador);
 
-                // Añadir vistas al CardLayout
-                ventana.añadirVistas(panelLogin, panelRegistro,
-                        panelCatalogo, panelCarrito, panelMisPedidos, panelPago,
-                        panelDashboard, panelAnadir, panelModificar, panelStock);
+				// Añadir vistas al CardLayout
+				ventana.añadirVistas(panelLogin, panelRegistro, panelCatalogo, panelCarrito, panelMisPedidos, panelPago,
+						panelDashboard, panelAnadir, panelModificar, panelStock);
 
-                // Sidebar inicial y vista de inicio
-                ventana.mostrarSidebarPreLogin(controlador);
-                ventana.mostrarVista(Constantes.VISTA_INICIO);
-                ventana.hacerVisible();
-            }
-        });
-    }
+				// Sidebar inicial y vista de inicio
+				ventana.mostrarSidebarPreLogin(controlador);
+				ventana.mostrarVista(Constantes.VISTA_INICIO);
+				ventana.hacerVisible();
+			}
+		});
+	}
 }
