@@ -10,32 +10,37 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 /**
- * Panel Control de Stock — vista del empleado. Muestra resumen del almacén,
- * filtros y tabla de stock.
+ * Panel del empleado para el control de stock. Muestra un resumen del almacén
+ * con tres métricas (total de productos, stock bajo y sin stock), filtros de
+ * búsqueda por nombre, ubicación y estado, y una tabla con el detalle del
+ * inventario. La carga de datos y el cálculo de métricas los realiza el
+ * controlador, que se los pasa a esta vista mediante
+ * {@link #mostrarPerfumesConStock(Object[][])} y
+ * {@link #actualizarMetricas(int, int, int)}.
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
  * @author David Moreno
+ * @see Controlador
  */
 public class VStock extends JPanel {
 
-	// ── Métricas ──────────────────────────────────────────────────────
 	private JLabel lblTotalProductosValor;
 	private JLabel lblStockBajoValor;
 	private JLabel lblSinStockValor;
 
-	// ── Filtros ───────────────────────────────────────────────────────
 	private JTextField txtBuscar;
 	private JComboBox<String> comboFiltroUbicacion;
 	private JComboBox<String> comboFiltroEstado;
 
-	// ── Botón ─────────────────────────────────────────────────────────
 	private JButton btnFiltrar;
 
-	// ── Tabla ─────────────────────────────────────────────────────────
 	private JTable tablaStock;
 	private DefaultTableModel modeloTablaStock;
 
+	/**
+	 * Construye el panel e inicializa todos los componentes visuales.
+	 */
 	public VStock() {
 		inicializarComponentes();
 	}
@@ -49,7 +54,6 @@ public class VStock extends JPanel {
 		contenido.setLayout(new BoxLayout(contenido, BoxLayout.Y_AXIS));
 		contenido.setBackground(Tema.FONDO);
 
-		// ── Resumen de almacén ────────────────────────────────────────
 		contenido.add(ComponentesUI.etiquetaSeccion("RESUMEN DE ALMACÉN"));
 		contenido.add(Box.createVerticalStrut(12));
 
@@ -71,11 +75,9 @@ public class VStock extends JPanel {
 		contenido.add(panelMetricas);
 		contenido.add(Box.createVerticalStrut(20));
 
-		// ── Sección estado almacén ────────────────────────────────────
 		contenido.add(ComponentesUI.etiquetaSeccion("ESTADO DEL ALMACÉN"));
 		contenido.add(Box.createVerticalStrut(10));
 
-		// ── Filtros ───────────────────────────────────────────────────
 		JPanel panelFiltros = new JPanel(new GridLayout(1, 3, 10, 0));
 		panelFiltros.setOpaque(false);
 		panelFiltros.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
@@ -91,7 +93,6 @@ public class VStock extends JPanel {
 		contenido.add(panelFiltros);
 		contenido.add(Box.createVerticalStrut(8));
 
-		// ── Botón Filtrar ─────────────────────────────────────────────
 		JPanel filaBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 		filaBoton.setOpaque(false);
 		filaBoton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -101,7 +102,6 @@ public class VStock extends JPanel {
 		contenido.add(filaBoton);
 		contenido.add(Box.createVerticalStrut(14));
 
-		// ── Tabla ─────────────────────────────────────────────────────
 		modeloTablaStock = new DefaultTableModel(Constantes.COLS_STOCK, 0) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
@@ -117,47 +117,45 @@ public class VStock extends JPanel {
 		add(contenido, BorderLayout.CENTER);
 	}
 
-	// ── Métodos para cargar datos desde el controlador ────────────────
-
 	/**
-	 * Pinta la tabla con los datos recibidos del controlador.
-	 * El controlador es responsable de pasar el estado ya calculado.
+	 * Pinta la tabla de stock con los datos recibidos del controlador. Vacía
+	 * la tabla antes de pintar para no acumular filas entre llamadas. El
+	 * controlador es responsable de calcular previamente el estado de cada
+	 * fila.
 	 *
-	 * @param filas array donde cada fila contiene 4 columnas:
-	 *              {nombre, localizacion, cantidad, estado}.
+	 * @param filas Matriz donde cada fila contiene 4 columnas en el orden
+	 *              {nombre, localización, cantidad, estado}.
 	 */
 	public void mostrarPerfumesConStock(Object[][] filas) {
-		modeloTablaStock.setRowCount(0); // vaciar la tabla antes de pintar
+		modeloTablaStock.setRowCount(0);
 
 		for (Object[] fila : filas) {
 			modeloTablaStock.addRow(fila);
 		}
 	}
-	
+
 	/**
-	 * Limpia los filtros de búsqueda y deja la vista lista para una nueva sesión.
-	 * No vacía la tabla, ya que esa se recarga al volver a entrar.
+	 * Restablece los filtros de búsqueda (texto y combos) a su estado inicial.
+	 * No vacía la tabla, ya que esa se recarga al entrar de nuevo a la vista.
 	 */
 	public void limpiarFiltros() {
-	    txtBuscar.setText("");
-	    comboFiltroUbicacion.setSelectedIndex(0);
-	    comboFiltroEstado.setSelectedIndex(0);
+		txtBuscar.setText("");
+		comboFiltroUbicacion.setSelectedIndex(0);
+		comboFiltroEstado.setSelectedIndex(0);
 	}
 
 	/**
 	 * Actualiza las tres tarjetas de métricas del resumen del almacén.
 	 *
-	 * @param total    número total de perfumes en catálogo.
-	 * @param bajo     número de perfumes con stock bajo.
-	 * @param sinStock número de perfumes sin stock.
+	 * @param total    Número total de perfumes en catálogo.
+	 * @param bajo     Número de perfumes con stock bajo.
+	 * @param sinStock Número de perfumes sin stock.
 	 */
 	public void actualizarMetricas(int total, int bajo, int sinStock) {
 		lblTotalProductosValor.setText(String.valueOf(total));
 		lblStockBajoValor.setText(String.valueOf(bajo));
 		lblSinStockValor.setText(String.valueOf(sinStock));
 	}
-
-	// ── Getters ───────────────────────────────────────────────────────
 
 	public JLabel getLblTotalProductosValor() {
 		return lblTotalProductosValor;
@@ -195,6 +193,11 @@ public class VStock extends JPanel {
 		return modeloTablaStock;
 	}
 
+	/**
+	 * Registra el controlador como listener del botón de filtrar.
+	 *
+	 * @param controlador Controlador que gestionará el evento.
+	 */
 	public void setControlador(Controlador controlador) {
 		btnFiltrar.addActionListener(controlador);
 	}

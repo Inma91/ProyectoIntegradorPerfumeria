@@ -11,13 +11,16 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel Añadir Perfume — vista del empleado. Formulario para dar de alta un
- * nuevo perfume. La localización se asigna automáticamente según los ml
- * introducidos.
+ * Panel del empleado para dar de alta un nuevo perfume. Presenta un formulario
+ * con los campos del perfume y un label de localización que se asigna
+ * automáticamente según los mililitros introducidos. Las validaciones de los
+ * campos se realizan internamente en {@link #obtenerDatos()}.
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
  * @author David Moreno
+ * @see Perfumes
+ * @see Controlador
  */
 public class VAniadirPerfume extends JPanel {
 
@@ -35,6 +38,9 @@ public class VAniadirPerfume extends JPanel {
 	private JButton btnGuardar;
 	private JButton btnLimpiar;
 
+	/**
+	 * Construye el panel e inicializa todos los componentes visuales.
+	 */
 	public VAniadirPerfume() {
 		inicializarComponentes();
 	}
@@ -48,7 +54,6 @@ public class VAniadirPerfume extends JPanel {
 		tarjeta.setBorder(BorderFactory.createEmptyBorder(24, 28, 24, 28));
 		tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
 
-		// ── Título ────────────────────────────────────────────────────
 		JLabel lblTitulo = new JLabel("Añadir nuevo perfume");
 		lblTitulo.setFont(Tema.fuenteNegrita(22));
 		lblTitulo.setForeground(Tema.TEXTO_OSCURO);
@@ -56,7 +61,6 @@ public class VAniadirPerfume extends JPanel {
 		tarjeta.add(lblTitulo);
 		tarjeta.add(Box.createVerticalStrut(18));
 
-		// ── Formulario ────────────────────────────────────────────────
 		JPanel formulario = new JPanel(new GridLayout(0, 2, 14, 10));
 		formulario.setOpaque(false);
 
@@ -86,7 +90,6 @@ public class VAniadirPerfume extends JPanel {
 		tarjeta.add(formulario);
 		tarjeta.add(Box.createVerticalStrut(14));
 
-		// ── Localización automática ───────────────────────────────────
 		JLabel lblLocTitulo = ComponentesUI.etiquetaFormulario("Localización automática");
 		tarjeta.add(lblLocTitulo);
 		tarjeta.add(Box.createVerticalStrut(4));
@@ -97,7 +100,6 @@ public class VAniadirPerfume extends JPanel {
 		tarjeta.add(lblLocalizacion);
 		tarjeta.add(Box.createVerticalStrut(12));
 
-		// ── Descripción ───────────────────────────────────────────────
 		tarjeta.add(ComponentesUI.etiquetaFormulario("Descripción"));
 		tarjeta.add(Box.createVerticalStrut(4));
 		txtDescripcion = ComponentesUI.areaTexto();
@@ -107,7 +109,6 @@ public class VAniadirPerfume extends JPanel {
 		tarjeta.add(scrollDesc);
 		tarjeta.add(Box.createVerticalStrut(10));
 
-		// ── Feedback ──────────────────────────────────────────────────
 		lblError = new JLabel(" ");
 		lblError.setFont(Tema.fuenteNormal(12));
 		lblError.setForeground(Tema.ERROR);
@@ -119,7 +120,6 @@ public class VAniadirPerfume extends JPanel {
 		tarjeta.add(lblExito);
 		tarjeta.add(Box.createVerticalStrut(8));
 
-		// ── Botones ───────────────────────────────────────────────────
 		JPanel fila = new JPanel(new GridLayout(1, 2, 10, 0));
 		fila.setOpaque(false);
 		fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -136,21 +136,32 @@ public class VAniadirPerfume extends JPanel {
 		add(scroll);
 	}
 
-	// ── Métodos de ayuda ──────────────────────────────────────────────
-
+	/**
+	 * Muestra un mensaje de error en el label de feedback y limpia el de éxito.
+	 *
+	 * @param msg Texto del error a mostrar.
+	 */
 	public void mostrarError(String msg) {
 		lblError.setText(msg);
 		lblExito.setText(" ");
 	}
 
+	/**
+	 * Muestra un mensaje de éxito en el label de feedback y limpia el de error.
+	 *
+	 * @param msg Texto del éxito a mostrar.
+	 */
 	public void mostrarExito(String msg) {
 		lblExito.setText(msg);
 		lblError.setText(" ");
 	}
 
 	/**
-	 * Calcula y actualiza la etiqueta de localización según los ml introducidos.
-	 * Llamar desde el controlador al cambiar txtMl.
+	 * Calcula y actualiza la etiqueta de localización según los mililitros
+	 * introducidos en {@code txtMl}. Asigna {@link Constantes#LOC_PEQUENO},
+	 * {@link Constantes#LOC_MEDIANO} o {@link Constantes#LOC_GRANDE} en función
+	 * de los límites definidos. Si los mililitros no son un número válido,
+	 * muestra un mensaje de aviso en el propio label.
 	 */
 	public void actualizarLocalizacion() {
 		try {
@@ -168,17 +179,20 @@ public class VAniadirPerfume extends JPanel {
 	}
 
 	/**
-	 * Lee los campos del formulario, los valida y construye un objeto Perfumes 
-	 * listo para enviar al DAO.
+	 * Lee los campos del formulario, valida internamente nombre, marca, precio,
+	 * mililitros y stock, y construye un objeto {@link Perfumes} listo para
+	 * enviar al DAO. Si alguna validación falla, muestra el error en el label
+	 * de feedback y devuelve {@code null}. El precio acepta coma o punto como
+	 * separador decimal. El ID del perfume se asigna a {@code 0} porque lo
+	 * genera la BBDD por AUTOINCREMENT.
 	 *
-	 * @return Perfumes con los datos del formulario, o null si hay errores de validación.
+	 * @return Objeto {@link Perfumes} con los datos del formulario, o
+	 *         {@code null} si hay errores de validación.
 	 */
 	public Perfumes obtenerDatos() {
-		// 1. Limpiar mensajes previos antes de validar
 		mostrarError(" ");
 		mostrarExito(" ");
 
-		// 2. Validar campos de texto básicos (Nombre y Marca)
 		String nombre = txtNombre.getText().trim();
 		if (nombre.isEmpty()) {
 			mostrarError("El nombre del perfume no puede estar vacío.");
@@ -191,7 +205,6 @@ public class VAniadirPerfume extends JPanel {
 			return null;
 		}
 
-		// 3. Validar variables numéricas (Precio, Mililitros, Stock)
 		String precioTxt = txtPrecio.getText().trim();
 		String mlTxt = txtMl.getText().trim();
 		String stockTxt = txtStock.getText().trim();
@@ -205,9 +218,8 @@ public class VAniadirPerfume extends JPanel {
 		int ml = 0;
 		int stock = 0;
 
-		// Validar Precio
 		try {
-			precioTxt = precioTxt.replace(",", "."); // Convierte comas por si acaso
+			precioTxt = precioTxt.replace(",", ".");
 			precio = Double.parseDouble(precioTxt);
 			if (precio <= 0) {
 				mostrarError("Error en Precio: Debe ser un valor mayor que 0.");
@@ -218,7 +230,6 @@ public class VAniadirPerfume extends JPanel {
 			return null;
 		}
 
-		// Validar Mililitros
 		try {
 			ml = Integer.parseInt(mlTxt);
 			if (ml <= 0) {
@@ -230,7 +241,6 @@ public class VAniadirPerfume extends JPanel {
 			return null;
 		}
 
-		// Validar Stock
 		try {
 			stock = Integer.parseInt(stockTxt);
 			if (stock < 0) {
@@ -242,16 +252,19 @@ public class VAniadirPerfume extends JPanel {
 			return null;
 		}
 
-		// 4. Recoger el resto de datos
 		String categoria = (String) comboCategoria.getSelectedItem();
 		String descripcion = txtDescripcion.getText().trim();
 		String publico = (String) comboPublico.getSelectedItem();
 
-		int id = 0; // lo asigna la BBDD (AUTOINCREMENT)
+		int id = 0;
 
 		return new Perfumes(id, nombre, marca, categoria, descripcion, precio, ml, publico);
 	}
-	
+
+	/**
+	 * Restablece todos los campos del formulario a su estado inicial, resetea
+	 * los combos al primer elemento y limpia los labels de feedback.
+	 */
 	public void limpiarFormulario() {
 		txtNombre.setText("");
 		txtMarca.setText("");
@@ -265,8 +278,6 @@ public class VAniadirPerfume extends JPanel {
 		lblError.setText(" ");
 		lblExito.setText(" ");
 	}
-
-	// ── Getters ───────────────────────────────────────────────────────
 
 	public JTextField getTxtNombre() {
 		return txtNombre;
@@ -320,6 +331,11 @@ public class VAniadirPerfume extends JPanel {
 		return btnLimpiar;
 	}
 
+	/**
+	 * Registra el controlador como listener de los botones de la vista.
+	 *
+	 * @param controlador Controlador que gestionará los eventos.
+	 */
 	public void setControlador(Controlador controlador) {
 		btnGuardar.addActionListener(controlador);
 		btnLimpiar.addActionListener(controlador);

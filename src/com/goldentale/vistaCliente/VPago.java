@@ -10,12 +10,15 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel de Pago — vista del cliente. Permite elegir forma de pago y dirección
- * de entrega, y muestra el resumen del pedido antes de confirmar.
+ * Panel del cliente para confirmar el pedido y procesar el pago. Muestra el
+ * resumen del carrito (número de perfumes y total), permite elegir la forma
+ * de pago, introducir la dirección de entrega y validar internamente los
+ * datos antes de devolverlos al controlador para registrar la compra.
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
  * @author David Moreno
+ * @see Controlador
  */
 public class VPago extends JPanel {
 
@@ -28,6 +31,9 @@ public class VPago extends JPanel {
 	private JButton btnConfirmarPago;
 	private JButton btnCancelar;
 
+	/**
+	 * Construye el panel e inicializa todos los componentes visuales.
+	 */
 	public VPago() {
 		inicializarComponentes();
 	}
@@ -41,7 +47,6 @@ public class VPago extends JPanel {
 		tarjeta.setBorder(BorderFactory.createEmptyBorder(24, 28, 24, 28));
 		tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
 
-		// ── Título ────────────────────────────────────────────────────
 		JLabel lblTitulo = new JLabel("Confirmar pedido");
 		lblTitulo.setFont(Tema.fuenteNegrita(22));
 		lblTitulo.setForeground(Tema.TEXTO_OSCURO);
@@ -49,7 +54,6 @@ public class VPago extends JPanel {
 		tarjeta.add(lblTitulo);
 		tarjeta.add(Box.createVerticalStrut(14));
 
-		// ── Resumen y total ───────────────────────────────────────────
 		lblResumen = new JLabel("Resumen: 0 perfumes seleccionados");
 		lblResumen.setFont(Tema.fuenteNormal(13));
 		lblResumen.setForeground(Tema.TEXTO_MEDIO);
@@ -64,7 +68,6 @@ public class VPago extends JPanel {
 		tarjeta.add(lblTotal);
 		tarjeta.add(Box.createVerticalStrut(20));
 
-		// ── Formulario ────────────────────────────────────────────────
 		JPanel formulario = new JPanel(new GridLayout(0, 2, 12, 10));
 		formulario.setOpaque(false);
 
@@ -79,7 +82,6 @@ public class VPago extends JPanel {
 		tarjeta.add(formulario);
 		tarjeta.add(Box.createVerticalStrut(12));
 
-		// ── Feedback ──────────────────────────────────────────────────
 		lblError = new JLabel(" ");
 		lblError.setFont(Tema.fuenteNormal(12));
 		lblError.setForeground(Tema.ERROR);
@@ -91,7 +93,6 @@ public class VPago extends JPanel {
 		tarjeta.add(lblExito);
 		tarjeta.add(Box.createVerticalStrut(10));
 
-		// ── Botones ───────────────────────────────────────────────────
 		JPanel acciones = new JPanel(new GridLayout(1, 2, 10, 0));
 		acciones.setOpaque(false);
 		acciones.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
@@ -104,26 +105,41 @@ public class VPago extends JPanel {
 		add(tarjeta);
 	}
 
-	// ── Métodos de ayuda ──────────────────────────────────────────────
-
+	/**
+	 * Muestra un mensaje de error en el label de feedback y limpia el de éxito.
+	 *
+	 * @param msg Texto del error a mostrar.
+	 */
 	public void mostrarError(String msg) {
 		lblError.setText(msg);
 		lblExito.setText(" ");
 	}
 
+	/**
+	 * Muestra un mensaje de éxito en el label de feedback y limpia el de error.
+	 *
+	 * @param msg Texto del éxito a mostrar.
+	 */
 	public void mostrarExito(String msg) {
 		lblExito.setText(msg);
 		lblError.setText(" ");
 	}
 
+	/**
+	 * Limpia los labels de feedback de error y éxito dejándolos en blanco.
+	 */
 	public void limpiarFeedback() {
 		lblError.setText(" ");
 		lblExito.setText(" ");
 	}
 
 	/**
-	 * Rellena el resumen y el total en la vista. Llamado por el controlador
-	 * al entrar a la vista de pago con el carrito ya validado.
+	 * Rellena el resumen del pedido y el total en la vista. Es invocado por
+	 * el controlador al entrar a la vista de pago con el carrito ya validado.
+	 * Adapta el texto a singular o plural según el número de perfumes.
+	 *
+	 * @param numItems Número de perfumes seleccionados en el carrito.
+	 * @param total    Total a pagar en euros.
 	 */
 	public void mostrarResumen(int numItems, double total) {
 		String texto = "Resumen: " + numItems + " perfume" + (numItems == 1 ? "" : "s") + " seleccionado"
@@ -133,16 +149,17 @@ public class VPago extends JPanel {
 	}
 
 	/**
-	 * Valida los campos de pago y devuelve los datos listos para la BBDD.
+	 * Valida los campos de pago (dirección no vacía y de longitud mínima) y
+	 * recoge la forma de pago seleccionada en el combo. Si alguna validación
+	 * falla, muestra el error en el label de feedback y devuelve {@code null}.
 	 *
-	 * @return Object[] donde [0] es la forma de pago (String) y [1] es la
-	 *         dirección de entrega (String). Devuelve null si hay error.
+	 * @return Array donde el índice 0 contiene la forma de pago
+	 *         ({@link String}) y el índice 1 la dirección de entrega
+	 *         ({@link String}), o {@code null} si la validación falla.
 	 */
 	public Object[] obtenerDatos() {
-		// 1. Limpiar mensajes previos
 		limpiarFeedback();
 
-		// 2. Validar dirección de entrega
 		String direccion = txtDireccionEntrega.getText().trim();
 		if (direccion.isEmpty()) {
 			mostrarError("La dirección de entrega no puede estar vacía.");
@@ -153,14 +170,15 @@ public class VPago extends JPanel {
 			return null;
 		}
 
-		// 3. Recoger forma de pago (cualquier opción del combo es válida)
 		String formaPago = (String) comboFormaPago.getSelectedItem();
 
 		return new Object[] { formaPago, direccion };
 	}
 
 	/**
-	 * Limpia los campos del formulario y los labels para una nueva sesión.
+	 * Restablece todos los campos del formulario a su estado inicial, resetea
+	 * el combo de forma de pago al primer elemento, reinicia el resumen y el
+	 * total y limpia los labels de feedback.
 	 */
 	public void limpiarFormulario() {
 		comboFormaPago.setSelectedIndex(0);
@@ -169,9 +187,6 @@ public class VPago extends JPanel {
 		lblTotal.setText("Total: 0.00 EUR");
 		limpiarFeedback();
 	}
-	
-	
-	// ── Getters ───────────────────────────────────────────────────────
 
 	public JLabel getLblResumen() {
 		return lblResumen;
@@ -204,11 +219,14 @@ public class VPago extends JPanel {
 	public JButton getBtnCancelar() {
 		return btnCancelar;
 	}
-	
+
+	/**
+	 * Registra el controlador como listener de los botones de la vista.
+	 *
+	 * @param controlador Controlador que gestionará los eventos.
+	 */
 	public void setControlador(Controlador controlador) {
-	    btnConfirmarPago.addActionListener(controlador);
-	    btnCancelar.addActionListener(controlador);
+		btnConfirmarPago.addActionListener(controlador);
+		btnCancelar.addActionListener(controlador);
 	}
-	
-	
 }

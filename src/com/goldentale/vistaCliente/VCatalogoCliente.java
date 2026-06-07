@@ -17,6 +17,7 @@ import java.awt.*;
  * @author Brandon Gaviria
  * @author Inmaculada Gil
  * @author David Moreno
+ * @see Controlador
  */
 public class VCatalogoCliente extends JPanel {
 
@@ -30,10 +31,18 @@ public class VCatalogoCliente extends JPanel {
 	private JButton btnMisPedidos;
 	private JButton btnFiltrar;
 
+	/**
+	 * Construye el panel e inicializa todos los componentes visuales del catálogo.
+	 */
 	public VCatalogoCliente() {
 		inicializarComponentes();
 	}
 
+	/**
+	 * Inicializa y configura la disposición de todos los componentes gráficos
+	 * de la interfaz, incluyendo la sección de filtros, la tabla con los datos
+	 * de los perfumes y los paneles de botones de acción.
+	 */
 	private void inicializarComponentes() {
 		setLayout(new BorderLayout());
 		setBackground(Tema.FONDO);
@@ -43,40 +52,36 @@ public class VCatalogoCliente extends JPanel {
 		contenido.setLayout(new BoxLayout(contenido, BoxLayout.Y_AXIS));
 		contenido.setBackground(Tema.FONDO);
 
-		// ── Título ────────────────────────────────────────────────────
 		JLabel lblTitulo = ComponentesUI.etiquetaSeccion("CATÁLOGO DE PERFUMES");
 		lblTitulo.setFont(Tema.fuenteNegrita(14));
 		lblTitulo.setForeground(Tema.TEXTO_OSCURO);
 		contenido.add(lblTitulo);
 		contenido.add(Box.createVerticalStrut(12));
 
-		// ── Filtros ───────────────────────────────────────────────────
-				JPanel filtros = new JPanel(new GridLayout(1, 3, 10, 0));
-				filtros.setOpaque(false);
-				filtros.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+		JPanel filtros = new JPanel(new GridLayout(1, 3, 10, 0));
+		filtros.setOpaque(false);
+		filtros.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
 				
-				txtBuscar = ComponentesUI.campoTexto("Buscar perfume o marca...");
-				comboCategoria = new JComboBox<>(Constantes.CATEGORIAS_PERFUME);
-				comboCategoria.insertItemAt("Todas las categorías", 0);
-				comboCategoria.setSelectedIndex(0);
+		txtBuscar = ComponentesUI.campoTexto("Buscar perfume o marca...");
+		comboCategoria = new JComboBox<>(Constantes.CATEGORIAS_PERFUME);
+		comboCategoria.insertItemAt("Todas las categorías", 0);
+		comboCategoria.setSelectedIndex(0);
 				
-				btnFiltrar = ComponentesUI.botonPrincipal("Filtrar"); // <── Cambiado Ver Carrito por Filtrar
+		btnFiltrar = ComponentesUI.botonPrincipal("Filtrar");
 				
-				filtros.add(txtBuscar);
-				filtros.add(comboCategoria);
-				filtros.add(btnFiltrar);
+		filtros.add(txtBuscar);
+		filtros.add(comboCategoria);
+		filtros.add(btnFiltrar);
 				
-				contenido.add(filtros);
-				contenido.add(Box.createVerticalStrut(14));
+		contenido.add(filtros);
+		contenido.add(Box.createVerticalStrut(14));
 
-		// ── Tabla ─────────────────────────────────────────────────────
 		modeloTablaCatalogo = new DefaultTableModel(Constantes.COLS_CATALOGO, 0) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
 				return false;
 			}
 		};
-		// TODO: cargar catálogo real desde JDBC (PerfumesDAO.getAll())
 		modeloTablaCatalogo
 				.addRow(new Object[] { "Velvet Rose", "Maison Luxe", "Floral", "Mujer", "50", "89.99", "12" });
 		modeloTablaCatalogo
@@ -90,36 +95,30 @@ public class VCatalogoCliente extends JPanel {
 		contenido.add(scrollTablaCatalogo);
 		contenido.add(Box.createVerticalStrut(14));
 
-		// ── Botones de acción ─────────────────────────────────────────
-				// Fila 1: Añadir al carrito y Ver carrito (Lado a lado usando un GridLayout 1, 2)
-				JPanel accionesFila1 = new JPanel(new GridLayout(1, 2, 10, 0));
-				accionesFila1.setOpaque(false);
-				accionesFila1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+		JPanel accionesFila1 = new JPanel(new GridLayout(1, 2, 10, 0));
+		accionesFila1.setOpaque(false);
+		accionesFila1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 				
-				btnAnadirCarrito = ComponentesUI.botonPrincipal("Añadir al carrito");
-				btnVerCarrito = ComponentesUI.botonSecundario("Ver carrito");
+		btnAnadirCarrito = ComponentesUI.botonPrincipal("Añadir al carrito");
+		btnVerCarrito = ComponentesUI.botonSecundario("Ver carrito");
 				
-				accionesFila1.add(btnAnadirCarrito);
-				accionesFila1.add(btnVerCarrito);
-				contenido.add(accionesFila1); // Lo añadimos al contenedor vertical
+		accionesFila1.add(btnAnadirCarrito);
+		accionesFila1.add(btnVerCarrito);
+		contenido.add(accionesFila1);
 
-				// Añadimos un pequeño espacio de separación vertical (como los que ya usas)
-				contenido.add(Box.createVerticalStrut(10));
+		contenido.add(Box.createVerticalStrut(10));
 
-				// Fila 2: Mis pedidos (Debajo, usando un GridLayout de 1, 1 para que ocupe todo el ancho)
-				JPanel accionesFila2 = new JPanel(new GridLayout(1, 1, 0, 0));
-				accionesFila2.setOpaque(false);
-				accionesFila2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+		JPanel accionesFila2 = new JPanel(new GridLayout(1, 1, 0, 0));
+		accionesFila2.setOpaque(false);
+		accionesFila2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 				
-				btnMisPedidos = ComponentesUI.botonSecundario("Mis pedidos");
+		btnMisPedidos = ComponentesUI.botonSecundario("Mis pedidos");
 				
-				accionesFila2.add(btnMisPedidos);
-				contenido.add(accionesFila2); // Lo añadimos al contenedor vertical debajo del anterior
+		accionesFila2.add(btnMisPedidos);
+		contenido.add(accionesFila2);
 
-				add(contenido, BorderLayout.CENTER);
+		add(contenido, BorderLayout.CENTER);
 	}
-
-	// ── Getters ───────────────────────────────────────────────────────
 
 	public JTextField getTxtBuscar() {
 		return txtBuscar;
@@ -153,6 +152,12 @@ public class VCatalogoCliente extends JPanel {
 	    return btnFiltrar;
 	}
 
+	/**
+	 * Registra el controlador como listener encargado de capturar los eventos
+	 * de los botones de interacción del catálogo.
+	 *
+	 * @param controlador Controlador que gestionará los eventos.
+	 */
 	public void setControlador(Controlador controlador) {
 		btnAnadirCarrito.addActionListener(controlador);
 		btnVerCarrito.addActionListener(controlador);
@@ -160,6 +165,12 @@ public class VCatalogoCliente extends JPanel {
 		btnFiltrar.addActionListener(controlador);
 	}
 	
+	/**
+	 * Actualiza el contenido de la tabla del catálogo cargando las nuevas filas
+	 * de perfumes proporcionadas y limpiando los registros previos.
+	 *
+	 * @param filas Matriz bidimensional de objetos con la información de los perfumes.
+	 */
 	public void mostrarCatalogo(Object[][] filas) {
 	    modeloTablaCatalogo.setRowCount(0);
 	    for (Object[] fila : filas) {

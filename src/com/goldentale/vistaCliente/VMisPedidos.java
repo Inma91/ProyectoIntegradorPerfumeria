@@ -10,12 +10,18 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 /**
- * Panel Mis Pedidos — vista del cliente. Lista los pedidos del cliente con
- * filtro por estado y muestra el detalle de las líneas del pedido seleccionado.
+ * Panel del cliente para consultar el historial de pedidos. Lista los pedidos
+ * del cliente autenticado con posibilidad de filtrarlos por estado y, al
+ * seleccionar uno, muestra el detalle de sus líneas (perfumes, cantidades y
+ * subtotales). Tanto la carga inicial como el filtrado los realiza el
+ * controlador, que pasa los datos a esta vista mediante
+ * {@link #mostrarPedidos(Object[][])} y
+ * {@link #mostrarDetalle(int, Object[][])}.
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
  * @author David Moreno
+ * @see Controlador
  */
 public class VMisPedidos extends JPanel {
 
@@ -30,6 +36,9 @@ public class VMisPedidos extends JPanel {
 	private JButton btnVerDetalle;
 	private JButton btnFiltrar;
 
+	/**
+	 * Construye el panel e inicializa todos los componentes visuales.
+	 */
 	public VMisPedidos() {
 		inicializarComponentes();
 	}
@@ -43,7 +52,6 @@ public class VMisPedidos extends JPanel {
 		contenido.setLayout(new BoxLayout(contenido, BoxLayout.Y_AXIS));
 		contenido.setBackground(Tema.FONDO);
 
-		// ── Cabecera con título y filtro ──────────────────────────────
 		JPanel cabecera = new JPanel(new BorderLayout(10, 0));
 		cabecera.setOpaque(false);
 		cabecera.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
@@ -59,7 +67,6 @@ public class VMisPedidos extends JPanel {
 		btnFiltrar = ComponentesUI.botonPrincipal("Filtrar");
 		btnFiltrar.setPreferredSize(new Dimension(90, 30));
 
-		// Agrupamos combo + botón en el lado derecho
 		JPanel filtroPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
 		filtroPanel.setOpaque(false);
 		filtroPanel.add(comboFiltroEstado);
@@ -69,7 +76,6 @@ public class VMisPedidos extends JPanel {
 		cabecera.add(filtroPanel, BorderLayout.EAST);
 		contenido.add(cabecera);
 
-		// ── Tabla de pedidos ──────────────────────────────────────────
 		modeloTablaPedidos = new DefaultTableModel(Constantes.COLS_MIS_PEDIDOS, 0) {
 			@Override
 			public boolean isCellEditable(int row, int col) {
@@ -83,7 +89,6 @@ public class VMisPedidos extends JPanel {
 		contenido.add(scrollTablaPedidos);
 		contenido.add(Box.createVerticalStrut(14));
 
-		// ── Detalle del pedido seleccionado ───────────────────────────
 		lblPedidoSeleccionado = new JLabel("Detalle del pedido seleccionado");
 		lblPedidoSeleccionado.setFont(Tema.fuenteNegrita(12));
 		lblPedidoSeleccionado.setForeground(Tema.TEXTO_MEDIO);
@@ -104,7 +109,6 @@ public class VMisPedidos extends JPanel {
 		contenido.add(scrollTablaDetallePedido);
 		contenido.add(Box.createVerticalStrut(12));
 
-		// ── Botón ver detalle ─────────────────────────────────────────
 		JPanel acciones = new JPanel(new GridLayout(1, 1, 0, 0));
 		acciones.setOpaque(false);
 		acciones.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
@@ -114,8 +118,6 @@ public class VMisPedidos extends JPanel {
 
 		add(contenido, BorderLayout.CENTER);
 	}
-
-	// ── Getters ───────────────────────────────────────────────────────
 
 	public JComboBox<String> getComboFiltroEstado() {
 		return comboFiltroEstado;
@@ -144,20 +146,26 @@ public class VMisPedidos extends JPanel {
 	public JButton getBtnVerDetalle() {
 		return btnVerDetalle;
 	}
-	
+
 	public JButton getBtnFiltrar() {
 		return btnFiltrar;
 	}
 
-	public void setControlador(Controlador controlador) {
-	    btnVerDetalle.addActionListener(controlador);
-	    btnFiltrar.addActionListener(controlador);
-	}
-	
 	/**
-	 * Vuelca la lista de pedidos en la tabla principal.
+	 * Registra el controlador como listener de los botones de la vista.
 	 *
-	 * @param filas Matriz Object[][] con los pedidos a mostrar.
+	 * @param controlador Controlador que gestionará los eventos.
+	 */
+	public void setControlador(Controlador controlador) {
+		btnVerDetalle.addActionListener(controlador);
+		btnFiltrar.addActionListener(controlador);
+	}
+
+	/**
+	 * Vuelca la lista de pedidos en la tabla principal. Vacía la tabla antes
+	 * de pintar para no acumular filas entre llamadas.
+	 *
+	 * @param filas Matriz con los pedidos a mostrar.
 	 */
 	public void mostrarPedidos(Object[][] filas) {
 		modeloTablaPedidos.setRowCount(0);
@@ -167,11 +175,11 @@ public class VMisPedidos extends JPanel {
 	}
 
 	/**
-	 * Vuelca el detalle de las líneas de un pedido en la tabla de detalle.
-	 * También actualiza el label con el número del pedido seleccionado.
+	 * Vuelca el detalle de las líneas de un pedido en la tabla de detalle y
+	 * actualiza el label con el número de pedido seleccionado.
 	 *
 	 * @param idPedido ID del pedido que se está mostrando.
-	 * @param filas    Matriz Object[][] con las líneas del pedido.
+	 * @param filas    Matriz con las líneas del pedido.
 	 */
 	public void mostrarDetalle(int idPedido, Object[][] filas) {
 		lblPedidoSeleccionado.setText("Detalle del pedido #" + idPedido);
@@ -182,8 +190,9 @@ public class VMisPedidos extends JPanel {
 	}
 
 	/**
-	 * Limpia las dos tablas y resetea el label de detalle. Útil al cerrar sesión
-	 * o al navegar fuera de la vista.
+	 * Limpia las dos tablas, restablece el label de detalle al texto por
+	 * defecto y resetea el filtro de estado al primer elemento. Útil al
+	 * cerrar sesión o al navegar fuera de la vista.
 	 */
 	public void limpiarVista() {
 		modeloTablaPedidos.setRowCount(0);
@@ -191,6 +200,4 @@ public class VMisPedidos extends JPanel {
 		lblPedidoSeleccionado.setText("Detalle del pedido seleccionado");
 		comboFiltroEstado.setSelectedIndex(0);
 	}
-	
-	
 }

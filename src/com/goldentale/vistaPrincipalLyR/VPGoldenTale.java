@@ -19,49 +19,53 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
- * Ventana principal de Golden Tale. Contiene navbar, sidebar dinámico y área
- * central con CardLayout. El panel de inicio (bienvenida) se construye aquí
- * directamente.
+ * Ventana principal de Golden Tale. Contiene la navbar superior, un sidebar
+ * dinámico que cambia según el estado de sesión (pre-login, cliente o
+ * empleado) y un área central con {@link CardLayout} para alternar entre
+ * todas las vistas de la aplicación. El panel de inicio (bienvenida) se
+ * construye internamente en esta clase, el resto de vistas se añaden vía
+ * {@link #añadirVistas}.
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
  * @author David Moreno
+ * @see Controlador
+ * @see VLogin
+ * @see VRegistroUsuario
  */
 public class VPGoldenTale extends JFrame {
 
-	// ── Navbar ────────────────────────────────────────────────────────
 	private JLabel lblNavNombre;
 	private JLabel lblNavEstado;
 
-	// ── Sidebar ───────────────────────────────────────────────────────
 	private JPanel panelLateral;
 
-	// Botones pre-login
 	private JButton btnLateralInicio;
 	private JButton btnLateralLogin;
 	private JButton btnLateralRegistro;
 
-	// Botones cliente
 	private JButton btnClienteCatalogo;
 	private JButton btnClienteCarrito;
 	private JButton btnClienteMisPedidos;
 	private JButton btnClienteCerrarSesion;
 
-	// Botones empleado
 	private JButton btnEmpleadoDashboard;
 	private JButton btnEmpleadoAnadir;
 	private JButton btnEmpleadoModificar;
 	private JButton btnEmpleadoStock;
 	private JButton btnEmpleadoCerrarSesion;
 
-	// ── Panel de inicio (bienvenida) ──────────────────────────────────
 	private JButton btnIniciarSesion;
 	private JButton btnRegistrarse;
 
-	// ── Área central (CardLayout) ─────────────────────────────────────
 	private CardLayout cardLayout;
 	private JPanel areaCentral;
 
+	/**
+	 * Construye la ventana principal con el título de la aplicación e
+	 * inicializa todos los componentes (navbar, sidebar y área central con
+	 * el panel de inicio).
+	 */
 	public VPGoldenTale() {
 		super(Constantes.TITULO_APLICACION);
 		inicializarComponentes();
@@ -77,7 +81,6 @@ public class VPGoldenTale extends JFrame {
 
 		add(construirNavbar(), BorderLayout.NORTH);
 
-		// ── Sidebar ───────────────────────────────────────────────────
 		panelLateral = new JPanel();
 		panelLateral.setBackground(Tema.FONDO_LATERAL);
 		panelLateral.setLayout(new BoxLayout(panelLateral, BoxLayout.Y_AXIS));
@@ -87,18 +90,14 @@ public class VPGoldenTale extends JFrame {
 						BorderFactory.createEmptyBorder(18, 12, 18, 12)));
 		add(panelLateral, BorderLayout.WEST);
 
-		// ── Área central ──────────────────────────────────────────────
 		cardLayout = new CardLayout();
 		areaCentral = new JPanel(cardLayout);
 		areaCentral.setBackground(Tema.FONDO);
 
-		// El panel de inicio se construye aquí y se añade directamente
 		areaCentral.add(construirPanelInicio(), Constantes.VISTA_INICIO);
 
 		add(areaCentral, BorderLayout.CENTER);
 	}
-
-	// ── Navbar ────────────────────────────────────────────────────────
 
 	private JPanel construirNavbar() {
 		JPanel navbar = new JPanel(new BorderLayout());
@@ -120,8 +119,6 @@ public class VPGoldenTale extends JFrame {
 		return navbar;
 	}
 
-	// ── Panel de inicio ───────────────────────────────────────────────
-
 	private JPanel construirPanelInicio() {
 		JPanel fondo = new JPanel(new GridBagLayout());
 		fondo.setBackground(Tema.FONDO);
@@ -131,14 +128,12 @@ public class VPGoldenTale extends JFrame {
 		tarjeta.setPreferredSize(new Dimension(520, 340));
 		tarjeta.setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50));
 
-		// Logo emoji
 		JLabel lblLogo = new JLabel("🧴");
 		lblLogo.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 52));
 		lblLogo.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(lblLogo);
 		tarjeta.add(Box.createVerticalStrut(14));
 
-		// Título
 		JLabel lblNombreApp = new JLabel(Constantes.TITULO_APLICACION);
 		lblNombreApp.setFont(Tema.fuenteNegrita(34));
 		lblNombreApp.setForeground(Tema.TEXTO_OSCURO);
@@ -158,7 +153,6 @@ public class VPGoldenTale extends JFrame {
 		tarjeta.add(sep);
 		tarjeta.add(Box.createVerticalStrut(24));
 
-		// Botones
 		JPanel filaBotones = new JPanel(new GridLayout(1, 2, 12, 0));
 		filaBotones.setOpaque(false);
 		filaBotones.setMaximumSize(new Dimension(Integer.MAX_VALUE, 42));
@@ -179,8 +173,22 @@ public class VPGoldenTale extends JFrame {
 		return fondo;
 	}
 
-	// ── Añadir vistas al CardLayout ───────────────────────────────────
-
+	/**
+	 * Añade todas las vistas de la aplicación al {@link CardLayout} central
+	 * usando como clave la constante de vista correspondiente definida en
+	 * {@link Constantes}.
+	 *
+	 * @param panelLogin      Vista de inicio de sesión.
+	 * @param panelRegistro   Vista de registro de usuario.
+	 * @param panelCatalogo   Vista del catálogo del cliente.
+	 * @param panelCarrito    Vista del carrito de la compra.
+	 * @param panelMisPedidos Vista del historial de pedidos del cliente.
+	 * @param panelPago       Vista de pago.
+	 * @param panelDashboard  Vista del dashboard del empleado.
+	 * @param panelAnadir     Vista de añadir perfume.
+	 * @param panelModificar  Vista de modificar perfume.
+	 * @param panelStock      Vista de control de stock.
+	 */
 	public void añadirVistas(VLogin panelLogin, VRegistroUsuario panelRegistro, VCatalogoCliente panelCatalogo,
 			VCarritoCompra panelCarrito, VMisPedidos panelMisPedidos, VPago panelPago,
 			VEmpleadoDashboard panelDashboard, VAniadirPerfume panelAnadir, VModificarPerfume panelModificar,
@@ -198,15 +206,24 @@ public class VPGoldenTale extends JFrame {
 		areaCentral.add(panelStock, Constantes.VISTA_STOCK);
 	}
 
-	// ── setControlador ────────────────────────────────────────────────
-
+	/**
+	 * Registra el controlador como listener de los botones del panel de
+	 * inicio (Iniciar sesión y Registrarse).
+	 *
+	 * @param controlador Controlador que gestionará los eventos.
+	 */
 	public void setControlador(Controlador controlador) {
 		btnIniciarSesion.addActionListener(controlador);
 		btnRegistrarse.addActionListener(controlador);
 	}
 
-	// ── Gestión del sidebar ───────────────────────────────────────────
-
+	/**
+	 * Construye el sidebar para el estado pre-login con los accesos a Inicio,
+	 * Login y Registro, y registra el listener pasado en cada uno de ellos.
+	 *
+	 * @param listener Listener que recibirá los eventos de los botones del
+	 *                 sidebar.
+	 */
 	public void mostrarSidebarPreLogin(ActionListener listener) {
 		panelLateral.removeAll();
 		agregarEtiquetaSeccion("MENÚ");
@@ -230,6 +247,14 @@ public class VPGoldenTale extends JFrame {
 		panelLateral.repaint();
 	}
 
+	/**
+	 * Construye el sidebar para un cliente autenticado, mostrando su nombre
+	 * en la navbar y los accesos al catálogo, carrito, mis pedidos y cerrar
+	 * sesión. Registra el listener pasado en cada botón.
+	 *
+	 * @param nombreCliente Nombre del cliente a mostrar en la navbar.
+	 * @param listener      Listener que recibirá los eventos de los botones.
+	 */
 	public void mostrarSidebarCliente(String nombreCliente, ActionListener listener) {
 		panelLateral.removeAll();
 		lblNavEstado.setText(nombreCliente);
@@ -261,6 +286,15 @@ public class VPGoldenTale extends JFrame {
 		panelLateral.repaint();
 	}
 
+	/**
+	 * Construye el sidebar para un empleado autenticado, mostrando su nombre
+	 * en la navbar y los accesos al dashboard, añadir/modificar perfume,
+	 * control de stock y cerrar sesión. Registra el listener pasado en cada
+	 * botón.
+	 *
+	 * @param nombreEmpleado Nombre del empleado a mostrar en la navbar.
+	 * @param listener       Listener que recibirá los eventos de los botones.
+	 */
 	public void mostrarSidebarEmpleado(String nombreEmpleado, ActionListener listener) {
 		panelLateral.removeAll();
 		lblNavEstado.setText(nombreEmpleado);
@@ -306,17 +340,23 @@ public class VPGoldenTale extends JFrame {
 		panelLateral.add(lbl);
 	}
 
-	// ── Navegación ────────────────────────────────────────────────────
-
+	/**
+	 * Cambia la vista mostrada en el área central a la identificada por la
+	 * clave dada.
+	 *
+	 * @param claveVista Clave de la vista (definida en {@link Constantes}).
+	 */
 	public void mostrarVista(String claveVista) {
 		cardLayout.show(areaCentral, claveVista);
 	}
 
+	/**
+	 * Hace visible la ventana principal.
+	 */
 	public void hacerVisible() {
 		setVisible(true);
 	}
 
-	// ── Getters panel inicio ──────────────────────────────────────────
 	public JButton getBtnIniciarSesion() {
 		return btnIniciarSesion;
 	}
@@ -325,7 +365,6 @@ public class VPGoldenTale extends JFrame {
 		return btnRegistrarse;
 	}
 
-	// ── Getters sidebar pre-login ─────────────────────────────────────
 	public JButton getBtnLateralInicio() {
 		return btnLateralInicio;
 	}
@@ -338,7 +377,6 @@ public class VPGoldenTale extends JFrame {
 		return btnLateralRegistro;
 	}
 
-	// ── Getters sidebar cliente ───────────────────────────────────────
 	public JButton getBtnClienteCatalogo() {
 		return btnClienteCatalogo;
 	}
@@ -355,7 +393,6 @@ public class VPGoldenTale extends JFrame {
 		return btnClienteCerrarSesion;
 	}
 
-	// ── Getters sidebar empleado ──────────────────────────────────────
 	public JButton getBtnEmpleadoDashboard() {
 		return btnEmpleadoDashboard;
 	}
@@ -376,7 +413,6 @@ public class VPGoldenTale extends JFrame {
 		return btnEmpleadoCerrarSesion;
 	}
 
-	// ── Getters navbar ────────────────────────────────────────────────
 	public JLabel getLblNavEstado() {
 		return lblNavEstado;
 	}
