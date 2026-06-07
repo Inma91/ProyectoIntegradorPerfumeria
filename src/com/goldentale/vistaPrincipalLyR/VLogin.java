@@ -10,12 +10,15 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel de inicio de sesión. Login por correo y contraseña. El rol se determina
- * automáticamente según el usuario encontrado en BD.
+ * Panel de inicio de sesión de Golden Tale. Solicita correo y contraseña al
+ * usuario; el rol (cliente o empleado) se determina automáticamente según el
+ * usuario encontrado en la BBDD. Las validaciones de formato se realizan en
+ * el controlador, esta vista solo expone los campos y los labels de error.
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
  * @author David Moreno
+ * @see Controlador
  */
 public class VLogin extends JPanel {
 
@@ -26,6 +29,9 @@ public class VLogin extends JPanel {
 	private JButton btnRegistrarse;
 	private JLabel lblError;
 
+	/**
+	 * Construye el panel e inicializa todos los componentes visuales.
+	 */
 	public VLogin() {
 		inicializarComponentes();
 	}
@@ -39,7 +45,6 @@ public class VLogin extends JPanel {
 		tarjeta.setPreferredSize(new Dimension(340, 380));
 		tarjeta.setBorder(BorderFactory.createEmptyBorder(28, 38, 24, 38));
 
-		// ── Título ────────────────────────────────────────────────────
 		JLabel lblNombreApp = new JLabel(Constantes.TITULO_APLICACION);
 		lblNombreApp.setFont(Tema.fuenteNegrita(24));
 		lblNombreApp.setForeground(Tema.TEXTO_OSCURO);
@@ -53,7 +58,6 @@ public class VLogin extends JPanel {
 		tarjeta.add(lblSubtitulo);
 		tarjeta.add(Box.createVerticalStrut(28));
 
-		// ── Email ─────────────────────────────────────────────────────
 		JLabel lblEmail = ComponentesUI.etiquetaFormulario("Correo electrónico");
 		lblEmail.setAlignmentX(LEFT_ALIGNMENT);
 		tarjeta.add(lblEmail);
@@ -63,7 +67,6 @@ public class VLogin extends JPanel {
 		tarjeta.add(txtEmail);
 		tarjeta.add(Box.createVerticalStrut(14));
 
-		// ── Contraseña ────────────────────────────────────────────────
 		JLabel lblPassword = ComponentesUI.etiquetaFormulario("Contraseña");
 		lblPassword.setAlignmentX(LEFT_ALIGNMENT);
 		tarjeta.add(lblPassword);
@@ -73,7 +76,6 @@ public class VLogin extends JPanel {
 		tarjeta.add(txtPassword);
 		tarjeta.add(Box.createVerticalStrut(8));
 
-		// ── Mostrar contraseña ────────────────────────────────────────
 		JPanel filaMostrar = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 		filaMostrar.setOpaque(false);
 		filaMostrar.setMaximumSize(new Dimension(Integer.MAX_VALUE, 28));
@@ -83,7 +85,6 @@ public class VLogin extends JPanel {
 		tarjeta.add(filaMostrar);
 		tarjeta.add(Box.createVerticalStrut(14));
 
-		// ── Error ─────────────────────────────────────────────────────
 		lblError = new JLabel(" ");
 		lblError.setFont(Tema.fuenteNormal(12));
 		lblError.setForeground(Tema.ERROR);
@@ -91,7 +92,6 @@ public class VLogin extends JPanel {
 		tarjeta.add(lblError);
 		tarjeta.add(Box.createVerticalStrut(8));
 
-		// ── Botones ───────────────────────────────────────────────────
 		btnIniciarSesion = ComponentesUI.botonPrincipal("Iniciar sesión");
 		btnIniciarSesion.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 		tarjeta.add(btnIniciarSesion);
@@ -104,29 +104,42 @@ public class VLogin extends JPanel {
 		add(tarjeta);
 	}
 
-	// ── Métodos de ayuda ──────────────────────────────────────────────
-
+	/**
+	 * Muestra un mensaje de error en el label de feedback.
+	 *
+	 * @param msg Texto del error a mostrar.
+	 */
 	public void mostrarError(String msg) {
 		lblError.setText(msg);
 	}
 
+	/**
+	 * Limpia el label de error dejándolo en blanco.
+	 */
 	public void limpiarError() {
 		lblError.setText(" ");
 	}
-	
+
+	/**
+	 * Vacía los campos de correo y contraseña y limpia el label de error.
+	 */
 	public void limpiarFormulario() {
 		txtEmail.setText("");
 		txtPassword.setText("");
 		lblError.setText(" ");
 	}
 
+	/**
+	 * Registra el controlador como listener de los botones de la vista.
+	 *
+	 * @param controlador Controlador que gestionará los eventos.
+	 */
 	public void setControlador(Controlador controlador) {
 		btnIniciarSesion.addActionListener(controlador);
 		btnRegistrarse.addActionListener(controlador);
 		btnMostrarPassword.addActionListener(controlador);
 	}
 
-	// ── Getters ───────────────────────────────────────────────────────
 	public JTextField getTxtEmail() {
 		return txtEmail;
 	}

@@ -20,6 +20,11 @@ import com.goldentale.vistaEmpleado.VStock;
 
 /**
  * Punto de entrada de la aplicación Golden Tale.
+ * <p>
+ * Inicializa todas las vistas, el controlador y la ventana principal, los
+ * conecta entre sí y arranca la interfaz gráfica en el hilo de eventos de
+ * Swing.
+ * </p>
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
@@ -27,23 +32,36 @@ import com.goldentale.vistaEmpleado.VStock;
  */
 public class Inicio {
 
+	/**
+	 * Método principal de la aplicación.
+	 * <p>
+	 * Programa el arranque de la interfaz gráfica en el Event Dispatch Thread
+	 * mediante {@link EventQueue#invokeLater}. Dentro del hilo de eventos:
+	 * <ol>
+	 * <li>Aplica el Look &amp; Feel nativo del sistema operativo.</li>
+	 * <li>Instancia la ventana principal y todas las vistas.</li>
+	 * <li>Crea el controlador y le inyecta todas las vistas.</li>
+	 * <li>Registra el controlador en cada vista.</li>
+	 * <li>Añade las vistas al {@code CardLayout} de la ventana principal.</li>
+	 * <li>Muestra el sidebar pre-login y la vista de inicio.</li>
+	 * </ol>
+	 * </p>
+	 *
+	 * @param args argumentos de línea de comandos (no utilizados)
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 
+			@Override
+			public void run() {
+				try {
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
-            @Override
-            public void run() {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                
-                // Ventana principal (incluye el panel de inicio internamente)
-                VPGoldenTale ventana = new VPGoldenTale();
-     
+				VPGoldenTale ventana = new VPGoldenTale();
 
-				// Vistas
 				VLogin panelLogin = new VLogin();
 				VRegistroUsuario panelRegistro = new VRegistroUsuario();
 				VCatalogoCliente panelCatalogo = new VCatalogoCliente();
@@ -55,7 +73,6 @@ public class Inicio {
 				VModificarPerfume panelModificar = new VModificarPerfume();
 				VStock panelStock = new VStock();
 
-				// Controlador
 				Controlador controlador = new Controlador(ventana);
 				controlador.setPanelLogin(panelLogin);
 				controlador.setPanelRegistro(panelRegistro);
@@ -68,7 +85,6 @@ public class Inicio {
 				controlador.setPanelModificar(panelModificar);
 				controlador.setPanelStock(panelStock);
 
-				// setControlador en cada vista
 				ventana.setControlador(controlador);
 				panelLogin.setControlador(controlador);
 				panelRegistro.setControlador(controlador);
@@ -81,11 +97,9 @@ public class Inicio {
 				panelModificar.setControlador(controlador);
 				panelStock.setControlador(controlador);
 
-				// Añadir vistas al CardLayout
 				ventana.añadirVistas(panelLogin, panelRegistro, panelCatalogo, panelCarrito, panelMisPedidos, panelPago,
 						panelDashboard, panelAnadir, panelModificar, panelStock);
 
-				// Sidebar inicial y vista de inicio
 				ventana.mostrarSidebarPreLogin(controlador);
 				ventana.mostrarVista(Constantes.VISTA_INICIO);
 				ventana.hacerVisible();
