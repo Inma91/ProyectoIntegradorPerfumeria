@@ -30,16 +30,18 @@ public class Inicio {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 
-			@Override
-			public void run() {
-				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
 
-				// Ventana principal (incluye el panel de inicio internamente)
-				VPGoldenTale ventana = new VPGoldenTale();
+            @Override
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                
+                // Ventana principal (incluye el panel de inicio internamente)
+                VPGoldenTale ventana = new VPGoldenTale();
+     
 
 				// Vistas
 				VLogin panelLogin = new VLogin();

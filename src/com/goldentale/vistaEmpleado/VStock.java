@@ -29,6 +29,9 @@ public class VStock extends JPanel {
 	private JComboBox<String> comboFiltroUbicacion;
 	private JComboBox<String> comboFiltroEstado;
 
+	// ── Botón ─────────────────────────────────────────────────────────
+	private JButton btnFiltrar;
+
 	// ── Tabla ─────────────────────────────────────────────────────────
 	private JTable tablaStock;
 	private DefaultTableModel modeloTablaStock;
@@ -86,6 +89,16 @@ public class VStock extends JPanel {
 		panelFiltros.add(comboFiltroUbicacion);
 		panelFiltros.add(comboFiltroEstado);
 		contenido.add(panelFiltros);
+		contenido.add(Box.createVerticalStrut(8));
+
+		// ── Botón Filtrar ─────────────────────────────────────────────
+		JPanel filaBoton = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		filaBoton.setOpaque(false);
+		filaBoton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+		btnFiltrar = ComponentesUI.botonPrincipal("Filtrar");
+		btnFiltrar.setPreferredSize(new Dimension(120, 36));
+		filaBoton.add(btnFiltrar);
+		contenido.add(filaBoton);
 		contenido.add(Box.createVerticalStrut(14));
 
 		// ── Tabla ─────────────────────────────────────────────────────
@@ -95,9 +108,6 @@ public class VStock extends JPanel {
 				return false;
 			}
 		};
-		// TODO: cargar stock real desde JDBC (PerfumesDAO.getAll())
-		modeloTablaStock.addRow(new Object[] { "Velvet Rose", Constantes.LOC_PEQUENO, "12", "OK" });
-		modeloTablaStock.addRow(new Object[] { "Golden Amber", Constantes.LOC_MEDIANO, "4", "Stock bajo" });
 
 		tablaStock = new JTable(modeloTablaStock);
 		ComponentesUI.prepararTabla(tablaStock);
@@ -105,6 +115,46 @@ public class VStock extends JPanel {
 		contenido.add(scroll);
 
 		add(contenido, BorderLayout.CENTER);
+	}
+
+	// ── Métodos para cargar datos desde el controlador ────────────────
+
+	/**
+	 * Pinta la tabla con los datos recibidos del controlador.
+	 * El controlador es responsable de pasar el estado ya calculado.
+	 *
+	 * @param filas array donde cada fila contiene 4 columnas:
+	 *              {nombre, localizacion, cantidad, estado}.
+	 */
+	public void mostrarPerfumesConStock(Object[][] filas) {
+		modeloTablaStock.setRowCount(0); // vaciar la tabla antes de pintar
+
+		for (Object[] fila : filas) {
+			modeloTablaStock.addRow(fila);
+		}
+	}
+	
+	/**
+	 * Limpia los filtros de búsqueda y deja la vista lista para una nueva sesión.
+	 * No vacía la tabla, ya que esa se recarga al volver a entrar.
+	 */
+	public void limpiarFiltros() {
+	    txtBuscar.setText("");
+	    comboFiltroUbicacion.setSelectedIndex(0);
+	    comboFiltroEstado.setSelectedIndex(0);
+	}
+
+	/**
+	 * Actualiza las tres tarjetas de métricas del resumen del almacén.
+	 *
+	 * @param total    número total de perfumes en catálogo.
+	 * @param bajo     número de perfumes con stock bajo.
+	 * @param sinStock número de perfumes sin stock.
+	 */
+	public void actualizarMetricas(int total, int bajo, int sinStock) {
+		lblTotalProductosValor.setText(String.valueOf(total));
+		lblStockBajoValor.setText(String.valueOf(bajo));
+		lblSinStockValor.setText(String.valueOf(sinStock));
 	}
 
 	// ── Getters ───────────────────────────────────────────────────────
@@ -133,6 +183,10 @@ public class VStock extends JPanel {
 		return comboFiltroEstado;
 	}
 
+	public JButton getBtnFiltrar() {
+		return btnFiltrar;
+	}
+
 	public JTable getTablaStock() {
 		return tablaStock;
 	}
@@ -142,6 +196,6 @@ public class VStock extends JPanel {
 	}
 
 	public void setControlador(Controlador controlador) {
-		// TODO: añadir listeners cuando se implementen botones de acción en stock
+		btnFiltrar.addActionListener(controlador);
 	}
 }

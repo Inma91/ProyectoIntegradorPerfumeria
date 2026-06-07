@@ -8,7 +8,7 @@ package com.goldentale.model.db;
  * @author David Moreno
  */
 public class Perfumes {
-
+	//Atributos
 	private int idPerfume;
 	private String nombre;
 	private String marca;
@@ -17,15 +17,27 @@ public class Perfumes {
 	private double precio;
 	private int ml;
 	private String publico;
-	private String localizacion;
-	private int stock;
 
 	/**
-	 * Constructor completo. Pasar 0 en idPerfume cuando el perfume es nuevo y aún
-	 * no tiene ID de BD.
+
+	 * Constructor completo.
+	 *
+	 * @param idPerfume    ID en la base de datos (null si es nuevo y el ID lo
+	 *                     genera la BD).
+	 * @param nombre       Nombre comercial del perfume.
+	 * @param marca        Casa de perfumería.
+	 * @param categoria    Categoría olfativa (Floral, Oriental, etc.).
+	 * @param descripcion  Notas olfativas y descripción (puede ser vacía).
+	 * @param precio       Precio en euros.
+	 * @param ml           Volumen del frasco en mililitros.
+	 * @param publico      Público objetivo (Mujer, Hombre, Unisex).
 	 */
+
+	
+	//Constructor
 	public Perfumes(int idPerfume, String nombre, String marca, String categoria, String descripcion, double precio,
-			int ml, String publico, String localizacion, int stock) {
+			int ml, String publico) {
+
 		this.idPerfume = idPerfume;
 		this.nombre = nombre;
 		this.marca = marca;
@@ -34,9 +46,9 @@ public class Perfumes {
 		this.precio = precio;
 		this.ml = ml;
 		this.publico = publico;
-		this.localizacion = localizacion;
-		this.stock = stock;
 	}
+
+	//Getters y setters
 
 	public int getIdPerfume() {
 		return idPerfume;
@@ -102,24 +114,8 @@ public class Perfumes {
 		this.publico = publico;
 	}
 
-	public String getLocalizacion() {
-		return localizacion;
-	}
-
-	public void setLocalizacion(String loc) {
-		this.localizacion = loc;
-	}
-
-	public int getStock() {
-		return stock;
-	}
-
-	public void setStock(int stock) {
-		this.stock = stock;
-	}
-
 	@Override
 	public String toString() {
-		return nombre + " (" + marca + ") - " + ml + "ml - " + String.format("%.2f€", precio);
+		return "Perfumes: " + nombre + ", " + marca +  ", " + categoria + ", " + ml + "ml" + ", " + publico + ", " + precio + "€";
 	}
 }
