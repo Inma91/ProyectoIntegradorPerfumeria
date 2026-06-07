@@ -54,8 +54,6 @@ public class VCarritoCompra extends JPanel {
 				return false;
 			}
 		};
-		// TODO: cargar líneas reales del carrito desde sesión/BD
-		modeloTablaCarrito.addRow(new Object[] { "Velvet Rose", "1", "89.99 EUR", "89.99 EUR" });
 
 		tablaCarrito = new JTable(modeloTablaCarrito);
 		ComponentesUI.prepararTabla(tablaCarrito);

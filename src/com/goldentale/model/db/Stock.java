@@ -1,11 +1,9 @@
 package com.goldentale.model.db;
 
-/**
- * Entidad Stock. Representa el stock de un perfume en el almacén.
- */
 public class Stock {
 
 	//Atributos
+
 	private int id;
 	private int idPerfume;
 	private int cantidad;

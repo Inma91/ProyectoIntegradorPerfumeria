@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import com.goldentale.model.data.ConstantesTablas;
 
 /**
@@ -18,16 +17,17 @@ import com.goldentale.model.data.ConstantesTablas;
  */
 public class PerfumesDAO {
 
+
 	// ATRIBUTO QUE REPRESENTA LA CLASE QUE ME VA A FACILITAR LA CONEXIÓN
 	private AccesoDBProp acc;
 
 	public PerfumesDAO() {
 		acc = new AccesoDBProp();
 	}
-
 	// SENTENCIAS Y MÉTODOS QUE SE VAN A NECESITAR
 
 	// GET ALL: devuelve todos los perfumes del catálogo (sin info de stock)
+
 	public ArrayList<Perfumes> getAll() {
 		ArrayList<Perfumes> listaPerfumes = new ArrayList<Perfumes>();
 
@@ -401,6 +401,7 @@ public class PerfumesDAO {
 		}
 	}
 
+
 	/**
 	 * Busca un perfume por nombre y mililitros.
 	 * TODO: implementar consulta JDBC con PreparedStatement.
@@ -648,4 +649,5 @@ public class PerfumesDAO {
 	// public boolean actualizarStock(int idPerfume, int nuevaCantidad) {
 	//     return false;
 	// }
+
 }

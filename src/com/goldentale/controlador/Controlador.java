@@ -43,6 +43,8 @@ public class Controlador implements ActionListener {
 	private VPGoldenTale ventana;
 	private VLogin panelLogin;
 	private VRegistroUsuario panelRegistro;
+	private boolean passwordLoginVisible = false;
+	private boolean passwordRegistroVisible = false;
 
 	// Vistas cliente
 	private VCatalogoCliente panelCatalogo;
@@ -155,7 +157,7 @@ public class Controlador implements ActionListener {
 				ventana.mostrarVista(Constantes.VISTA_REGISTRO);
 
 			} else if (ev.getSource().equals(panelLogin.getBtnMostrarPassword())) {
-				// TODO: mostrar/ocultar contraseña
+				mostrarPasswordLogin();
 
 				// ── Registro ──────────────────────────────────────────────
 			} else if (ev.getSource().equals(panelRegistro.getBtnRegistrar())) {
@@ -165,7 +167,7 @@ public class Controlador implements ActionListener {
 				panelRegistro.limpiarFormulario();
 
 			} else if (ev.getSource().equals(panelRegistro.getBtnMostrarPassword())) {
-				// TODO: mostrar/ocultar contraseña registro
+				mostrarPasswordRegistro();
 
 				// ── Sidebar cliente ───────────────────────────────────────
 			} else if (ev.getSource().equals(ventana.getBtnClienteCatalogo())) {
@@ -1101,5 +1103,32 @@ public class Controlador implements ActionListener {
 
 			panelMisPedidos.mostrarDetalle(idPedido, filas);
 		}
-		
+  
+  // ── Mostrar/ocultar contraseña ────────────────────────────────────
+
+	private void mostrarPasswordLogin() {
+		passwordLoginVisible = !passwordLoginVisible;
+
+		if (passwordLoginVisible) {
+			panelLogin.getTxtPassword().setEchoChar('\0');
+			panelLogin.getBtnMostrarPassword().setText("Ocultar");
+		} else {
+			panelLogin.getTxtPassword().setEchoChar('•');
+			panelLogin.getBtnMostrarPassword().setText("Mostrar");
+		}
+	}
+
+	private void mostrarPasswordRegistro() {
+		passwordRegistroVisible = !passwordRegistroVisible;
+
+		if (passwordRegistroVisible) {
+			panelRegistro.getTxtPassword().setEchoChar('\0');
+			panelRegistro.getTxtConfirmarPassword().setEchoChar('\0');
+			panelRegistro.getBtnMostrarPassword().setText("Ocultar");
+		} else {
+			panelRegistro.getTxtPassword().setEchoChar('•');
+			panelRegistro.getTxtConfirmarPassword().setEchoChar('•');
+			panelRegistro.getBtnMostrarPassword().setText("Mostrar");
+		}
+	}
 }
