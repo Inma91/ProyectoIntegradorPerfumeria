@@ -102,4 +102,6 @@ public class Constantes {
 	 * de Usuario). Se pone a null al cerrar sesión.
 	 */
 	public static Usuario usuarioAutenticado;
+
+	
 }

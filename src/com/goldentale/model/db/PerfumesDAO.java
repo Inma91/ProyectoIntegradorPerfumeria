@@ -536,6 +536,116 @@ public class PerfumesDAO {
 			}
 		}
 		
+		
+ //CLIENTES
+		
+		// GET INFO CATALOGO POR CATEGORÍA: devuelve perfumes filtrados por categoría
+		public ArrayList<InfoPerfumeConStock> getInfoCatalogoPorCategoria(String categoria) {
+			ArrayList<InfoPerfumeConStock> lista = new ArrayList<InfoPerfumeConStock>();
+
+			String query = "SELECT * FROM " + ConstantesTablas.TABLA_PERFUME + " p "
+					+ " INNER JOIN " + ConstantesTablas.TABLA_STOCK + " s "
+					+ " ON p." + ConstantesTablas.COL_PERFUME_ID + " = s." + ConstantesTablas.COL_STOCK_ID_PERFUME
+					+ " WHERE p." + ConstantesTablas.COL_PERFUME_CATEGORIA + " = ? ";
+
+			Connection con = null;
+			PreparedStatement stmt = null;
+			ResultSet rslt = null;
+
+			try {
+				con = acc.getConexion();
+				stmt = con.prepareStatement(query);
+				stmt.setString(1, categoria);
+				rslt = stmt.executeQuery();
+
+				while (rslt.next()) {
+					Perfumes perfume = new Perfumes(
+							rslt.getInt(ConstantesTablas.COL_PERFUME_ID),
+							rslt.getString(ConstantesTablas.COL_PERFUME_NOMBRE),
+							rslt.getString(ConstantesTablas.COL_PERFUME_MARCA),
+							rslt.getString(ConstantesTablas.COL_PERFUME_CATEGORIA),
+							rslt.getString(ConstantesTablas.COL_PERFUME_DESCRIPCION),
+							rslt.getDouble(ConstantesTablas.COL_PERFUME_PRECIO),
+							rslt.getInt(ConstantesTablas.COL_PERFUME_ML),
+							rslt.getString(ConstantesTablas.COL_PERFUME_PUBLICO));
+
+					Stock stock = new Stock(
+							rslt.getInt(ConstantesTablas.COL_STOCK_ID),
+							rslt.getInt(ConstantesTablas.COL_STOCK_ID_PERFUME),
+							rslt.getInt(ConstantesTablas.COL_STOCK_CANTIDAD),
+							rslt.getString(ConstantesTablas.COL_STOCK_LOCALIZACION));
+
+					lista.add(new InfoPerfumeConStock(perfume, stock));
+				}
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (rslt != null) rslt.close();
+					if (stmt != null) stmt.close();
+					if (con != null) con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return lista;
+		}
+
+		// GET INFO CATALOGO POR NOMBRE Y CATEGORÍA: filtra por ambos campos a la vez
+		public ArrayList<InfoPerfumeConStock> getInfoCatalogoPorNombreYCategoria(String nombre, String categoria) {
+			ArrayList<InfoPerfumeConStock> lista = new ArrayList<InfoPerfumeConStock>();
+
+			String query = "SELECT * FROM " + ConstantesTablas.TABLA_PERFUME + " p "
+					+ " INNER JOIN " + ConstantesTablas.TABLA_STOCK + " s "
+					+ " ON p." + ConstantesTablas.COL_PERFUME_ID + " = s." + ConstantesTablas.COL_STOCK_ID_PERFUME
+					+ " WHERE p." + ConstantesTablas.COL_PERFUME_NOMBRE + " LIKE ? "
+					+ " AND p." + ConstantesTablas.COL_PERFUME_CATEGORIA + " = ? ";
+
+			Connection con = null;
+			PreparedStatement stmt = null;
+			ResultSet rslt = null;
+
+			try {
+				con = acc.getConexion();
+				stmt = con.prepareStatement(query);
+				stmt.setString(1, "%" + nombre + "%");
+				stmt.setString(2, categoria);
+				rslt = stmt.executeQuery();
+
+				while (rslt.next()) {
+					Perfumes perfume = new Perfumes(
+							rslt.getInt(ConstantesTablas.COL_PERFUME_ID),
+							rslt.getString(ConstantesTablas.COL_PERFUME_NOMBRE),
+							rslt.getString(ConstantesTablas.COL_PERFUME_MARCA),
+							rslt.getString(ConstantesTablas.COL_PERFUME_CATEGORIA),
+							rslt.getString(ConstantesTablas.COL_PERFUME_DESCRIPCION),
+							rslt.getDouble(ConstantesTablas.COL_PERFUME_PRECIO),
+							rslt.getInt(ConstantesTablas.COL_PERFUME_ML),
+							rslt.getString(ConstantesTablas.COL_PERFUME_PUBLICO));
+
+					Stock stock = new Stock(
+							rslt.getInt(ConstantesTablas.COL_STOCK_ID),
+							rslt.getInt(ConstantesTablas.COL_STOCK_ID_PERFUME),
+							rslt.getInt(ConstantesTablas.COL_STOCK_CANTIDAD),
+							rslt.getString(ConstantesTablas.COL_STOCK_LOCALIZACION));
+
+					lista.add(new InfoPerfumeConStock(perfume, stock));
+				}
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					if (rslt != null) rslt.close();
+					if (stmt != null) stmt.close();
+					if (con != null) con.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			return lista;
+		}
+		
+		
 	// public boolean actualizarStock(int idPerfume, int nuevaCantidad) {
 	//     return false;
 	// }

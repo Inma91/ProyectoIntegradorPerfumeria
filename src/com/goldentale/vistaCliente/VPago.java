@@ -50,13 +50,13 @@ public class VPago extends JPanel {
 		tarjeta.add(Box.createVerticalStrut(14));
 
 		// ── Resumen y total ───────────────────────────────────────────
-		lblResumen = new JLabel("Resumen: 1 perfume seleccionado");
+		lblResumen = new JLabel("Resumen: 0 perfumes seleccionados");
 		lblResumen.setFont(Tema.fuenteNormal(13));
 		lblResumen.setForeground(Tema.TEXTO_MEDIO);
 		lblResumen.setAlignmentX(CENTER_ALIGNMENT);
 		tarjeta.add(lblResumen);
 
-		lblTotal = new JLabel("Total: 89.99 EUR");
+		lblTotal = new JLabel("Total: 0.00 EUR");
 		lblTotal.setFont(Tema.fuenteNegrita(26));
 		lblTotal.setForeground(Tema.MORADO);
 		lblTotal.setAlignmentX(CENTER_ALIGNMENT);
@@ -121,6 +121,56 @@ public class VPago extends JPanel {
 		lblExito.setText(" ");
 	}
 
+	/**
+	 * Rellena el resumen y el total en la vista. Llamado por el controlador
+	 * al entrar a la vista de pago con el carrito ya validado.
+	 */
+	public void mostrarResumen(int numItems, double total) {
+		String texto = "Resumen: " + numItems + " perfume" + (numItems == 1 ? "" : "s") + " seleccionado"
+				+ (numItems == 1 ? "" : "s");
+		lblResumen.setText(texto);
+		lblTotal.setText(String.format("Total: %.2f EUR", total));
+	}
+
+	/**
+	 * Valida los campos de pago y devuelve los datos listos para la BBDD.
+	 *
+	 * @return Object[] donde [0] es la forma de pago (String) y [1] es la
+	 *         dirección de entrega (String). Devuelve null si hay error.
+	 */
+	public Object[] obtenerDatos() {
+		// 1. Limpiar mensajes previos
+		limpiarFeedback();
+
+		// 2. Validar dirección de entrega
+		String direccion = txtDireccionEntrega.getText().trim();
+		if (direccion.isEmpty()) {
+			mostrarError("La dirección de entrega no puede estar vacía.");
+			return null;
+		}
+		if (direccion.length() < 5) {
+			mostrarError("La dirección parece demasiado corta. Revísala por favor.");
+			return null;
+		}
+
+		// 3. Recoger forma de pago (cualquier opción del combo es válida)
+		String formaPago = (String) comboFormaPago.getSelectedItem();
+
+		return new Object[] { formaPago, direccion };
+	}
+
+	/**
+	 * Limpia los campos del formulario y los labels para una nueva sesión.
+	 */
+	public void limpiarFormulario() {
+		comboFormaPago.setSelectedIndex(0);
+		txtDireccionEntrega.setText("");
+		lblResumen.setText("Resumen: 0 perfumes seleccionados");
+		lblTotal.setText("Total: 0.00 EUR");
+		limpiarFeedback();
+	}
+	
+	
 	// ── Getters ───────────────────────────────────────────────────────
 
 	public JLabel getLblResumen() {
@@ -159,4 +209,6 @@ public class VPago extends JPanel {
 	    btnConfirmarPago.addActionListener(controlador);
 	    btnCancelar.addActionListener(controlador);
 	}
+	
+	
 }

@@ -28,6 +28,7 @@ public class VMisPedidos extends JPanel {
 	private JScrollPane scrollTablaDetallePedido;
 	private JLabel lblPedidoSeleccionado;
 	private JButton btnVerDetalle;
+	private JButton btnFiltrar;
 
 	public VMisPedidos() {
 		inicializarComponentes();
@@ -55,10 +56,18 @@ public class VMisPedidos extends JPanel {
 		comboFiltroEstado.insertItemAt("Todos", 0);
 		comboFiltroEstado.setSelectedIndex(0);
 
+		btnFiltrar = ComponentesUI.botonPrincipal("Filtrar");
+		btnFiltrar.setPreferredSize(new Dimension(90, 30));
+
+		// Agrupamos combo + botón en el lado derecho
+		JPanel filtroPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+		filtroPanel.setOpaque(false);
+		filtroPanel.add(comboFiltroEstado);
+		filtroPanel.add(btnFiltrar);
+
 		cabecera.add(lblTitulo, BorderLayout.WEST);
-		cabecera.add(comboFiltroEstado, BorderLayout.EAST);
+		cabecera.add(filtroPanel, BorderLayout.EAST);
 		contenido.add(cabecera);
-		contenido.add(Box.createVerticalStrut(12));
 
 		// ── Tabla de pedidos ──────────────────────────────────────────
 		modeloTablaPedidos = new DefaultTableModel(Constantes.COLS_MIS_PEDIDOS, 0) {
@@ -67,9 +76,6 @@ public class VMisPedidos extends JPanel {
 				return false;
 			}
 		};
-		// TODO: cargar pedidos reales del usuario autenticado desde JDBC
-		modeloTablaPedidos.addRow(new Object[] { "#1001", "01/06/2026", "Pendiente", "89.99 EUR" });
-		modeloTablaPedidos.addRow(new Object[] { "#1002", "25/05/2026", "Entregado", "120.00 EUR" });
 
 		tablaPedidos = new JTable(modeloTablaPedidos);
 		ComponentesUI.prepararTabla(tablaPedidos);
@@ -90,8 +96,6 @@ public class VMisPedidos extends JPanel {
 				return false;
 			}
 		};
-		// TODO: cargar líneas del pedido seleccionado desde JDBC
-		modeloTablaDetallePedido.addRow(new Object[] { "Velvet Rose", "1", "89.99 EUR", "89.99 EUR" });
 
 		tablaDetallePedido = new JTable(modeloTablaDetallePedido);
 		ComponentesUI.prepararTabla(tablaDetallePedido);
@@ -140,8 +144,53 @@ public class VMisPedidos extends JPanel {
 	public JButton getBtnVerDetalle() {
 		return btnVerDetalle;
 	}
+	
+	public JButton getBtnFiltrar() {
+		return btnFiltrar;
+	}
 
 	public void setControlador(Controlador controlador) {
-		btnVerDetalle.addActionListener(controlador);
+	    btnVerDetalle.addActionListener(controlador);
+	    btnFiltrar.addActionListener(controlador);
 	}
+	
+	/**
+	 * Vuelca la lista de pedidos en la tabla principal.
+	 *
+	 * @param filas Matriz Object[][] con los pedidos a mostrar.
+	 */
+	public void mostrarPedidos(Object[][] filas) {
+		modeloTablaPedidos.setRowCount(0);
+		for (Object[] fila : filas) {
+			modeloTablaPedidos.addRow(fila);
+		}
+	}
+
+	/**
+	 * Vuelca el detalle de las líneas de un pedido en la tabla de detalle.
+	 * También actualiza el label con el número del pedido seleccionado.
+	 *
+	 * @param idPedido ID del pedido que se está mostrando.
+	 * @param filas    Matriz Object[][] con las líneas del pedido.
+	 */
+	public void mostrarDetalle(int idPedido, Object[][] filas) {
+		lblPedidoSeleccionado.setText("Detalle del pedido #" + idPedido);
+		modeloTablaDetallePedido.setRowCount(0);
+		for (Object[] fila : filas) {
+			modeloTablaDetallePedido.addRow(fila);
+		}
+	}
+
+	/**
+	 * Limpia las dos tablas y resetea el label de detalle. Útil al cerrar sesión
+	 * o al navegar fuera de la vista.
+	 */
+	public void limpiarVista() {
+		modeloTablaPedidos.setRowCount(0);
+		modeloTablaDetallePedido.setRowCount(0);
+		lblPedidoSeleccionado.setText("Detalle del pedido seleccionado");
+		comboFiltroEstado.setSelectedIndex(0);
+	}
+	
+	
 }

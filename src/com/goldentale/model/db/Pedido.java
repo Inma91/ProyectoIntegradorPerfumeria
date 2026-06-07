@@ -12,16 +12,19 @@ public class Pedido {
 	private String estado;
 	private String metodoPago;
 	private double total;
+	private String direccionEntrega;
 
 	//Constructor
-	public Pedido(int idPedido, Usuario usuario, String fecha, String estado, String metodoPago, double total) {
-		this.idPedido = idPedido;
-		this.usuario = usuario;
-		this.fecha = fecha;
-		this.estado = estado;
-		this.metodoPago = metodoPago;
-		this.total = total;
-	}
+		public Pedido(int idPedido, Usuario usuario, String fecha, String estado, String metodoPago, double total,
+				String direccionEntrega) {
+			this.idPedido = idPedido;
+			this.usuario = usuario;
+			this.fecha = fecha;
+			this.estado = estado;
+			this.metodoPago = metodoPago;
+			this.total = total;
+			this.direccionEntrega = direccionEntrega;
+		}
 
 	//Getters y Setters
 	public int getIdPedido() {
@@ -71,16 +74,25 @@ public class Pedido {
 	public void setTotal(double total) {
 		this.total = total;
 	}
+	
+	public String getDireccionEntrega() {
+		return direccionEntrega;
+	}
+
+	public void setDireccionEntrega(String direccionEntrega) {
+		this.direccionEntrega = direccionEntrega;
+	}
 
 	//toString
-	@Override
-	public String toString() {
-		return "Pedido: " + 
-				"\n Usuario: " + usuario + 
-				"\n Fecha: " + fecha + 
-				"\n Estado: " + estado + 
-				"\n Metodo de Pago: " + metodoPago +
-				"\n Total: " + total;
-	}
+		@Override
+		public String toString() {
+			return "Pedido: " +
+					"\n Usuario: " + usuario +
+					"\n Fecha: " + fecha +
+					"\n Estado: " + estado +
+					"\n Metodo de Pago: " + metodoPago +
+					"\n Total: " + total +
+					"\n Dirección de entrega: " + direccionEntrega;
+		}
 	
 }
