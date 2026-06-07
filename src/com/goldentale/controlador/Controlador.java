@@ -1013,6 +1013,7 @@ public class Controlador implements ActionListener {
 							JOptionPane.WARNING_MESSAGE);
 
 					cargarCatalogoCliente();
+					ventana.mostrarVista(Constantes.VISTA_CATALOGO);
 					return;
 				}
 			}
