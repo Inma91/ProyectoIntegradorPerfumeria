@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 import com.goldentale.model.data.Constantes;
 import com.goldentale.model.db.InfoPerfumeConStock;
@@ -174,7 +175,7 @@ public class Controlador implements ActionListener {
 
 				// ── Catálogo cliente ──────────────────────────────────────
 			} else if (ev.getSource().equals(panelCatalogo.getBtnAnadirCarrito())) {
-				// TODO: anadirAlCarrito()
+				  anadirAlCarrito();
 
 			} else if (ev.getSource().equals(panelCatalogo.getBtnVerCarrito())) {
 				ventana.mostrarVista(Constantes.VISTA_CARRITO);
@@ -184,21 +185,21 @@ public class Controlador implements ActionListener {
 
 				// ── Carrito ───────────────────────────────────────────────
 			} else if (ev.getSource().equals(panelCarrito.getBtnEliminarLinea())) {
-				// TODO: eliminarLineaCarrito()
+				eliminarLineaCarrito();
 
 			} else if (ev.getSource().equals(panelCarrito.getBtnVaciarCarrito())) {
-				// TODO: vaciarCarrito()
+				  vaciarCarrito();
 
 			} else if (ev.getSource().equals(panelCarrito.getBtnFinalizarCompra())) {
 				ventana.mostrarVista(Constantes.VISTA_PAGO);
 
 				// ── Mis pedidos ───────────────────────────────────────────
 			} else if (ev.getSource().equals(panelMisPedidos.getBtnVerDetalle())) {
-				// TODO: mostrarDetallePedido()
+				mostrarDetallePedido();
 
 				// ── Pago ──────────────────────────────────────────────────
 			} else if (ev.getSource().equals(panelPago.getBtnConfirmarPago())) {
-				// TODO: procesarPago()
+				procesarPago();
 
 			} else if (ev.getSource().equals(panelPago.getBtnCancelar())) {
 				ventana.mostrarVista(Constantes.VISTA_CARRITO);
@@ -668,5 +669,163 @@ public class Controlador implements ActionListener {
 	        panelRegistro.getTxtConfirmarPassword().setEchoChar('•');
 	        panelRegistro.getBtnMostrarPassword().setText("Mostrar");
 	    }
+	}
+	
+	private void anadirAlCarrito() {
+	    int fila = panelCatalogo.getTablaCatalogo().getSelectedRow();
+	    if (fila < 0) {
+	        JOptionPane.showMessageDialog(ventana,
+	                "Selecciona un perfume del catálogo primero.",
+	                "Sin selección", JOptionPane.WARNING_MESSAGE);
+	        return;
+	    }
+
+	    String nombre    = panelCatalogo.getModeloTablaCatalogo().getValueAt(fila, 0).toString();
+	    String precio    = panelCatalogo.getModeloTablaCatalogo().getValueAt(fila, 5).toString();
+	    String stockStr  = panelCatalogo.getModeloTablaCatalogo().getValueAt(fila, 6).toString();
+
+	    if (stockStr.equals("0")) {
+	        JOptionPane.showMessageDialog(ventana,
+	                "Este perfume no tiene stock disponible.",
+	                "Sin stock", JOptionPane.WARNING_MESSAGE);
+	        return;
+	    }
+
+	    // Comprobar si ya está en el carrito y sumar cantidad
+	    DefaultTableModel modelo = panelCarrito.getModeloTablaCarrito();
+	    for (int i = 0; i < modelo.getRowCount(); i++) {
+	        if (modelo.getValueAt(i, 0).toString().equals(nombre)) {
+	            int cantidadActual = Integer.parseInt(modelo.getValueAt(i, 1).toString());
+	            int nuevaCantidad  = cantidadActual + 1;
+	            double precioUd    = Double.parseDouble(precio);
+	            double subtotal    = precioUd * nuevaCantidad;
+	            modelo.setValueAt(String.valueOf(nuevaCantidad), i, 1);
+	            modelo.setValueAt(String.format("%.2f EUR", subtotal), i, 3);
+	            actualizarTotalCarrito();
+	            JOptionPane.showMessageDialog(ventana,
+	                    "\"" + nombre + "\" actualizado en el carrito.",
+	                    "Carrito", JOptionPane.INFORMATION_MESSAGE);
+	            return;
+	        }
+	    }
+
+	    // Añadir nueva línea
+	    String precioFormato = String.format("%.2f EUR", Double.parseDouble(precio));
+	    modelo.addRow(new Object[]{ nombre, "1", precioFormato, precioFormato });
+	    actualizarTotalCarrito();
+
+	    JOptionPane.showMessageDialog(ventana,
+	            "\"" + nombre + "\" añadido al carrito.",
+	            "Carrito", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private void actualizarTotalCarrito() {
+	    double total = 0;
+	    DefaultTableModel modelo = panelCarrito.getModeloTablaCarrito();
+	    for (int i = 0; i < modelo.getRowCount(); i++) {
+	        try {
+	            String sub = modelo.getValueAt(i, 3).toString().replace(" EUR", "").trim();
+	            total += Double.parseDouble(sub);
+	        } catch (NumberFormatException ignored) {}
+	    }
+	    panelCarrito.getLblTotal().setText(String.format("Total: %.2f EUR", total));
+	    panelPago.getLblTotal().setText(String.format("%.2f EUR", total));
+	    panelPago.getLblResumen().setText("Resumen: " + modelo.getRowCount() + " artículo(s)");
+	}
+	
+	
+	private void eliminarLineaCarrito() {
+	    int fila = panelCarrito.getTablaCarrito().getSelectedRow();
+	    if (fila < 0) {
+	        JOptionPane.showMessageDialog(ventana,
+	                "Selecciona una línea del carrito para eliminar.",
+	                "Sin selección", JOptionPane.WARNING_MESSAGE);
+	        return;
+	    }
+	    panelCarrito.getModeloTablaCarrito().removeRow(fila);
+	    actualizarTotalCarrito();
+	}
+	
+	
+	private void vaciarCarrito() {
+	    if (panelCarrito.getModeloTablaCarrito().getRowCount() == 0) {
+	        JOptionPane.showMessageDialog(ventana,
+	                "El carrito ya está vacío.",
+	                "Carrito vacío", JOptionPane.INFORMATION_MESSAGE);
+	        return;
+	    }
+	    int confirm = JOptionPane.showConfirmDialog(ventana,
+	            "¿Seguro que quieres vaciar el carrito?",
+	            "Vaciar carrito", JOptionPane.YES_NO_OPTION);
+	    if (confirm != JOptionPane.YES_OPTION) return;
+
+	    panelCarrito.getModeloTablaCarrito().setRowCount(0);
+	    panelCarrito.getLblTotal().setText("Total: 0.00 EUR");
+	    panelPago.getLblTotal().setText("0.00 EUR");
+	    panelPago.getLblResumen().setText("Resumen: 0 artículo(s)");
+	}
+	
+	private void mostrarDetallePedido() {
+	    int fila = panelMisPedidos.getTablaPedidos().getSelectedRow();
+	    if (fila < 0) {
+	        JOptionPane.showMessageDialog(ventana,
+	                "Selecciona un pedido para ver su detalle.",
+	                "Sin selección", JOptionPane.WARNING_MESSAGE);
+	        return;
+	    }
+
+	    String ref    = panelMisPedidos.getModeloTablaPedidos().getValueAt(fila, 0).toString();
+	    String fecha  = panelMisPedidos.getModeloTablaPedidos().getValueAt(fila, 1).toString();
+	    String estado = panelMisPedidos.getModeloTablaPedidos().getValueAt(fila, 2).toString();
+	    String total  = panelMisPedidos.getModeloTablaPedidos().getValueAt(fila, 3).toString();
+
+	    panelMisPedidos.getLblPedidoSeleccionado()
+	            .setText("Pedido " + ref + "  |  " + fecha + "  |  " + estado + "  |  " + total);
+
+	    // TODO: cargar líneas reales desde BD
+	}
+	
+	private void procesarPago() {
+	    // 1. Comprobar que el carrito no esté vacío
+	    if (panelCarrito.getModeloTablaCarrito().getRowCount() == 0) {
+	        panelPago.mostrarError("El carrito está vacío, añade perfumes antes de confirmar.");
+	        return;
+	    }
+
+	    // 2. Comprobar que se ha introducido la dirección de entrega
+	    String direccion = panelPago.getTxtDireccionEntrega().getText().trim();
+	    if (direccion.isEmpty()) {
+	        panelPago.mostrarError("Introduce la dirección de entrega.");
+	        return;
+	    }
+
+	    // 3. Recoger la forma de pago
+	    String formaPago = panelPago.getComboFormaPago().getSelectedItem().toString();
+
+	    // 4. Confirmación
+	    int confirm = JOptionPane.showConfirmDialog(ventana,
+	            "¿Confirmas el pedido?\n\nForma de pago: " + formaPago
+	            + "\nDirección: " + direccion
+	            + "\n" + panelPago.getLblTotal().getText(),
+	            "Confirmar pedido", JOptionPane.YES_NO_OPTION);
+	    if (confirm != JOptionPane.YES_OPTION) return;
+
+	    // TODO:  el pedido en BD
+	    // TODO: guardar el pago en BD
+	    // TODO: actualizar stock en BD por cada línea del carrito
+
+	    // 5. Limpiar carrito y mostrar mensaje de éxito
+	    panelCarrito.getModeloTablaCarrito().setRowCount(0);
+	    panelCarrito.getLblTotal().setText("Total: 0.00 EUR");
+	    panelPago.getLblTotal().setText("0.00 EUR");
+	    panelPago.getLblResumen().setText("Resumen: 0 artículo(s)");
+	    panelPago.getTxtDireccionEntrega().setText("");
+	    panelPago.limpiarFeedback();
+
+	    JOptionPane.showMessageDialog(ventana,
+	            "Pedido confirmado correctamente.\nPuedes ver el estado en 'Mis pedidos'.",
+	            "Pedido realizado", JOptionPane.INFORMATION_MESSAGE);
+
+	    ventana.mostrarVista(Constantes.VISTA_MIS_PEDIDOS);
 	}
 }
