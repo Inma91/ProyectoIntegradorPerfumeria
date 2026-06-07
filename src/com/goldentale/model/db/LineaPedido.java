@@ -70,7 +70,7 @@ public class LineaPedido {
 	@Override
 	public String toString() {
 		return "Pedido nº " + pedido.getIdPedido() + ": " +
-				"\n Unidades del perfume " + perfume.getNombre() + cantidad + 
+				"\n Unidades del perfume " + perfume.getNombre() + ": " + cantidad + 
 				"\n Subtotal " + subtotal + "€";
 	}
 }

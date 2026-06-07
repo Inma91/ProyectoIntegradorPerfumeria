@@ -28,6 +28,7 @@ public class VCatalogoCliente extends JPanel {
 	private JButton btnAnadirCarrito;
 	private JButton btnVerCarrito;
 	private JButton btnMisPedidos;
+	private JButton btnFiltrar;
 
 	public VCatalogoCliente() {
 		inicializarComponentes();
@@ -50,19 +51,23 @@ public class VCatalogoCliente extends JPanel {
 		contenido.add(Box.createVerticalStrut(12));
 
 		// ── Filtros ───────────────────────────────────────────────────
-		JPanel filtros = new JPanel(new GridLayout(1, 3, 10, 0));
-		filtros.setOpaque(false);
-		filtros.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
-		txtBuscar = ComponentesUI.campoTexto("Buscar perfume o marca...");
-		comboCategoria = new JComboBox<>(Constantes.CATEGORIAS_PERFUME);
-		comboCategoria.insertItemAt("Todas las categorías", 0);
-		comboCategoria.setSelectedIndex(0);
-		btnVerCarrito = ComponentesUI.botonSecundario("Ver carrito");
-		filtros.add(txtBuscar);
-		filtros.add(comboCategoria);
-		filtros.add(btnVerCarrito);
-		contenido.add(filtros);
-		contenido.add(Box.createVerticalStrut(14));
+				JPanel filtros = new JPanel(new GridLayout(1, 3, 10, 0));
+				filtros.setOpaque(false);
+				filtros.setMaximumSize(new Dimension(Integer.MAX_VALUE, 38));
+				
+				txtBuscar = ComponentesUI.campoTexto("Buscar perfume o marca...");
+				comboCategoria = new JComboBox<>(Constantes.CATEGORIAS_PERFUME);
+				comboCategoria.insertItemAt("Todas las categorías", 0);
+				comboCategoria.setSelectedIndex(0);
+				
+				btnFiltrar = ComponentesUI.botonPrincipal("Filtrar"); // <── Cambiado Ver Carrito por Filtrar
+				
+				filtros.add(txtBuscar);
+				filtros.add(comboCategoria);
+				filtros.add(btnFiltrar);
+				
+				contenido.add(filtros);
+				contenido.add(Box.createVerticalStrut(14));
 
 		// ── Tabla ─────────────────────────────────────────────────────
 		modeloTablaCatalogo = new DefaultTableModel(Constantes.COLS_CATALOGO, 0) {
@@ -86,16 +91,32 @@ public class VCatalogoCliente extends JPanel {
 		contenido.add(Box.createVerticalStrut(14));
 
 		// ── Botones de acción ─────────────────────────────────────────
-		JPanel acciones = new JPanel(new GridLayout(1, 2, 10, 0));
-		acciones.setOpaque(false);
-		acciones.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
-		btnAnadirCarrito = ComponentesUI.botonPrincipal("Añadir al carrito");
-		btnMisPedidos = ComponentesUI.botonSecundario("Mis pedidos");
-		acciones.add(btnAnadirCarrito);
-		acciones.add(btnMisPedidos);
-		contenido.add(acciones);
+				// Fila 1: Añadir al carrito y Ver carrito (Lado a lado usando un GridLayout 1, 2)
+				JPanel accionesFila1 = new JPanel(new GridLayout(1, 2, 10, 0));
+				accionesFila1.setOpaque(false);
+				accionesFila1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+				
+				btnAnadirCarrito = ComponentesUI.botonPrincipal("Añadir al carrito");
+				btnVerCarrito = ComponentesUI.botonSecundario("Ver carrito");
+				
+				accionesFila1.add(btnAnadirCarrito);
+				accionesFila1.add(btnVerCarrito);
+				contenido.add(accionesFila1); // Lo añadimos al contenedor vertical
 
-		add(contenido, BorderLayout.CENTER);
+				// Añadimos un pequeño espacio de separación vertical (como los que ya usas)
+				contenido.add(Box.createVerticalStrut(10));
+
+				// Fila 2: Mis pedidos (Debajo, usando un GridLayout de 1, 1 para que ocupe todo el ancho)
+				JPanel accionesFila2 = new JPanel(new GridLayout(1, 1, 0, 0));
+				accionesFila2.setOpaque(false);
+				accionesFila2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+				
+				btnMisPedidos = ComponentesUI.botonSecundario("Mis pedidos");
+				
+				accionesFila2.add(btnMisPedidos);
+				contenido.add(accionesFila2); // Lo añadimos al contenedor vertical debajo del anterior
+
+				add(contenido, BorderLayout.CENTER);
 	}
 
 	// ── Getters ───────────────────────────────────────────────────────
@@ -127,10 +148,22 @@ public class VCatalogoCliente extends JPanel {
 	public JButton getBtnMisPedidos() {
 		return btnMisPedidos;
 	}
+	
+	public JButton getBtnFiltrar() {
+	    return btnFiltrar;
+	}
 
 	public void setControlador(Controlador controlador) {
 		btnAnadirCarrito.addActionListener(controlador);
 		btnVerCarrito.addActionListener(controlador);
 		btnMisPedidos.addActionListener(controlador);
+		btnFiltrar.addActionListener(controlador);
+	}
+	
+	public void mostrarCatalogo(Object[][] filas) {
+	    modeloTablaCatalogo.setRowCount(0);
+	    for (Object[] fila : filas) {
+	        modeloTablaCatalogo.addRow(fila);
+	    }
 	}
 }

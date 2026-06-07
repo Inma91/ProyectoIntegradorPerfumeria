@@ -1,7 +1,6 @@
 package com.goldentale.vistaCliente;
 
 import com.goldentale.controlador.Controlador;
-import com.goldentale.model.data.Constantes;
 import com.goldentale.model.util.ComponentesUI;
 import com.goldentale.model.util.Tema;
 
@@ -116,5 +115,21 @@ public class VCarritoCompra extends JPanel {
 		btnEliminarLinea.addActionListener(controlador);
 		btnVaciarCarrito.addActionListener(controlador);
 		btnFinalizarCompra.addActionListener(controlador);
+	}
+
+	/**
+	 * Vuelca las filas y el total recibidos del controlador en la vista del
+	 * carrito.
+	 *
+	 * @param filas Matriz Object[][] con las líneas del carrito.
+	 * @param total Total acumulado a mostrar en la etiqueta.
+	 */
+	public void mostrarCarrito(Object[][] filas, double total) {
+		DefaultTableModel modelo = (DefaultTableModel) tablaCarrito.getModel();
+		modelo.setRowCount(0);
+		for (Object[] fila : filas) {
+			modelo.addRow(fila);
+		}
+		lblTotal.setText(String.format("Total: %.2f EUR", total));
 	}
 }

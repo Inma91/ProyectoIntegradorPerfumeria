@@ -39,6 +39,7 @@ public class ConstantesTablas {
 	public static final String COL_PEDIDO_ID_USUARIO = "id_usuario";
 	public static final String COL_PEDIDO_FECHA = "fecha";
 	public static final String COL_PEDIDO_ESTADO = "estado";
+	public static final String COL_PEDIDO_DIRECCION_ENTREGA = "direccion_entrega";
 
 	// Tabla PAGO
 	public static final String TABLA_PAGO = "pago";
