@@ -14,7 +14,7 @@ import java.awt.*;
  * por nombre y ml, y modificar su precio y/o añadir stock.
  */
 public class VModificarPerfume extends JPanel {
-
+	//ATRIBUTOS
 	// ── Búsqueda ──────────────────────────────────────────────────────
 	private JTextField txtBuscarNombre;
 	private JTextField txtBuscarMl;
@@ -32,6 +32,7 @@ public class VModificarPerfume extends JPanel {
 	private JLabel lblExito;
 	private JButton btnGuardar;
 	private JButton btnCancelar;
+	private boolean tieneError;
 
 	public VModificarPerfume() {
 		inicializarComponentes();
@@ -250,54 +251,70 @@ public class VModificarPerfume extends JPanel {
 	}
 
 	/**
-	 * Valida los campos de modificación de precio y stock.
-	 * @param stockActual El stock que tiene el perfume para calcular que el cambio no lo deje en negativo.
-	 * @return Un array Double donde [0] es el nuevo precio y [1] es la cantidad a sumar/restar. null si hay error.
+	 * Comprueba si la última validación tuvo un error.
 	 */
-	public Double[] obtenerDatosModificados(int stockActual) {
-		String precioTexto = txtNuevoPrecio.getText().trim();
-		String cantidadTexto = txtCantidadAnadir.getText().trim();
+	public boolean tieneError() {
+		return tieneError;
+	}
 
-		if (precioTexto.isEmpty() && cantidadTexto.isEmpty()) {
-			lblResultado.setText("Rellena al menos un campo para modificar.");
-			lblResultado.setForeground(com.goldentale.model.util.Tema.ERROR);
+	/**
+	 * Valida y devuelve el nuevo precio. Devuelve null si el campo está vacío
+	 * (no se quiere modificar) O si hay un error de formato.
+	 * Usa tieneError() para distinguir los dos casos.
+	 */
+	public Double obtenerNuevoPrecio() {
+		tieneError = false;
+		String precioTexto = txtNuevoPrecio.getText().trim();
+
+		if (precioTexto.isEmpty()) {
 			return null;
 		}
 
-		Double nuevoPrecio = null;
-		if (!precioTexto.isEmpty()) {
-			try {
-				nuevoPrecio = Double.parseDouble(precioTexto);
-				if (nuevoPrecio <= 0) {
-					lblResultado.setText("El nuevo precio debe ser mayor que 0.");
-					lblResultado.setForeground(com.goldentale.model.util.Tema.ERROR);
-					return null;
-				}
-			} catch (NumberFormatException e) {
-				lblResultado.setText("El precio debe ser un número válido.");
-				lblResultado.setForeground(com.goldentale.model.util.Tema.ERROR);
+		try {
+			double nuevoPrecio = Double.parseDouble(precioTexto);
+			if (nuevoPrecio <= 0) {
+				lblResultado.setText("El nuevo precio debe ser mayor que 0.");
+				lblResultado.setForeground(Tema.ERROR);
+				tieneError = true;
 				return null;
 			}
+			return nuevoPrecio;
+		} catch (NumberFormatException e) {
+			lblResultado.setText("El precio debe ser un número válido.");
+			lblResultado.setForeground(Tema.ERROR);
+			tieneError = true;
+			return null;
+		}
+	}
+
+	/**
+	 * Valida y devuelve la cantidad a sumar (puede ser negativa para restar).
+	 * Devuelve null si el campo está vacío O si hay un error.
+	 * Usa tieneError() para distinguir los dos casos.
+	 */
+	public Integer obtenerCantidadASumar(int stockActual) {
+		tieneError = false;
+		String cantidadTexto = txtCantidadAnadir.getText().trim();
+
+		if (cantidadTexto.isEmpty()) {
+			return null;
 		}
 
-		Double cantidadAnadir = null;
-		if (!cantidadTexto.isEmpty()) {
-			try {
-				int aSumar = Integer.parseInt(cantidadTexto);
-				if (stockActual + aSumar < 0) {
-					lblResultado.setText("El stock final no puede ser negativo (Actual: " + stockActual + ").");
-					lblResultado.setForeground(com.goldentale.model.util.Tema.ERROR);
-					return null;
-				}
-				cantidadAnadir = (double) aSumar;
-			} catch (NumberFormatException e) {
-				lblResultado.setText("La cantidad a añadir/quitar debe ser un número entero.");
-				lblResultado.setForeground(com.goldentale.model.util.Tema.ERROR);
+		try {
+			int aSumar = Integer.parseInt(cantidadTexto);
+			if (stockActual + aSumar < 0) {
+				lblResultado.setText("El stock final no puede ser negativo (Actual: " + stockActual + ").");
+				lblResultado.setForeground(Tema.ERROR);
+				tieneError = true;
 				return null;
 			}
+			return aSumar;
+		} catch (NumberFormatException e) {
+			lblResultado.setText("La cantidad debe ser un número entero.");
+			lblResultado.setForeground(Tema.ERROR);
+			tieneError = true;
+			return null;
 		}
-
-		return new Double[] { nuevoPrecio, cantidadAnadir };
 	}
 	
 	// ── Getters ───────────────────────────────────────────────────────

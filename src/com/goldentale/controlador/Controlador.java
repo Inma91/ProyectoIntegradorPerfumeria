@@ -203,31 +203,52 @@ public class Controlador implements ActionListener {
 
 				// ── Sidebar empleado ──────────────────────────────────────
 			} else if (ev.getSource().equals(ventana.getBtnEmpleadoDashboard())) {
-				ventana.mostrarVista(Constantes.VISTA_DASHBOARD);
+			    panelAnadir.limpiarFormulario();
+			    panelModificar.limpiarFormulario();
+			    panelStock.limpiarFiltros();
+			    perfumeEnEdicion = null;
+			    ventana.mostrarVista(Constantes.VISTA_DASHBOARD);
 
 			} else if (ev.getSource().equals(ventana.getBtnEmpleadoAnadir())) {
-				ventana.mostrarVista(Constantes.VISTA_ANADIR);
-
+			    panelModificar.limpiarFormulario();
+			    panelStock.limpiarFiltros();
+			    perfumeEnEdicion = null;
+			    ventana.mostrarVista(Constantes.VISTA_ANADIR);
+			    
 			} else if (ev.getSource().equals(ventana.getBtnEmpleadoModificar())) {
-				ventana.mostrarVista(Constantes.VISTA_MODIFICAR);
+			    panelAnadir.limpiarFormulario();
+			    panelStock.limpiarFiltros();
+			    ventana.mostrarVista(Constantes.VISTA_MODIFICAR);
 
 			} else if (ev.getSource().equals(ventana.getBtnEmpleadoStock())) {
-				cargarStock();
-				ventana.mostrarVista(Constantes.VISTA_STOCK);
+			    panelAnadir.limpiarFormulario();
+			    panelModificar.limpiarFormulario();
+			    panelStock.limpiarFiltros();
+			    perfumeEnEdicion = null;
+			    cargarStock();
+			    ventana.mostrarVista(Constantes.VISTA_STOCK);
 
 			} else if (ev.getSource().equals(ventana.getBtnEmpleadoCerrarSesion())) {
 				cerrarSesion();
 
 				// ── Dashboard empleado (accesos rápidos) ──────────────────
 			} else if (ev.getSource().equals(panelDashboard.getBtnAccesoAnadirPerfume())) {
-				ventana.mostrarVista(Constantes.VISTA_ANADIR);
+			    panelModificar.limpiarFormulario();
+			    panelStock.limpiarFiltros();
+			    perfumeEnEdicion = null;
+			    ventana.mostrarVista(Constantes.VISTA_ANADIR);
 
 			} else if (ev.getSource().equals(panelDashboard.getBtnAccesoModificarPerfume())) {
-				ventana.mostrarVista(Constantes.VISTA_MODIFICAR);
+			    panelAnadir.limpiarFormulario();
+			    panelStock.limpiarFiltros();
+			    ventana.mostrarVista(Constantes.VISTA_MODIFICAR);
 
 			} else if (ev.getSource().equals(panelDashboard.getBtnAccesoStock())) {
-				cargarStock();
-				ventana.mostrarVista(Constantes.VISTA_STOCK);
+			    panelAnadir.limpiarFormulario();
+			    panelModificar.limpiarFormulario();
+			    perfumeEnEdicion = null;
+			    cargarStock();
+			    ventana.mostrarVista(Constantes.VISTA_STOCK);
 
 			} else if (ev.getSource().equals(panelDashboard.getBtnAccesoGestionarPedidos())) {
 				// TODO: ventana.mostrarVista(Constantes.VISTA_PEDIDOS_EMPLEADO)
@@ -298,16 +319,26 @@ public class Controlador implements ActionListener {
 	// ── Cerrar sesión ─────────────────────────────────────────────────
 
 	private void cerrarSesion() {
-		int confirm = JOptionPane.showConfirmDialog(ventana, "¿Seguro que quieres cerrar sesión?", "Cerrar sesión",
-				JOptionPane.YES_NO_OPTION);
-		if (confirm != JOptionPane.YES_OPTION)
-			return;
+	    int confirm = JOptionPane.showConfirmDialog(ventana, "¿Seguro que quieres cerrar sesión?", "Cerrar sesión",
+	            JOptionPane.YES_NO_OPTION);
+	    if (confirm != JOptionPane.YES_OPTION)
+	        return;
 
-		Constantes.usuarioAutenticado = null;
-		panelLogin.limpiarFormulario();
-		ventana.mostrarSidebarPreLogin(this);
-		ventana.getLblNavEstado().setText("Bienvenido a " + Constantes.TITULO_APLICACION);
-		ventana.mostrarVista(Constantes.VISTA_INICIO);
+	    // Limpiar todas las vistas para que la próxima sesión empiece desde cero
+	    panelLogin.limpiarFormulario();
+	    panelRegistro.limpiarFormulario();
+	    panelAnadir.limpiarFormulario();
+	    panelModificar.limpiarFormulario();
+	    panelStock.limpiarFiltros();
+
+	    // Resetear el atributo del controlador
+	    perfumeEnEdicion = null;
+
+	    // Cerrar sesión y volver al inicio
+	    Constantes.usuarioAutenticado = null;
+	    ventana.mostrarSidebarPreLogin(this);
+	    ventana.getLblNavEstado().setText("Bienvenido a " + Constantes.TITULO_APLICACION);
+	    ventana.mostrarVista(Constantes.VISTA_INICIO);
 	}
 
 	// ── Registro ──────────────────────────────────────────────────────
@@ -495,9 +526,10 @@ public class Controlador implements ActionListener {
 		InfoPerfumeConStock info = perfumesDAO.buscarPorNombreYMl(nombre, ml);
 
 		if (info == null) {
-			panelModificar.mostrarError("No se ha encontrado ningún perfume con esos datos.");
-			panelModificar.getPanelModificacion().setVisible(false);
-			return;
+		    panelModificar.getLblResultado().setText("No se ha encontrado ningún perfume con esos datos.");
+		    panelModificar.getLblResultado().setForeground(Tema.ERROR);
+		    panelModificar.getPanelModificacion().setVisible(false);
+		    return;
 		}
 
 		// 3. Mostrar panel de modificación indicando éxito
@@ -527,23 +559,32 @@ public class Controlador implements ActionListener {
 
 		int stockActual = perfumeEnEdicion.getStock().getCantidad();
 
-		// 1. Delegamos las validaciones de los nuevos datos a la vista
-		Double[] datosModificados = panelModificar.obtenerDatosModificados(stockActual);
-
-		// Si es null, la vista ya ha mostrado sus propios mensajes de error
-		if (datosModificados == null) {
+		// 1. Validar precio
+		Double nuevoPrecio = panelModificar.obtenerNuevoPrecio();
+		if (panelModificar.tieneError()) {
 			return;
 		}
 
-		Double nuevoPrecio = datosModificados[0];
-		Integer nuevaCantidad = null;
-
-		// Si en el índice 1 hay un dato, calculamos el stock resultante
-		if (datosModificados[1] != null) {
-			nuevaCantidad = stockActual + datosModificados[1].intValue();
+		// 2. Validar cantidad
+		Integer cantidadASumar = panelModificar.obtenerCantidadASumar(stockActual);
+		if (panelModificar.tieneError()) {
+			return;
 		}
 
-		// 2. JOption de confirmación con el resumen de los cambios
+		// 3. Si los dos son null (los dos campos vacíos), no hay nada que modificar
+		if (nuevoPrecio == null && cantidadASumar == null) {
+			panelModificar.getLblResultado().setText("Rellena al menos un campo para modificar.");
+			panelModificar.getLblResultado().setForeground(Tema.ERROR);
+			return;
+		}
+
+		// 4. Calcular la cantidad final si hay que modificar el stock
+		Integer nuevaCantidad = null;
+		if (cantidadASumar != null) {
+			nuevaCantidad = stockActual + cantidadASumar;
+		}
+
+		// 5. JOption de confirmación con el resumen de los cambios
 		String resumen = "¿Confirmas los siguientes cambios?\n\n";
 		if (nuevoPrecio != null) {
 			resumen += "• Precio: " + perfumeEnEdicion.getPerfume().getPrecio() + "€ → " + nuevoPrecio + "€\n";
@@ -559,12 +600,12 @@ public class Controlador implements ActionListener {
 			return;
 		}
 
-		// 3. Guardar en la BBDD
+		// 6. Guardar en la BBDD
 		int idPerfume = perfumeEnEdicion.getPerfume().getIdPerfume();
 		int idStock = perfumeEnEdicion.getStock().getId();
 		perfumesDAO.actualizarPrecioYStock(idPerfume, idStock, nuevoPrecio, nuevaCantidad);
 
-		// 4. JOption informativo + limpiar + ir a Stock para ver el cambio
+		// 7. JOption informativo + limpiar + ir a Stock
 		JOptionPane.showMessageDialog(ventana, "Perfume modificado correctamente.", "Modificación guardada",
 				JOptionPane.INFORMATION_MESSAGE);
 
@@ -573,7 +614,7 @@ public class Controlador implements ActionListener {
 		cargarStock();
 		ventana.mostrarVista(Constantes.VISTA_STOCK);
 	}
-
+	
 	// ── Utilidades de validación ──────────────────────────────────────
 
 	private boolean emailEsValido(String email) {

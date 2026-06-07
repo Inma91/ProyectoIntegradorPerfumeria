@@ -133,6 +133,16 @@ public class VStock extends JPanel {
 			modeloTablaStock.addRow(fila);
 		}
 	}
+	
+	/**
+	 * Limpia los filtros de búsqueda y deja la vista lista para una nueva sesión.
+	 * No vacía la tabla, ya que esa se recarga al volver a entrar.
+	 */
+	public void limpiarFiltros() {
+	    txtBuscar.setText("");
+	    comboFiltroUbicacion.setSelectedIndex(0);
+	    comboFiltroEstado.setSelectedIndex(0);
+	}
 
 	/**
 	 * Actualiza las tres tarjetas de métricas del resumen del almacén.
