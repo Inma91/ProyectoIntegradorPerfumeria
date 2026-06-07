@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 import com.goldentale.model.data.Constantes;
 import com.goldentale.model.db.CarritoCompra;
@@ -30,9 +29,14 @@ import com.goldentale.vistaEmpleado.VEmpleadoDashboard;
 import com.goldentale.vistaEmpleado.VAniadirPerfume;
 import com.goldentale.vistaEmpleado.VModificarPerfume;
 import com.goldentale.vistaEmpleado.VStock;
-
 /**
  * Controlador principal de Golden Tale.
+ * <p>
+ * Implementa {@link ActionListener} y actúa como punto central de gestión de
+ * eventos de la interfaz. Coordina la navegación entre vistas, la lógica de
+ * negocio del cliente (catálogo, carrito, pedidos, pago) y las operaciones del
+ * empleado (stock, añadir y modificar perfumes).
+ * </p>
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
@@ -63,12 +67,17 @@ public class Controlador implements ActionListener {
 	private PerfumesDAO perfumesDAO;
 	private PedidosDAO pedidosDAO;
 
-	// Perfume que se está editando en la pantalla de Modificar
+	/** Perfume que se está editando en la pantalla de Modificar. */
 	private InfoPerfumeConStock perfumeEnEdicion;
 
-	// Líneas del carrito del cliente que tiene la sesión iniciada (en memoria)
+	/** Líneas del carrito del cliente con sesión activa, mantenidas en memoria. */
 	private ArrayList<CarritoCompra> carritoActivo = new ArrayList<CarritoCompra>();
 
+	/**
+	 * Crea el controlador e inicializa los DAOs.
+	 *
+	 * @param ventana ventana principal de la aplicación
+	 */
 	public Controlador(VPGoldenTale ventana) {
 		this.ventana = ventana;
 		usuarioDAO = new UsuarioDAO();
@@ -78,54 +87,114 @@ public class Controlador implements ActionListener {
 
 	// ── Setters ───────────────────────────────────────────────────────
 
+	/**
+	 * Establece el panel de inicio de sesión.
+	 *
+	 * @param panelLogin panel de login
+	 */
 	public void setPanelLogin(VLogin panelLogin) {
 		this.panelLogin = panelLogin;
 	}
 
+	/**
+	 * Establece el panel de registro de usuario.
+	 *
+	 * @param panelRegistro panel de registro
+	 */
 	public void setPanelRegistro(VRegistroUsuario panelRegistro) {
 		this.panelRegistro = panelRegistro;
 	}
 
+	/**
+	 * Establece el panel del catálogo de cliente.
+	 *
+	 * @param panelCatalogo panel del catálogo
+	 */
 	public void setPanelCatalogo(VCatalogoCliente panelCatalogo) {
 		this.panelCatalogo = panelCatalogo;
 	}
 
+	/**
+	 * Establece el panel del carrito de compra.
+	 *
+	 * @param panelCarrito panel del carrito
+	 */
 	public void setPanelCarrito(VCarritoCompra panelCarrito) {
 		this.panelCarrito = panelCarrito;
 	}
 
+	/**
+	 * Establece el panel de mis pedidos.
+	 *
+	 * @param panelMisPedidos panel de pedidos del cliente
+	 */
 	public void setPanelMisPedidos(VMisPedidos panelMisPedidos) {
 		this.panelMisPedidos = panelMisPedidos;
 	}
 
+	/**
+	 * Establece el panel de pago.
+	 *
+	 * @param panelPago panel de pago
+	 */
 	public void setPanelPago(VPago panelPago) {
 		this.panelPago = panelPago;
 	}
 
+	/**
+	 * Establece el panel del dashboard del empleado.
+	 *
+	 * @param panelDashboard panel del dashboard
+	 */
 	public void setPanelDashboard(VEmpleadoDashboard panelDashboard) {
 		this.panelDashboard = panelDashboard;
 	}
 
+	/**
+	 * Establece el panel de añadir perfume.
+	 *
+	 * @param panelAnadir panel de alta de perfume
+	 */
 	public void setPanelAnadir(VAniadirPerfume panelAnadir) {
 		this.panelAnadir = panelAnadir;
 	}
 
+	/**
+	 * Establece el panel de modificar perfume.
+	 *
+	 * @param panelModificar panel de modificación de perfume
+	 */
 	public void setPanelModificar(VModificarPerfume panelModificar) {
 		this.panelModificar = panelModificar;
 	}
 
+	/**
+	 * Establece el panel de gestión de stock.
+	 *
+	 * @param panelStock panel de stock
+	 */
 	public void setPanelStock(VStock panelStock) {
 		this.panelStock = panelStock;
 	}
 
 	// ── Dispatcher ────────────────────────────────────────────────────
 
+	/**
+	 * Punto de entrada de todos los eventos de botón de la aplicación.
+	 * <p>
+	 * Identifica el origen del evento y delega en el método privado
+	 * correspondiente. Cubre los flujos de: inicio, login, registro, sidebar de
+	 * cliente y empleado, catálogo, carrito, pedidos, pago, stock, alta y
+	 * modificación de perfumes.
+	 * </p>
+	 *
+	 * @param ev evento de acción generado por la interfaz
+	 */
 	@Override
 	public void actionPerformed(ActionEvent ev) {
 
 		if (ev.getSource() instanceof JButton) {
 
-			// ── Panel inicio (botones dentro de VPGoldenTale) ─────────
 			if (ev.getSource().equals(ventana.getBtnIniciarSesion())) {
 				panelRegistro.limpiarFormulario();
 				ventana.mostrarVista(Constantes.VISTA_LOGIN);
@@ -134,7 +203,6 @@ public class Controlador implements ActionListener {
 				panelLogin.limpiarFormulario();
 				ventana.mostrarVista(Constantes.VISTA_REGISTRO);
 
-				// ── Sidebar pre-login ─────────────────────────────────────
 			} else if (ev.getSource().equals(ventana.getBtnLateralInicio())) {
 				panelLogin.limpiarFormulario();
 				panelRegistro.limpiarFormulario();
@@ -148,7 +216,6 @@ public class Controlador implements ActionListener {
 				panelLogin.limpiarFormulario();
 				ventana.mostrarVista(Constantes.VISTA_REGISTRO);
 
-				// ── Login ─────────────────────────────────────────────────
 			} else if (ev.getSource().equals(panelLogin.getBtnIniciarSesion())) {
 				procesarLogin();
 
@@ -159,7 +226,6 @@ public class Controlador implements ActionListener {
 			} else if (ev.getSource().equals(panelLogin.getBtnMostrarPassword())) {
 				mostrarPasswordLogin();
 
-				// ── Registro ──────────────────────────────────────────────
 			} else if (ev.getSource().equals(panelRegistro.getBtnRegistrar())) {
 				procesarRegistro();
 
@@ -169,7 +235,6 @@ public class Controlador implements ActionListener {
 			} else if (ev.getSource().equals(panelRegistro.getBtnMostrarPassword())) {
 				mostrarPasswordRegistro();
 
-				// ── Sidebar cliente ───────────────────────────────────────
 			} else if (ev.getSource().equals(ventana.getBtnClienteCatalogo())) {
 				cargarCatalogoCliente();
 				ventana.mostrarVista(Constantes.VISTA_CATALOGO);
@@ -185,8 +250,6 @@ public class Controlador implements ActionListener {
 			} else if (ev.getSource().equals(ventana.getBtnClienteCerrarSesion())) {
 				cerrarSesion();
 
-				// ── Catálogo cliente ──────────────────────────────────────
-
 			} else if (ev.getSource().equals(panelCatalogo.getBtnFiltrar())) {
 				filtrarCatalogoCliente();
 
@@ -197,7 +260,6 @@ public class Controlador implements ActionListener {
 			    cargarMisPedidos();
 			    ventana.mostrarVista(Constantes.VISTA_MIS_PEDIDOS);
 
-				// ── Carrito ───────────────────────────────────────────────
 			} else if (ev.getSource().equals(panelCarrito.getBtnEliminarLinea())) {
 				eliminarLineaCarrito();
 
@@ -207,14 +269,12 @@ public class Controlador implements ActionListener {
 			} else if (ev.getSource().equals(panelCarrito.getBtnFinalizarCompra())) {
 				finalizarCompraCarrito();
 
-				// ── Mis pedidos ───────────────────────────────────────────
 			} else if (ev.getSource().equals(panelMisPedidos.getBtnVerDetalle())) {
 			    mostrarDetallePedido();
 
 			} else if (ev.getSource().equals(panelMisPedidos.getBtnFiltrar())) {
 			    filtrarMisPedidos();
 
-				// ── Pago ──────────────────────────────────────────────────
 			} else if (ev.getSource().equals(panelPago.getBtnConfirmarPago())) {
 				procesarPago();
 
@@ -222,7 +282,6 @@ public class Controlador implements ActionListener {
 				panelPago.limpiarFormulario();
 				ventana.mostrarVista(Constantes.VISTA_CARRITO);
 
-				// ── Sidebar empleado ──────────────────────────────────────
 			} else if (ev.getSource().equals(ventana.getBtnEmpleadoDashboard())) {
 				panelAnadir.limpiarFormulario();
 				panelModificar.limpiarFormulario();
@@ -252,7 +311,6 @@ public class Controlador implements ActionListener {
 			} else if (ev.getSource().equals(ventana.getBtnEmpleadoCerrarSesion())) {
 				cerrarSesion();
 
-				// ── Dashboard empleado (accesos rápidos) ──────────────────
 			} else if (ev.getSource().equals(panelDashboard.getBtnAccesoAnadirPerfume())) {
 				panelModificar.limpiarFormulario();
 				panelStock.limpiarFiltros();
@@ -271,21 +329,15 @@ public class Controlador implements ActionListener {
 				cargarStock();
 				ventana.mostrarVista(Constantes.VISTA_STOCK);
 
-			} else if (ev.getSource().equals(panelDashboard.getBtnAccesoGestionarPedidos())) {
-				// TODO: ventana.mostrarVista(Constantes.VISTA_PEDIDOS_EMPLEADO)
-
-				// ── Botón Filtrar de Stock ────────────────────────────────
 			} else if (ev.getSource().equals(panelStock.getBtnFiltrar())) {
 				filtrarStock();
 
-				// ── Añadir perfume ────────────────────────────────────────
 			} else if (ev.getSource().equals(panelAnadir.getBtnGuardar())) {
 				procesarAnadirPerfume();
 
 			} else if (ev.getSource().equals(panelAnadir.getBtnLimpiar())) {
 				panelAnadir.limpiarFormulario();
 
-				// ── Modificar perfume ─────────────────────────────────────
 			} else if (ev.getSource().equals(panelModificar.getBtnBuscar())) {
 				buscarPerfumeParaModificar();
 
@@ -299,6 +351,16 @@ public class Controlador implements ActionListener {
 	}
 
 	// ── Login ─────────────────────────────────────────────────────────
+
+	/**
+	 * Valida las credenciales introducidas en el formulario de login y, si son
+	 * correctas, redirige al usuario a su vista según su rol (cliente o empleado).
+	 * <p>
+	 * Muestra mensajes de error si el email o la contraseña están vacíos, el
+	 * formato del email no es válido o las credenciales no coinciden con ningún
+	 * usuario registrado.
+	 * </p>
+	 */
 	private void procesarLogin() {
 		String email = panelLogin.getTxtEmail().getText().trim();
 		String password = new String(panelLogin.getTxtPassword().getPassword()).trim();
@@ -339,13 +401,19 @@ public class Controlador implements ActionListener {
 
 	// ── Cerrar sesión ─────────────────────────────────────────────────
 
+	/**
+	 * Solicita confirmación al usuario y, si acepta, cierra la sesión activa.
+	 * <p>
+	 * Limpia todos los formularios y vistas, vacía el carrito en memoria, restablece
+	 * el sidebar al estado pre-login y navega a la vista de inicio.
+	 * </p>
+	 */
 	private void cerrarSesion() {
 		int confirm = JOptionPane.showConfirmDialog(ventana, "¿Seguro que quieres cerrar sesión?", "Cerrar sesión",
 				JOptionPane.YES_NO_OPTION);
 		if (confirm != JOptionPane.YES_OPTION)
 			return;
 
-		// Limpiar todas las vistas para que la próxima sesión empiece desde cero
 		panelLogin.limpiarFormulario();
 		panelRegistro.limpiarFormulario();
 		panelAnadir.limpiarFormulario();
@@ -354,11 +422,9 @@ public class Controlador implements ActionListener {
 		panelPago.limpiarFormulario();
 		panelMisPedidos.limpiarVista();
 
-		// Resetear el atributo del controlador
 		perfumeEnEdicion = null;
 		carritoActivo.clear();
 
-		// Cerrar sesión y volver al inicio
 		Constantes.usuarioAutenticado = null;
 		ventana.mostrarSidebarPreLogin(this);
 		ventana.getLblNavEstado().setText("Bienvenido a " + Constantes.TITULO_APLICACION);
@@ -367,12 +433,18 @@ public class Controlador implements ActionListener {
 
 	// ── Registro ──────────────────────────────────────────────────────
 
+	/**
+	 * Procesa el formulario de registro de un nuevo cliente.
+	 * <p>
+	 * Delega la validación de campos a la vista. Comprueba además que las
+	 * contraseñas coincidan y que el correo no esté ya registrado. Si todo es
+	 * correcto, persiste el usuario, inicia sesión automáticamente y navega al
+	 * catálogo.
+	 * </p>
+	 */
 	private void procesarRegistro() {
-
-		// Obtener los datos del formulario (la vista valida internamente)
 		Usuario nuevoUsuario = panelRegistro.obtenerDatos();
 
-		// Si la vista detectó un error, ya lo mostró en lblError
 		if (nuevoUsuario == null) {
 			return;
 		}
@@ -407,11 +479,19 @@ public class Controlador implements ActionListener {
 
 	// ── Stock (empleado) ──────────────────────────────────────────────
 
+	/**
+	 * Carga todos los perfumes con su stock desde la base de datos y los muestra
+	 * en la vista de stock junto con las métricas calculadas.
+	 */
 	private void cargarStock() {
 		ArrayList<InfoPerfumeConStock> lista = perfumesDAO.getInfoPerfumesConStock();
 		pintarTablaYMetricas(lista);
 	}
 
+	/**
+	 * Aplica los filtros de nombre, ubicación y estado seleccionados en la vista de
+	 * stock y actualiza la tabla con los resultados obtenidos.
+	 */
 	private void filtrarStock() {
 		String nombre = panelStock.getTxtBuscar().getText().trim();
 		String ubicacion = (String) panelStock.getComboFiltroUbicacion().getSelectedItem();
@@ -433,6 +513,14 @@ public class Controlador implements ActionListener {
 		pintarTablaYMetricas(listaFiltrada);
 	}
 
+	/**
+	 * Filtra una lista de perfumes con stock según el estado de disponibilidad.
+	 *
+	 * @param lista  lista original de perfumes con stock
+	 * @param estado estado por el que filtrar: {@code "Todos los estados"},
+	 *               {@code "Con stock"}, {@code "Stock bajo"} o {@code "Sin stock"}
+	 * @return lista filtrada según el estado indicado
+	 */
 	private ArrayList<InfoPerfumeConStock> filtrarPorEstado(ArrayList<InfoPerfumeConStock> lista, String estado) {
 		if (estado.equals("Todos los estados")) {
 			return lista;
@@ -456,6 +544,12 @@ public class Controlador implements ActionListener {
 		return resultado;
 	}
 
+	/**
+	 * Construye la matriz de filas para la tabla de stock y actualiza las métricas
+	 * del panel (total de referencias, artículos con stock bajo y artículos sin stock).
+	 *
+	 * @param lista lista de perfumes con stock a representar
+	 */
 	private void pintarTablaYMetricas(ArrayList<InfoPerfumeConStock> lista) {
 		Object[][] filas = new Object[lista.size()][4];
 		int total = lista.size();
@@ -485,6 +579,14 @@ public class Controlador implements ActionListener {
 		panelStock.actualizarMetricas(total, bajo, sinStock);
 	}
 
+	/**
+	 * Calcula la etiqueta de estado de stock a partir de una cantidad numérica.
+	 *
+	 * @param cantidad unidades disponibles en almacén
+	 * @return {@code "Sin stock"} si es 0, {@code "Stock bajo"} si está por debajo
+	 *         del umbral definido en {@link Constantes#STOCK_MINIMO_ALERTA},
+	 *         o {@code "OK"} en caso contrario
+	 */
 	private String calcularEstado(int cantidad) {
 		if (cantidad == 0) {
 			return "Sin stock";
@@ -497,6 +599,15 @@ public class Controlador implements ActionListener {
 
 	// ── Añadir perfume (empleado) ─────────────────────────────────────
 
+	/**
+	 * Recoge los datos del formulario de alta de perfume, comprueba que no exista
+	 * un duplicado (mismo nombre y mililitros) y, si la validación es correcta,
+	 * persiste el nuevo perfume con su stock inicial.
+	 * <p>
+	 * Tras guardar, pregunta al empleado si desea añadir otro perfume. En caso
+	 * negativo, navega automáticamente a la vista de stock.
+	 * </p>
+	 */
 	private void procesarAnadirPerfume() {
 		Perfumes nuevoPerfume = panelAnadir.obtenerDatos();
 
@@ -530,15 +641,20 @@ public class Controlador implements ActionListener {
 
 	// ── Modificar perfume (empleado) ──────────────────────────────────
 
+	/**
+	 * Busca en la base de datos el perfume cuyo nombre y mililitros coincidan con
+	 * los introducidos en el formulario de búsqueda.
+	 * <p>
+	 * Si se encuentra, muestra los datos actuales del perfume y hace visible el
+	 * panel de modificación. Si no, informa al usuario y oculta dicho panel.
+	 * </p>
+	 */
 	private void buscarPerfumeParaModificar() {
 		panelModificar.getLblResultado().setText(" ");
 		panelModificar.limpiarFeedback();
 
-		// 1. Delegamos las validaciones de búsqueda a la vista
 		Object[] datosBusqueda = panelModificar.obtenerDatosBusqueda();
 
-		// Si la vista devuelve null, significa que falló la validación y ya mostró el
-		// error
 		if (datosBusqueda == null) {
 			panelModificar.getPanelModificacion().setVisible(false);
 			return;
@@ -547,7 +663,6 @@ public class Controlador implements ActionListener {
 		String nombre = (String) datosBusqueda[0];
 		int ml = (Integer) datosBusqueda[1];
 
-		// 2. Buscar el perfume en la BBDD
 		InfoPerfumeConStock info = perfumesDAO.buscarPorNombreYMl(nombre, ml);
 
 		if (info == null) {
@@ -557,23 +672,29 @@ public class Controlador implements ActionListener {
 			return;
 		}
 
-		// 3. Mostrar panel de modificación indicando éxito
 		panelModificar.getLblResultado().setText("¡Perfume encontrado!");
 		panelModificar.getLblResultado().setForeground(Tema.EXITO);
 		perfumeEnEdicion = info;
 
-		// 4. Mostrar los datos en la vista
 		panelModificar.getLblDatosPerfume().setText(info.getPerfume().getNombre() + " - " + info.getPerfume().getMarca()
 				+ " (" + info.getPerfume().getMl() + "ml)");
 		panelModificar.getLblPrecioActual().setText("Precio actual: " + info.getPerfume().getPrecio() + "€");
 		panelModificar.getLblStockActual().setText("Stock actual: " + info.getStock().getCantidad() + " uds");
 
-		// 5. Vaciar los campos de entrada y mostrar el panel de modificación
 		panelModificar.getTxtNuevoPrecio().setText("");
 		panelModificar.getTxtCantidadAnadir().setText("");
 		panelModificar.getPanelModificacion().setVisible(true);
 	}
 
+	/**
+	 * Valida y persiste los cambios de precio y/o stock sobre el perfume actualmente
+	 * en edición ({@link #perfumeEnEdicion}).
+	 * <p>
+	 * Requiere que al menos uno de los dos campos esté relleno. Impide que el stock
+	 * resultante sea negativo. Muestra un resumen de los cambios al empleado antes
+	 * de confirmar la operación y, tras guardar, navega a la vista de stock.
+	 * </p>
+	 */
 	private void guardarModificacionPerfume() {
 		panelModificar.limpiarFeedback();
 
@@ -584,40 +705,32 @@ public class Controlador implements ActionListener {
 
 		int stockActual = perfumeEnEdicion.getStock().getCantidad();
 
-		// 1. Validar precio
 		Double nuevoPrecio = panelModificar.obtenerNuevoPrecio();
 		if (panelModificar.tieneError()) {
 			return;
 		}
 
-		// 2. Validar cantidad
 		Integer cantidadASumar = panelModificar.obtenerCantidadASumar(stockActual);
 		if (panelModificar.tieneError()) {
 			return;
 		}
 
-		// 3. Si los dos son null (los dos campos vacíos), no hay nada que modificar
 		if (nuevoPrecio == null && cantidadASumar == null) {
 			panelModificar.getLblResultado().setText("Rellena al menos un campo para modificar.");
 			panelModificar.getLblResultado().setForeground(Tema.ERROR);
 			return;
 		}
 
-		// 4. Calcular la cantidad final si hay que modificar el stock
 		Integer nuevaCantidad = null;
 		if (cantidadASumar != null) {
 			nuevaCantidad = stockActual + cantidadASumar;
 		}
-		
+
 		if (nuevaCantidad != null && nuevaCantidad < 0) {
-
-			panelModificar.mostrarError(
-					"El stock final no puede ser negativo.");
-
+			panelModificar.mostrarError("El stock final no puede ser negativo.");
 			return;
 		}
 
-		// 5. JOption de confirmación con el resumen de los cambios
 		String resumen = "¿Confirmas los siguientes cambios?\n\n";
 		if (nuevoPrecio != null) {
 			resumen += "• Precio: " + perfumeEnEdicion.getPerfume().getPrecio() + "€ → " + nuevoPrecio + "€\n";
@@ -633,12 +746,10 @@ public class Controlador implements ActionListener {
 			return;
 		}
 
-		// 6. Guardar en la BBDD
 		int idPerfume = perfumeEnEdicion.getPerfume().getIdPerfume();
 		int idStock = perfumeEnEdicion.getStock().getId();
 		perfumesDAO.actualizarPrecioYStock(idPerfume, idStock, nuevoPrecio, nuevaCantidad);
 
-		// 7. JOption informativo + limpiar + ir a Stock
 		JOptionPane.showMessageDialog(ventana, "Perfume modificado correctamente.", "Modificación guardada",
 				JOptionPane.INFORMATION_MESSAGE);
 
@@ -650,6 +761,17 @@ public class Controlador implements ActionListener {
 
 	// ── Utilidades de validación ──────────────────────────────────────
 
+	/**
+	 * Comprueba que una cadena tenga formato de correo electrónico válido.
+	 * <p>
+	 * Verifica que exista exactamente un símbolo {@code @}, que haya texto antes
+	 * de él, y que la parte del dominio contenga un punto que no sea ni el primer
+	 * ni el último carácter.
+	 * </p>
+	 *
+	 * @param email cadena a validar
+	 * @return {@code true} si el formato es válido; {@code false} en caso contrario
+	 */
 	private boolean emailEsValido(String email) {
 		int posArroba = email.indexOf('@');
 		int ultimaArroba = email.lastIndexOf('@');
@@ -674,24 +796,26 @@ public class Controlador implements ActionListener {
 		return true;
 	}
 
-	// CLIENTES
-	// ── Catálogo Cliente (Mostrando disponibilidad comercial en vez de stock
-	// numérico) ──
+	// ── Catálogo cliente ──────────────────────────────────────────────
 
+	/**
+	 * Carga el catálogo completo de perfumes disponibles y lo muestra en la vista
+	 * del cliente. El stock numérico se convierte en disponibilidad comercial
+	 * ("Disponible" / "Agotado").
+	 */
 	private void cargarCatalogoCliente() {
 		ArrayList<InfoPerfumeConStock> listaPerfumes = perfumesDAO.getInfoPerfumesConStock();
 		Object[][] filas = construirFilasCatalogo(listaPerfumes);
 		panelCatalogo.mostrarCatalogo(filas);
 	}
 
-	// ── Filtrar Catálogo Cliente (Búsqueda parcial y Categorías) ──────
-
+	/**
+	 * Aplica los filtros de nombre y categoría seleccionados en la vista del
+	 * catálogo y actualiza la tabla con los resultados.
+	 */
 	private void filtrarCatalogoCliente() {
-		// 1. Capturar los valores de los filtros desde la vista
 		String nombre = panelCatalogo.getTxtBuscar().getText().trim();
 
-		// Si el usuario no ha escrito nada o se mantiene el texto por defecto, lo
-		// tratamos como vacío
 		if (nombre.equals("Buscar perfume o marca...")) {
 			nombre = "";
 		}
@@ -700,7 +824,6 @@ public class Controlador implements ActionListener {
 
 		ArrayList<InfoPerfumeConStock> lista;
 
-		// 2. Evaluar combinaciones según el texto y el combo
 		boolean sinNombre = nombre.isEmpty();
 		boolean todasCategorias = categoria.equals("Todas las categorías");
 
@@ -714,7 +837,6 @@ public class Controlador implements ActionListener {
 			lista = perfumesDAO.getInfoCatalogoPorNombreYCategoria(nombre, categoria);
 		}
 
-		// 3. Pintar los resultados
 		Object[][] filas = construirFilasCatalogo(lista);
 		panelCatalogo.mostrarCatalogo(filas);
 	}
@@ -723,6 +845,9 @@ public class Controlador implements ActionListener {
 	 * Construye la matriz de filas del catálogo a partir de una lista de perfumes
 	 * con stock. Convierte el stock numérico en "Disponible"/"Agotado" para que el
 	 * cliente no vea las unidades reales del almacén.
+	 *
+	 * @param lista lista de perfumes con información de stock
+	 * @return matriz de filas lista para ser mostrada en la tabla del catálogo
 	 */
 	private Object[][] construirFilasCatalogo(ArrayList<InfoPerfumeConStock> lista) {
 		Object[][] filas = new Object[lista.size()][7];
@@ -744,28 +869,28 @@ public class Controlador implements ActionListener {
 		return filas;
 	}
 
-	// ── Acción: Añadir al carrito desde el Catálogo ───────────────────
+	// ── Carrito ───────────────────────────────────────────────────────
 
+	/**
+	 * Gestiona la acción de añadir un perfume al carrito desde el catálogo.
+	 * <p>
+	 * Verifica que haya una fila seleccionada, que el perfume tenga stock
+	 * disponible y que la cantidad solicitada por el cliente sea válida y no supere
+	 * el stock real. Si el perfume ya estaba en el carrito, acumula la cantidad.
+	 * </p>
+	 */
 	private void anadirAlCarrito() {
-		// 1. Obtener la fila seleccionada en la tabla del catálogo
 		int filaSeleccionada = panelCatalogo.getTablaCatalogo().getSelectedRow();
 
-		// Si no hay ninguna fila seleccionada, avisamos al usuario y paramos
 		if (filaSeleccionada == -1) {
 			JOptionPane.showMessageDialog(ventana, "Por favor, selecciona un perfume del catálogo.",
 					"Ningún producto seleccionado", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
-		// 2. Recuperar los datos clave de la fila para identificar el perfume en la
-		// BBDD
-		// Según vuestro modelo: Nombre está en la col 0, y los mililitros (ml) en la
-		// col 4
 		String nombre = (String) panelCatalogo.getTablaCatalogo().getValueAt(filaSeleccionada, 0);
 		int ml = Integer.parseInt(panelCatalogo.getTablaCatalogo().getValueAt(filaSeleccionada, 4).toString());
 
-		// 3. Buscar el perfume completo con su stock real en la BBDD a través de
-		// vuestro DAO
 		InfoPerfumeConStock info = perfumesDAO.buscarPorNombreYMl(nombre, ml);
 
 		if (info == null) {
@@ -776,24 +901,20 @@ public class Controlador implements ActionListener {
 
 		int stockDisponible = info.getStock().getCantidad();
 
-		// Si el producto está agotado en almacén, no permitimos continuar
 		if (stockDisponible <= 0) {
 			JOptionPane.showMessageDialog(ventana, "Lo sentimos, este perfume está temporalmente agotado.", "Sin stock",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
-		// 4. Preguntar al cliente cuántas unidades desea comprar
 		String inputCantidad = JOptionPane.showInputDialog(ventana,
 				"¿Cuántas unidades de '" + info.getPerfume().getNombre() + "' deseas añadir al carrito?",
 				"Añadir al carrito", JOptionPane.QUESTION_MESSAGE);
 
-		// Si el usuario cancela o cierra el diálogo, salimos sin hacer nada
 		if (inputCantidad == null) {
 			return;
 		}
 
-		// 5. Validar que la cantidad introducida sea un número entero coherente
 		int cantidadElegida;
 		try {
 			cantidadElegida = Integer.parseInt(inputCantidad.trim());
@@ -808,7 +929,6 @@ public class Controlador implements ActionListener {
 			return;
 		}
 
-		// 6. Verificar si hay suficiente stock físico en el almacén de la BBDD
 		if (cantidadElegida > stockDisponible) {
 			JOptionPane.showMessageDialog(ventana,
 					"No es posible añadir esa cantidad. Solo quedan " + stockDisponible + " unidades en stock.",
@@ -816,15 +936,11 @@ public class Controlador implements ActionListener {
 			return;
 		}
 
-		// 7. Añadir el producto al carrito activo en memoria (carritoActivo)
-		// Comprobamos primero si este perfume ya estaba en el carrito para sumarle la
-		// cantidad
 		boolean existeEnCarrito = false;
 		for (CarritoCompra item : carritoActivo) {
 			if (item.getPerfume().getIdPerfume() == info.getPerfume().getIdPerfume()) {
 				int nuevaCantidadTotal = item.getCantidad() + cantidadElegida;
 
-				// Validamos que la suma de lo que ya tenía más lo nuevo no supere el stock real
 				if (nuevaCantidadTotal > stockDisponible) {
 					JOptionPane.showMessageDialog(ventana, "Lo sentimos, no hay suficiente stock de este producto",
 							"Stock insuficiente", JOptionPane.WARNING_MESSAGE);
@@ -837,23 +953,21 @@ public class Controlador implements ActionListener {
 			}
 		}
 
-		// Si es la primera vez que añade este perfume en esta sesión, creamos una nueva
-		// línea
 		if (!existeEnCarrito) {
-			// ID temporal en memoria basado en el tamaño actual de la lista
 			int idCarritoTemporal = carritoActivo.size() + 1;
-
 			CarritoCompra nuevaLinea = new CarritoCompra(idCarritoTemporal, Constantes.usuarioAutenticado,
 					info.getPerfume(), cantidadElegida, info.getPerfume().getPrecio());
 			carritoActivo.add(nuevaLinea);
 		}
 
-		// 8. Confirmar el éxito de la operación al cliente
 		JOptionPane.showMessageDialog(ventana, "Producto añadido con éxito", "Producto añadido",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	// ── Cargar los datos reales en la vista del Carrito de la Compra ──
+	/**
+	 * Lee las líneas del carrito en memoria ({@link #carritoActivo}), calcula el
+	 * subtotal de cada línea y el total global, y actualiza la vista del carrito.
+	 */
 	private void cargarCarritoCliente() {
 		Object[][] filas = new Object[carritoActivo.size()][4];
 		double totalPrecioCarrito = 0;
@@ -873,271 +987,260 @@ public class Controlador implements ActionListener {
 		panelCarrito.mostrarCarrito(filas, totalPrecioCarrito);
 	}
 
-	// ── Acción: Eliminar la línea seleccionada del Carrito ─────────────
-
+	/**
+	 * Elimina del carrito la línea seleccionada por el cliente, previa confirmación.
+	 * Refresca la vista del carrito tras la eliminación.
+	 */
 	private void eliminarLineaCarrito() {
-		// 1. Obtener la fila seleccionada en la tabla del carrito
 		int filaSeleccionada = panelCarrito.getTablaCarrito().getSelectedRow();
 
-		// Si el usuario no ha seleccionado ninguna fila, le avisamos
 		if (filaSeleccionada == -1) {
 			JOptionPane.showMessageDialog(ventana, "Por favor, selecciona el perfume que deseas quitar del carrito.",
 					"Ninguna línea seleccionada", JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
-		// 2. Confirmar si el usuario está seguro de querer eliminar el producto
 		int confirmacion = JOptionPane.showConfirmDialog(ventana,
 				"¿Estás seguro de que deseas eliminar este perfume de tu carrito?", "Eliminar producto",
 				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 		if (confirmacion == JOptionPane.YES_OPTION) {
-			// 3. Eliminar el elemento de la lista en memoria (carritoActivo)
-			// Como la fila de la tabla coincide exactamente con la posición en la lista,
-			// borramos por índice
 			carritoActivo.remove(filaSeleccionada);
 
-			// 4. Avisar al usuario con un mensaje limpio
 			JOptionPane.showMessageDialog(ventana, "El perfume ha sido eliminado del carrito.", "Producto eliminado",
 					JOptionPane.INFORMATION_MESSAGE);
 
-			// 5. Refrescar la pantalla llamando al método que ya creamos antes
-			// Esto vacía la tabla, vuelve a leer la lista actualizada y recalcula el total
-			// automáticamente
 			cargarCarritoCliente();
 		}
 	}
 
-	// ── Acción: Vaciar por completo el Carrito de Compra ───────────────
+	/**
+	 * Vacía por completo el carrito activo, previa confirmación del cliente.
+	 * Refresca la vista del carrito para mostrar el estado vacío.
+	 */
 	private void vaciarCarritoCompleto() {
-		// 1. Si el carrito ya está vacío, no hace falta hacer nada
 		if (carritoActivo.isEmpty()) {
 			JOptionPane.showMessageDialog(ventana, "Tu carrito ya está vacío.", "Carrito vacío",
 					JOptionPane.INFORMATION_MESSAGE);
 			return;
 		}
 
-		// 2. Pedir confirmación al usuario para evitar descuidos
 		int confirmacion = JOptionPane.showConfirmDialog(ventana,
 				"¿Estás seguro de que deseas eliminar todos los productos de tu carrito?", "Vaciar carrito",
 				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
 		if (confirmacion == JOptionPane.YES_OPTION) {
-			// 3. Borrar todos los elementos de la lista en memoria
 			carritoActivo.clear();
 
-			// 4. Avisar al usuario con un mensaje limpio
 			JOptionPane.showMessageDialog(ventana, "El carrito ha sido vaciado correctamente.", "Carrito vaciado",
 					JOptionPane.INFORMATION_MESSAGE);
 
-			// 5. Refrescar la pantalla para que la tabla se limpie y el total vuelva a
-			// 0.0EUR
 			cargarCarritoCliente();
 		}
 	}
 
-
-	// ── Acción: Finalizar la compra y navegar a la vista de Pago ──────
-
-		private void finalizarCompraCarrito() {
-			// 1. Verificar si el carrito está vacío antes de continuar
-			if (carritoActivo.isEmpty()) {
-				JOptionPane.showMessageDialog(ventana, "No puedes finalizar la compra porque tu carrito está vacío.",
-						"Carrito vacío", JOptionPane.WARNING_MESSAGE);
-				return;
-			}
-
-			// 2. Calcular el total acumulado
-			double totalPrecioCarrito = 0;
-			int numItems = 0;
-			for (CarritoCompra item : carritoActivo) {
-				totalPrecioCarrito += item.getCantidad() * item.getPrecioUnidad();
-				numItems += item.getCantidad();
-			}
-
-			// 3. Rellenar el resumen y el total en la vista de Pago
-			panelPago.limpiarFormulario();
-			panelPago.mostrarResumen(numItems, totalPrecioCarrito);
-
-			// 4. Navegar a la vista de Pago
-			ventana.mostrarVista(Constantes.VISTA_PAGO);
+	/**
+	 * Prepara la vista de pago con el resumen del carrito (número de artículos y
+	 * total) y navega a dicha vista. Impide continuar si el carrito está vacío.
+	 */
+	private void finalizarCompraCarrito() {
+		if (carritoActivo.isEmpty()) {
+			JOptionPane.showMessageDialog(ventana, "No puedes finalizar la compra porque tu carrito está vacío.",
+					"Carrito vacío", JOptionPane.WARNING_MESSAGE);
+			return;
 		}
-		
-	// ── Acción: Procesar el pago y registrar la compra en la BBDD ─────
 
-		private void procesarPago() {
-			// 1. Validar los datos del formulario (la vista valida internamente)
-			Object[] datosPago = panelPago.obtenerDatos();
+		double totalPrecioCarrito = 0;
+		int numItems = 0;
+		for (CarritoCompra item : carritoActivo) {
+			totalPrecioCarrito += item.getCantidad() * item.getPrecioUnidad();
+			numItems += item.getCantidad();
+		}
 
-			if (datosPago == null) {
-				return; // La vista ya mostró su error
-			}
+		panelPago.limpiarFormulario();
+		panelPago.mostrarResumen(numItems, totalPrecioCarrito);
 
-			String formaPago = (String) datosPago[0];
-			String direccionEntrega = (String) datosPago[1];
+		ventana.mostrarVista(Constantes.VISTA_PAGO);
+	}
 
-			// 2. Recalcular el total (por si acaso, aunque ya lo tenemos en la vista)
-			double totalPrecioCarrito = 0;
-			for (CarritoCompra item : carritoActivo) {
-				totalPrecioCarrito += item.getCantidad() * item.getPrecioUnidad();
-			}
+	// ── Pago ──────────────────────────────────────────────────────────
 
-			// 3. JOption de confirmación con el resumen
-			String mensaje = "¿Confirmas el pago de " + String.format("%.2f EUR", totalPrecioCarrito) + " con " + formaPago
-					+ "?\n\nDirección de entrega:\n" + direccionEntrega;
+	/**
+	 * Procesa el pago del carrito activo.
+	 * <p>
+	 * Recoge los datos del formulario de pago, revalida el stock real de cada
+	 * línea antes de confirmar, y persiste el pedido en la base de datos a través
+	 * del DAO. Si la operación es correcta, vacía el carrito y vuelve al catálogo;
+	 * si falla, informa al usuario sin perder el carrito.
+	 * </p>
+	 */
+	private void procesarPago() {
+		Object[] datosPago = panelPago.obtenerDatos();
 
-			int respuesta = JOptionPane.showConfirmDialog(ventana, mensaje, "Confirmar pago", JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE);
+		if (datosPago == null) {
+			return;
+		}
 
-			if (respuesta != JOptionPane.YES_OPTION) {
-				return;
-			}
+		String formaPago = (String) datosPago[0];
+		String direccionEntrega = (String) datosPago[1];
 
-			// 4. Guardar el pedido en la BBDD a través del DAO
-			int idUsuario = Constantes.usuarioAutenticado.getIdUsuario();
-			
-			// Revalidar stock real antes de procesar el pedido
-			for (CarritoCompra item : carritoActivo) {
+		double totalPrecioCarrito = 0;
+		for (CarritoCompra item : carritoActivo) {
+			totalPrecioCarrito += item.getCantidad() * item.getPrecioUnidad();
+		}
 
-				int stockReal = perfumesDAO.obtenerStockDisponible(
-						item.getPerfume().getIdPerfume());
+		String mensaje = "¿Confirmas el pago de " + String.format("%.2f EUR", totalPrecioCarrito) + " con " + formaPago
+				+ "?\n\nDirección de entrega:\n" + direccionEntrega;
 
-				if (item.getCantidad() > stockReal) {
+		int respuesta = JOptionPane.showConfirmDialog(ventana, mensaje, "Confirmar pago", JOptionPane.YES_NO_OPTION,
+				JOptionPane.QUESTION_MESSAGE);
 
-					JOptionPane.showMessageDialog(
-							ventana,
-							"El perfume '" + item.getPerfume().getNombre()
-									+ "' ya no tiene suficiente stock disponible.\n"
-									+ "Stock actual: " + stockReal + " unidades.",
-							"Stock insuficiente",
-							JOptionPane.WARNING_MESSAGE);
+		if (respuesta != JOptionPane.YES_OPTION) {
+			return;
+		}
 
-					cargarCatalogoCliente();
-					ventana.mostrarVista(Constantes.VISTA_CATALOGO);
-					return;
-				}
-			}
-			
-			boolean exitoBBDD = pedidosDAO.insertarPedido(idUsuario, totalPrecioCarrito, formaPago, direccionEntrega,
-					carritoActivo);
+		int idUsuario = Constantes.usuarioAutenticado.getIdUsuario();
 
-			if (exitoBBDD) {
-				// 5. Si todo fue bien
-				JOptionPane.showMessageDialog(ventana,
-						"¡Tu compra ha sido procesada con éxito!\nGracias por confiar en Golden Tale.", "Compra finalizada",
-						JOptionPane.INFORMATION_MESSAGE);
+		for (CarritoCompra item : carritoActivo) {
+			int stockReal = perfumesDAO.obtenerStockDisponible(item.getPerfume().getIdPerfume());
 
-				// Vaciamos el carrito y limpiamos la vista de pago
-				carritoActivo.clear();
-				panelPago.limpiarFormulario();
+			if (item.getCantidad() > stockReal) {
+				JOptionPane.showMessageDialog(
+						ventana,
+						"El perfume '" + item.getPerfume().getNombre()
+								+ "' ya no tiene suficiente stock disponible.\n"
+								+ "Stock actual: " + stockReal + " unidades.",
+						"Stock insuficiente",
+						JOptionPane.WARNING_MESSAGE);
 
-				// Refrescamos el catálogo (el stock ha cambiado) y volvemos a él
 				cargarCatalogoCliente();
 				ventana.mostrarVista(Constantes.VISTA_CATALOGO);
-
-			} else {
-				// 6. Si hubo un error técnico
-				JOptionPane.showMessageDialog(ventana,
-						"Hubo un problema al procesar tu pedido.\nTu carrito sigue intacto, puedes intentarlo de nuevo.",
-						"Error en la compra", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-		
-		// ── Mis pedidos (cliente) ─────────────────────────────────────────
-
-		/**
-		 * Carga todos los pedidos del cliente autenticado en la vista de Mis pedidos.
-		 */
-		private void cargarMisPedidos() {
-			// Resetear filtro al estado por defecto
-			panelMisPedidos.getComboFiltroEstado().setSelectedIndex(0);
-
-			int idUsuario = Constantes.usuarioAutenticado.getIdUsuario();
-			ArrayList<Pedido> lista = pedidosDAO.getPedidosPorUsuario(idUsuario);
-
-			Object[][] filas = construirFilasPedidos(lista);
-			panelMisPedidos.mostrarPedidos(filas);
-
-			// También limpiamos la tabla de detalle, por si venimos de una sesión anterior
-			panelMisPedidos.mostrarDetalle(0, new Object[0][4]);
-			panelMisPedidos.getLblPedidoSeleccionado().setText("Detalle del pedido seleccionado");
-		}
-
-		/**
-		 * Filtra los pedidos del cliente según el estado seleccionado en el combo.
-		 */
-		private void filtrarMisPedidos() {
-			String estado = (String) panelMisPedidos.getComboFiltroEstado().getSelectedItem();
-			int idUsuario = Constantes.usuarioAutenticado.getIdUsuario();
-
-			ArrayList<Pedido> lista;
-			if (estado.equals("Todos")) {
-				lista = pedidosDAO.getPedidosPorUsuario(idUsuario);
-			} else {
-				lista = pedidosDAO.getPedidosPorUsuarioYEstado(idUsuario, estado);
-			}
-
-			Object[][] filas = construirFilasPedidos(lista);
-			panelMisPedidos.mostrarPedidos(filas);
-
-			// Limpiar el detalle al cambiar el filtro
-			panelMisPedidos.mostrarDetalle(0, new Object[0][4]);
-			panelMisPedidos.getLblPedidoSeleccionado().setText("Detalle del pedido seleccionado");
-		}
-
-		/**
-		 * Construye la matriz de filas de la tabla de pedidos a partir de una lista
-		 * de pedidos. Las columnas siguen el orden de Constantes.COLS_MIS_PEDIDOS:
-		 * Ref, Fecha, Estado, Total.
-		 */
-		private Object[][] construirFilasPedidos(ArrayList<Pedido> lista) {
-			Object[][] filas = new Object[lista.size()][4];
-
-			for (int i = 0; i < lista.size(); i++) {
-				Pedido p = lista.get(i);
-				filas[i][0] = "#" + p.getIdPedido();
-				filas[i][1] = p.getFecha();
-				filas[i][2] = p.getEstado();
-				filas[i][3] = String.format("%.2f EUR", p.getTotal());
-			}
-
-			return filas;
-		}
-
-		/**
-		 * Muestra el detalle (líneas) del pedido seleccionado en la tabla principal.
-		 */
-		private void mostrarDetallePedido() {
-			int filaSeleccionada = panelMisPedidos.getTablaPedidos().getSelectedRow();
-
-			if (filaSeleccionada == -1) {
-				JOptionPane.showMessageDialog(ventana, "Selecciona un pedido para ver su detalle.",
-						"Ningún pedido seleccionado", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-
-			// Extraer el id del pedido de la columna "Ref." (formato "#123")
-			String referencia = (String) panelMisPedidos.getTablaPedidos().getValueAt(filaSeleccionada, 0);
-			int idPedido = Integer.parseInt(referencia.substring(1)); // quitamos el '#'
-
-			// Recuperar las líneas del pedido desde la BBDD
-			ArrayList<LineaPedido> lineas = pedidosDAO.getLineasPorPedido(idPedido);
-
-			// Construir las filas y pintar en la vista
-			Object[][] filas = new Object[lineas.size()][4];
-			for (int i = 0; i < lineas.size(); i++) {
-				LineaPedido linea = lineas.get(i);
-				filas[i][0] = linea.getPerfume().getNombre() + " (" + linea.getPerfume().getMl() + "ml)";
-				filas[i][1] = linea.getCantidad();
-				filas[i][2] = String.format("%.2f EUR", linea.getPrecioUnitario());
-				filas[i][3] = String.format("%.2f EUR", linea.getSubtotal());
-			}
-
-			panelMisPedidos.mostrarDetalle(idPedido, filas);
 		}
-  
-  // ── Mostrar/ocultar contraseña ────────────────────────────────────
 
+		boolean exitoBBDD = pedidosDAO.insertarPedido(idUsuario, totalPrecioCarrito, formaPago, direccionEntrega,
+				carritoActivo);
+
+		if (exitoBBDD) {
+			JOptionPane.showMessageDialog(ventana,
+					"¡Tu compra ha sido procesada con éxito!\nGracias por confiar en Golden Tale.", "Compra finalizada",
+					JOptionPane.INFORMATION_MESSAGE);
+
+			carritoActivo.clear();
+			panelPago.limpiarFormulario();
+
+			cargarCatalogoCliente();
+			ventana.mostrarVista(Constantes.VISTA_CATALOGO);
+
+		} else {
+			JOptionPane.showMessageDialog(ventana,
+					"Hubo un problema al procesar tu pedido.\nTu carrito sigue intacto, puedes intentarlo de nuevo.",
+					"Error en la compra", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	// ── Mis pedidos (cliente) ─────────────────────────────────────────
+
+	/**
+	 * Carga todos los pedidos del cliente autenticado en la vista de Mis pedidos.
+	 * Restablece el filtro de estado a su valor por defecto y limpia el panel de
+	 * detalle.
+	 */
+	private void cargarMisPedidos() {
+		panelMisPedidos.getComboFiltroEstado().setSelectedIndex(0);
+
+		int idUsuario = Constantes.usuarioAutenticado.getIdUsuario();
+		ArrayList<Pedido> lista = pedidosDAO.getPedidosPorUsuario(idUsuario);
+
+		Object[][] filas = construirFilasPedidos(lista);
+		panelMisPedidos.mostrarPedidos(filas);
+
+		panelMisPedidos.mostrarDetalle(0, new Object[0][4]);
+		panelMisPedidos.getLblPedidoSeleccionado().setText("Detalle del pedido seleccionado");
+	}
+
+	/**
+	 * Filtra los pedidos del cliente según el estado seleccionado en el combo de la
+	 * vista. Limpia el panel de detalle al cambiar el filtro.
+	 */
+	private void filtrarMisPedidos() {
+		String estado = (String) panelMisPedidos.getComboFiltroEstado().getSelectedItem();
+		int idUsuario = Constantes.usuarioAutenticado.getIdUsuario();
+
+		ArrayList<Pedido> lista;
+		if (estado.equals("Todos")) {
+			lista = pedidosDAO.getPedidosPorUsuario(idUsuario);
+		} else {
+			lista = pedidosDAO.getPedidosPorUsuarioYEstado(idUsuario, estado);
+		}
+
+		Object[][] filas = construirFilasPedidos(lista);
+		panelMisPedidos.mostrarPedidos(filas);
+
+		panelMisPedidos.mostrarDetalle(0, new Object[0][4]);
+		panelMisPedidos.getLblPedidoSeleccionado().setText("Detalle del pedido seleccionado");
+	}
+
+	/**
+	 * Construye la matriz de filas de la tabla de pedidos a partir de una lista de
+	 * pedidos. Las columnas siguen el orden de {@code Constantes.COLS_MIS_PEDIDOS}:
+	 * Ref, Fecha, Estado, Total.
+	 *
+	 * @param lista lista de pedidos a representar
+	 * @return matriz de filas lista para ser mostrada en la tabla de pedidos
+	 */
+	private Object[][] construirFilasPedidos(ArrayList<Pedido> lista) {
+		Object[][] filas = new Object[lista.size()][4];
+
+		for (int i = 0; i < lista.size(); i++) {
+			Pedido p = lista.get(i);
+			filas[i][0] = "#" + p.getIdPedido();
+			filas[i][1] = p.getFecha();
+			filas[i][2] = p.getEstado();
+			filas[i][3] = String.format("%.2f EUR", p.getTotal());
+		}
+
+		return filas;
+	}
+
+	/**
+	 * Muestra el detalle (líneas) del pedido seleccionado en la tabla principal de
+	 * Mis pedidos. Extrae el identificador del pedido del campo "Ref." y consulta
+	 * las líneas asociadas en la base de datos.
+	 */
+	private void mostrarDetallePedido() {
+		int filaSeleccionada = panelMisPedidos.getTablaPedidos().getSelectedRow();
+
+		if (filaSeleccionada == -1) {
+			JOptionPane.showMessageDialog(ventana, "Selecciona un pedido para ver su detalle.",
+					"Ningún pedido seleccionado", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		String referencia = (String) panelMisPedidos.getTablaPedidos().getValueAt(filaSeleccionada, 0);
+		int idPedido = Integer.parseInt(referencia.substring(1));
+
+		ArrayList<LineaPedido> lineas = pedidosDAO.getLineasPorPedido(idPedido);
+
+		Object[][] filas = new Object[lineas.size()][4];
+		for (int i = 0; i < lineas.size(); i++) {
+			LineaPedido linea = lineas.get(i);
+			filas[i][0] = linea.getPerfume().getNombre() + " (" + linea.getPerfume().getMl() + "ml)";
+			filas[i][1] = linea.getCantidad();
+			filas[i][2] = String.format("%.2f EUR", linea.getPrecioUnitario());
+			filas[i][3] = String.format("%.2f EUR", linea.getSubtotal());
+		}
+
+		panelMisPedidos.mostrarDetalle(idPedido, filas);
+	}
+
+	// ── Mostrar/ocultar contraseña ────────────────────────────────────
+
+	/**
+	 * Alterna la visibilidad de la contraseña en el formulario de login y actualiza
+	 * el texto del botón entre "Mostrar" y "Ocultar".
+	 */
 	private void mostrarPasswordLogin() {
 		passwordLoginVisible = !passwordLoginVisible;
 
@@ -1150,6 +1253,11 @@ public class Controlador implements ActionListener {
 		}
 	}
 
+	/**
+	 * Alterna la visibilidad de los campos de contraseña y confirmación en el
+	 * formulario de registro, y actualiza el texto del botón entre "Mostrar" y
+	 * "Ocultar".
+	 */
 	private void mostrarPasswordRegistro() {
 		passwordRegistroVisible = !passwordRegistroVisible;
 
