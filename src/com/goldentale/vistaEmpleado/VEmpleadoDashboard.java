@@ -82,8 +82,7 @@ public class VEmpleadoDashboard extends JPanel {
 				return false;
 			}
 		};
-		modeloTablaPedidos.addRow(new Object[] { "#1001", "Cliente prueba", "Velvet Rose", "89.99 EUR", "Pendiente" });
-		modeloTablaPedidos.addRow(new Object[] { "#1002", "Cliente prueba", "Black Oud", "120.00 EUR", "Procesando" });
+		
 
 		tablaPedidos = new JTable(modeloTablaPedidos);
 		ComponentesUI.prepararTabla(tablaPedidos);

@@ -1,0 +1,109 @@
+<diagram program="umletino" version="15.1"><zoom_level>5</zoom_level><element><id>UMLClass</id><coordinates><x>25</x><y>205</y><w>110</w><h>75</h></coordinates><panel_attributes>
+Carrito Compra
+
+--
+- int idCarrito;
+- Usuario: usuario;
+- Perfumes: perfume;
+- int cantidad;
+- double precioUnidad;
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>75</y><w>110</w><h>95</h></coordinates><panel_attributes>
+Perfumes
+
+--
+- int idPerfume;
+- String nombre;
+- String marca;
+- String categoria;
+- String descripcion;
+- double precio;
+- int ml;
+- String publico;
+
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>25</x><y>75</y><w>110</w><h>95</h></coordinates><panel_attributes>
+Stock
+
+--
+- int idUsuario;
+- String nombre;
+- String apellido;
+- String direccion;
+- String telefono;
+- String email;
+- String password;
+- String rol;
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>140</x><y>205</y><w>110</w><h>75</h></coordinates><panel_attributes>
+InfoPerfumeConStock
+
+--
+- Perfumes: perfume;
+- Stock: stock;
++toString(): String;
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>25</x><y>310</y><w>110</w><h>90</h></coordinates><panel_attributes>
+Pedido
+
+--
+- int idPedido;
+- Usuario usuario;
+- String fecha;
+- String estado;
+- String metodoPago;
+- double total;
+- String direccionEntrega;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>150</x><y>310</y><w>110</w><h>90</h></coordinates><panel_attributes>
+Pago
+
+--
+- int idPago;
+- Pedido pedido;
+- Usuario usuario;
+- double total;
+- String formaPago;</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>280</x><y>310</y><w>110</w><h>90</h></coordinates><panel_attributes>
+Linea Pedido
+
+--
+- Pedido pedido;
+- Perfumes perfume;
+- int cantidad;
+- double precioUnitario;
+- double subtotal;</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>75</x><y>165</y><w>15</w><h>50</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>75</x><y>275</y><w>15</w><h>45</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;70;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>185</x><y>165</y><w>15</w><h>50</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;80;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>245</x><y>110</y><w>45</w><h>20</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;20;70;20</additional_attributes></element><element><id>Relation</id><coordinates><x>245</x><y>150</y><w>95</w><h>105</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;190;170;140;170;10</additional_attributes></element><element><id>Relation</id><coordinates><x>325</x><y>150</y><w>15</w><h>170</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;320;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>80</x><y>395</y><w>130</w><h>55</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>240;10;240;90;10;90;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>80</x><y>395</y><w>265</w><h>55</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>510;10;510;90;10;90;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>160</x><y>45</y><w>65</w><h>15</h></coordinates><panel_attributes>Modelo -- Entidades</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>280</x><y>80</y><w>110</w><h>75</h></coordinates><panel_attributes>
+Stock
+
+--
+- int id;
+- int idPerfume;
+- int cantidad;
+- String localizacion;
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>25</x><y>510</y><w>110</w><h>50</h></coordinates><panel_attributes>
+AccesoDBProp
+
+--
+- String driver
++ getConexion(): Connection</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>165</x><y>510</y><w>110</w><h>105</h></coordinates><panel_attributes>
+PerfumesDAO
+
+--
+- acc: AccesoDBProp
++ getAll(): ArrayList
++ getInfoPerfumesConStock()
++ buscarPorNombreYMl()
++ insertar(p, cant, loc)
++ actualizarPrecioYStock()
++ getInfoCatalogoPorCat()
++ contarStockBajo(): int
++ filtros por nombre/ubic.</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>25</x><y>585</y><w>110</w><h>60</h></coordinates><panel_attributes>
+UsuarioDAO
+
+--
+- acc: AccesoDBProp
++ autenticar(): Usuario
++ existeEmail(): boolean</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>310</x><y>510</y><w>110</w><h>90</h></coordinates><panel_attributes>
+PedidosDAO
+
+--
+- acc: AccesoDBProp
++ insertarPedido(): boolean
++ getPedidosPorUsuario()
++ getPedidosPorEstado()
++ getLineasPorPedido()
++ contarPedidosHoy(): int
++ contarPendientes(): int</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>70</x><y>555</y><w>15</w><h>40</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>10;60;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>130</x><y>545</y><w>40</w><h>15</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>60;10;10;10</additional_attributes></element><element><id>Relation</id><coordinates><x>75</x><y>490</y><w>290</w><h>30</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>560;40;560;10;10;10;10;40</additional_attributes></element><element><id>UMLClass</id><coordinates><x>180</x><y>475</y><w>65</w><h>15</h></coordinates><panel_attributes>Modelo -- DAOs</panel_attributes><additional_attributes></additional_attributes></element></diagram>

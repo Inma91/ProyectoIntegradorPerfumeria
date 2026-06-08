@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import com.goldentale.model.data.Constantes;
 import com.goldentale.model.data.ConstantesTablas;
 
 /**
@@ -737,5 +739,54 @@ public class PerfumesDAO {
 		}
 
 		return lista;
+	}
+
+	/**
+	 * Cuenta el número de perfumes con stock bajo, es decir, aquellos cuya cantidad
+	 * es mayor que {@code 0} pero inferior al umbral definido en
+	 * {@link com.goldentale.model.data.Constantes#STOCK_MINIMO_ALERTA}.
+	 * <p>
+	 * Los perfumes sin stock (cantidad {@code 0}) no se incluyen en este recuento,
+	 * ya que se consideran una categoría distinta.
+	 * </p>
+	 *
+	 * @return Número de perfumes con stock bajo. Devuelve {@code 0} si no hay
+	 *         ninguno o si ocurre un error de acceso a la base de datos.
+	 */
+	public int contarStockBajo() {
+		int total = 0;
+
+		String query = "SELECT COUNT(*) FROM " + ConstantesTablas.TABLA_STOCK + " WHERE "
+				+ ConstantesTablas.COL_STOCK_CANTIDAD + " > 0" + " AND " + ConstantesTablas.COL_STOCK_CANTIDAD + " < ?";
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rslt = null;
+
+		try {
+			con = acc.getConexion();
+			stmt = con.prepareStatement(query);
+			stmt.setInt(1, Constantes.STOCK_MINIMO_ALERTA);
+			rslt = stmt.executeQuery();
+			if (rslt.next()) {
+				total = rslt.getInt(1);
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rslt != null)
+					rslt.close();
+				if (stmt != null)
+					stmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return total;
 	}
 }

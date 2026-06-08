@@ -360,4 +360,94 @@ public class PedidosDAO {
 
 		return resultado;
 	}
+
+	/**
+	 * Cuenta el número de pedidos realizados en el día de hoy.
+	 * <p>
+	 * Utiliza la función {@code DATE('now')} de SQLite para comparar únicamente la
+	 * parte de fecha del campo {@code fecha}, ignorando la hora.
+	 * </p>
+	 *
+	 * @return Número de pedidos realizados hoy. Devuelve {@code 0} si no hay
+	 *         ninguno o si ocurre un error de acceso a la base de datos.
+	 */
+	public int contarPedidosHoy() {
+		int total = 0;
+
+		String query = "SELECT COUNT(*) FROM " + ConstantesTablas.TABLA_PEDIDO + " WHERE DATE("
+				+ ConstantesTablas.COL_PEDIDO_FECHA + ") = DATE('now')";
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rslt = null;
+
+		try {
+			con = acc.getConexion();
+			stmt = con.prepareStatement(query);
+			rslt = stmt.executeQuery();
+			if (rslt.next()) {
+				total = rslt.getInt(1);
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rslt != null)
+					rslt.close();
+				if (stmt != null)
+					stmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return total;
+	}
+
+	/**
+	 * Cuenta el número de pedidos que se encuentran en estado
+	 * {@link com.goldentale.model.data.Constantes#ESTADO_PENDIENTE}.
+	 *
+	 * @return Número de pedidos pendientes. Devuelve {@code 0} si no hay ninguno o
+	 *         si ocurre un error de acceso a la base de datos.
+	 */
+	public int contarPedidosPendientes() {
+		int total = 0;
+
+		String query = "SELECT COUNT(*) FROM " + ConstantesTablas.TABLA_PEDIDO + " WHERE "
+				+ ConstantesTablas.COL_PEDIDO_ESTADO + " = ?";
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+		ResultSet rslt = null;
+
+		try {
+			con = acc.getConexion();
+			stmt = con.prepareStatement(query);
+			stmt.setString(1, "Pendiente");
+			rslt = stmt.executeQuery();
+			if (rslt.next()) {
+				total = rslt.getInt(1);
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (rslt != null)
+					rslt.close();
+				if (stmt != null)
+					stmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return total;
+	}
 }

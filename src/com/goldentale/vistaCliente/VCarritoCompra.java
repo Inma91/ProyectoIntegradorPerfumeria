@@ -68,7 +68,7 @@ public class VCarritoCompra extends JPanel {
 		contenido.add(scrollTablaCarrito);
 		contenido.add(Box.createVerticalStrut(14));
 
-		lblTotal = new JLabel("Total: 89.99 EUR");
+		lblTotal = new JLabel("Total: 0.00 EUR");
 		lblTotal.setFont(Tema.fuenteNegrita(22));
 		lblTotal.setForeground(Tema.MORADO);
 		contenido.add(lblTotal);
