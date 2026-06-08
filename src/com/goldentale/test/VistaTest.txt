@@ -1,2 +1,1326 @@
-Vista Pruebas
+GOLDEN TALE — PRUEBAS DE INTEGRACIÓN DE VISTAS
+Sprint 3 — Junio 2026
+Autor: Brandon Gaviria
+Equipo: Brandon Gaviria · Inmaculada Gil · David Moreno
 
+
+**1. INTRODUCCIÓN**
+
+
+Este documento recoge las pruebas de integración realizadas
+sobre las vistas de la aplicación Golden Tale, desarrollada
+en Java Swing con arquitectura MVC. El objetivo es verificar
+que cada vista interactúa correctamente con el controlador
+y produce los resultados esperados ante las acciones del usuario.
+
+Las pruebas de integración complementan las pruebas unitarias
+realizadas por Inmaculada Gil con JUnit, y cubren los flujos
+completos: entrada de datos en la vista → procesamiento en el
+controlador → actualización de la vista y/o la base de datos.
+
+
+**2. ENTORNO DE PRUEBAS**
+
+
+Lenguaje:            Java 17
+Framework UI:        Java Swing
+Base de datos:       SQLite 3
+IDE:                 Eclipse IDE
+Sistema operativo:   Windows 10/11
+Arquitectura:        MVC — Controlador único (ActionListener)
+Datos de prueba:     BD con 15 perfumes, 20 usuarios, 15 pedidos
+Fecha ejecución:     Junio 2026
+
+
+**3. CASOS DE PRUEBA**
+
+
+
+-3.1 VLogin — Inicio de sesión-
+
+
+ID:                  PT-V01
+Nombre:              Login con credenciales correctas (cliente)
+Vista:               VLogin
+Precondición:        Usuario cliente existe en BD
+Pasos:               1. Introducir email válido
+                     2. Introducir contraseña correcta
+                     3. Pulsar "Iniciar sesión"
+Datos de entrada:    email: cliente1@goldentale.com
+                     password: pass1234
+Resultado esperado:  Navega a VCatalogoCliente. Sidebar muestra
+                     nombre del cliente. Catálogo cargado con
+                     datos reales de BD.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V02
+Nombre:              Login con credenciales correctas (empleado)
+Vista:               VLogin
+Precondición:        Usuario empleado existe en BD
+Pasos:               1. Introducir email de empleado
+                     2. Introducir contraseña correcta
+                     3. Pulsar "Iniciar sesión"
+Datos de entrada:    email: empleado1@goldentale.com
+                     password: emp1234
+Resultado esperado:  Navega a VEmpleadoDashboard. Sidebar muestra
+                     opciones de empleado. Métricas del dashboard
+                     cargadas con datos reales de BD.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V03
+Nombre:              Login con contraseña incorrecta
+Vista:               VLogin
+Precondición:        Usuario existe en BD
+Pasos:               1. Introducir email válido
+                     2. Introducir contraseña incorrecta
+                     3. Pulsar "Iniciar sesión"
+Datos de entrada:    email: cliente1@goldentale.com
+                     password: mal1234
+Resultado esperado:  JOptionPane de error: "El usuario o la
+                     contraseña son incorrectos." La vista
+                     permanece en VLogin.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V04
+Nombre:              Login con campos vacíos
+Vista:               VLogin
+Precondición:        Ninguna
+Pasos:               1. Dejar email vacío
+                     2. Dejar contraseña vacía
+                     3. Pulsar "Iniciar sesión"
+Datos de entrada:    email: (vacío)
+                     password: (vacío)
+Resultado esperado:  JOptionPane de aviso: "Por favor, introduce
+                     tu correo y contraseña."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V05
+Nombre:              Login con email con formato inválido
+Vista:               VLogin
+Precondición:        Ninguna
+Pasos:               1. Introducir email sin arroba
+                     2. Introducir contraseña
+                     3. Pulsar "Iniciar sesión"
+Datos de entrada:    email: usuariosinArroba
+                     password: 1234
+Resultado esperado:  JOptionPane de aviso: "El formato del correo
+                     electrónico no es válido."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V06
+Nombre:              Mostrar y ocultar contraseña en login
+Vista:               VLogin
+Precondición:        Vista de login visible
+Pasos:               1. Introducir contraseña
+                     2. Pulsar "Mostrar"
+                     3. Verificar que el texto es visible
+                     4. Pulsar "Ocultar"
+Datos de entrada:    password: miContraseña
+Resultado esperado:  Al pulsar "Mostrar" el texto se hace visible.
+                     Al pulsar "Ocultar" vuelve a enmascararse.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+-------------------------------------------------------------------------------------------------------
+-3.2 VRegistroUsuario — Registro de cliente-
+-------------------------------------------------------------------------------------------------------
+
+
+
+ID:                  PT-V07
+Nombre:              Registro completo con datos válidos
+Vista:               VRegistroUsuario
+Precondición:        El email no existe en BD
+Pasos:               1. Rellenar todos los campos
+                     2. Las contraseñas coinciden
+                     3. Pulsar "Registrar"
+Datos de entrada:    nombre: Ana, apellido: García,
+                     email: ana@test.com, password: 1234,
+                     dirección: Calle Mayor 1, tel: 600000001
+Resultado esperado:  JOptionPane de éxito. Navega al catálogo.
+                     Sidebar con nombre del nuevo cliente.
+                     Usuario registrado en BD.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V08
+Nombre:              Registro con email ya existente
+Vista:               VRegistroUsuario
+Precondición:        El email ya existe en BD
+Pasos:               1. Rellenar todos los campos con email duplicado
+                     2. Pulsar "Registrar"
+Datos de entrada:    email: cliente1@goldentale.com (ya registrado)
+Resultado esperado:  JOptionPane de aviso: "Ya existe una cuenta
+                     con ese correo electrónico."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V09
+Nombre:              Registro con contraseñas que no coinciden
+Vista:               VRegistroUsuario
+Precondición:        Email nuevo
+Pasos:               1. Rellenar todos los campos
+                     2. Introducir contraseñas distintas
+                     3. Pulsar "Registrar"
+Datos de entrada:    password: 1234
+                     confirmar: 5678
+Resultado esperado:  JOptionPane de aviso: "Las contraseñas
+                     no coinciden."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V10
+Nombre:              Registro con campo obligatorio vacío
+Vista:               VRegistroUsuario
+Precondición:        Ninguna
+Pasos:               1. Dejar el campo nombre vacío
+                     2. Rellenar el resto
+                     3. Pulsar "Registrar"
+Datos de entrada:    nombre: (vacío)
+Resultado esperado:  lblError: "Todos los campos son obligatorios."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V11
+Nombre:              Registro con teléfono con letras
+Vista:               VRegistroUsuario
+Precondición:        Ninguna
+Pasos:               1. Rellenar todos los campos
+                     2. Introducir teléfono con letras
+                     3. Pulsar "Registrar"
+Datos de entrada:    telefono: 6AB0001XY
+Resultado esperado:  lblError: "El teléfono solo puede contener
+                     números y opcionalmente un + al inicio."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V12
+Nombre:              Limpiar formulario de registro
+Vista:               VRegistroUsuario
+Precondición:        Formulario con datos escritos
+Pasos:               1. Rellenar varios campos
+                     2. Pulsar "Limpiar"
+Datos de entrada:    Datos varios en los campos
+Resultado esperado:  Todos los campos quedan vacíos. Labels de
+                     error y éxito en blanco.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+-------------------------------------------------------------------------------------------------------
+-3.3 VCatalogoCliente — Catálogo de perfumes-
+-------------------------------------------------------------------------------------------------------
+
+
+
+ID:                  PT-V13
+Nombre:              Carga del catálogo al hacer login
+Vista:               VCatalogoCliente
+Precondición:        Usuario cliente autenticado
+Pasos:               1. Hacer login como cliente
+                     2. Observar la tabla del catálogo
+Datos de entrada:    email/password de cliente válidos
+Resultado esperado:  Tabla cargada con perfumes reales de BD.
+                     Columna Stock muestra "Disponible" o
+                     "Agotado". Sin filas hardcodeadas.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V14
+Nombre:              Filtrar catálogo por nombre
+Vista:               VCatalogoCliente
+Precondición:        Catálogo cargado
+Pasos:               1. Escribir "Rose" en el campo de búsqueda
+                     2. Pulsar "Filtrar"
+Datos de entrada:    txtBuscar: Rose
+Resultado esperado:  Tabla muestra solo perfumes cuyo nombre
+                     contiene "Rose". Resto de perfumes ocultos.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V15
+Nombre:              Filtrar catálogo por categoría
+Vista:               VCatalogoCliente
+Precondición:        Catálogo cargado
+Pasos:               1. Seleccionar "Floral" en el combo
+                     2. Pulsar "Filtrar"
+Datos de entrada:    comboCategoria: Floral
+Resultado esperado:  Tabla muestra solo perfumes de categoría
+                     Floral.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V16
+Nombre:              Filtrar por nombre y categoría a la vez
+Vista:               VCatalogoCliente
+Precondición:        Catálogo cargado
+Pasos:               1. Escribir nombre parcial en txtBuscar
+                     2. Seleccionar categoría en combo
+                     3. Pulsar "Filtrar"
+Datos de entrada:    txtBuscar: Black
+                     comboCategoria: Oriental
+Resultado esperado:  Tabla muestra solo perfumes que cumplen
+                     ambos filtros simultáneamente.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V17
+Nombre:              Filtrar sin resultados
+Vista:               VCatalogoCliente
+Precondición:        Catálogo cargado
+Pasos:               1. Escribir nombre inexistente
+                     2. Pulsar "Filtrar"
+Datos de entrada:    txtBuscar: XxPerfumeInexistentexX
+Resultado esperado:  Tabla queda vacía. No hay error ni excepción.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V18
+Nombre:              Añadir perfume disponible al carrito
+Vista:               VCatalogoCliente
+Precondición:        Perfume con stock mayor que 0 en BD
+Pasos:               1. Seleccionar fila de perfume disponible
+                     2. Pulsar "Añadir al carrito"
+                     3. Introducir cantidad válida en el diálogo
+                     4. Confirmar
+Datos de entrada:    Perfume: Velvet Rose
+                     cantidad: 2
+Resultado esperado:  JOptionPane de éxito. El perfume aparece
+                     en el carritoActivo del controlador.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V19
+Nombre:              Añadir perfume agotado al carrito
+Vista:               VCatalogoCliente
+Precondición:        Perfume con stock = 0 en BD
+Pasos:               1. Seleccionar fila de perfume agotado
+                     2. Pulsar "Añadir al carrito"
+Datos de entrada:    Perfume con cantidad 0 en BD
+Resultado esperado:  JOptionPane de aviso: "Este perfume está
+                     temporalmente agotado."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V20
+Nombre:              Añadir cantidad mayor que el stock real
+Vista:               VCatalogoCliente
+Precondición:        Perfume con stock = 3 en BD
+Pasos:               1. Seleccionar perfume
+                     2. Pulsar "Añadir al carrito"
+                     3. Introducir cantidad mayor que el stock
+Datos de entrada:    cantidad: 10 (stock real: 3)
+Resultado esperado:  JOptionPane: "No es posible añadir esa
+                     cantidad. Solo quedan 3 unidades en stock."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V21
+Nombre:              Añadir al carrito sin seleccionar fila
+Vista:               VCatalogoCliente
+Precondición:        Catálogo cargado
+Pasos:               1. No seleccionar ninguna fila
+                     2. Pulsar "Añadir al carrito"
+Datos de entrada:    (ninguna fila seleccionada)
+Resultado esperado:  JOptionPane de aviso: "Por favor, selecciona
+                     un perfume del catálogo."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+-------------------------------------------------------------------------------------------------------
+-3.4 VCarritoCompra — Carrito de compra-
+-------------------------------------------------------------------------------------------------------
+
+
+ID:                  PT-V22
+Nombre:              Ver carrito con productos
+Vista:               VCarritoCompra
+Precondición:        carritoActivo con al menos un producto
+Pasos:               1. Añadir perfume al carrito
+                     2. Pulsar "Ver carrito"
+Datos de entrada:    1 línea en carritoActivo
+Resultado esperado:  Tabla muestra las líneas del carrito.
+                     Total calculado correctamente en EUR.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V23
+Nombre:              Eliminar línea del carrito
+Vista:               VCarritoCompra
+Precondición:        Carrito con al menos una línea
+Pasos:               1. Seleccionar una línea de la tabla
+                     2. Pulsar "Eliminar línea"
+                     3. Confirmar en el JOptionPane
+Datos de entrada:    Fila seleccionada en la tabla del carrito
+Resultado esperado:  Línea eliminada del carritoActivo. Tabla
+                     y total actualizados automáticamente.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V24
+Nombre:              Eliminar línea sin seleccionar fila
+Vista:               VCarritoCompra
+Precondición:        Carrito con productos
+Pasos:               1. No seleccionar ninguna fila
+                     2. Pulsar "Eliminar línea"
+Datos de entrada:    (ninguna fila seleccionada)
+Resultado esperado:  JOptionPane de aviso: "Por favor, selecciona
+                     el perfume que deseas quitar del carrito."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V25
+Nombre:              Vaciar carrito completo
+Vista:               VCarritoCompra
+Precondición:        Carrito con productos
+Pasos:               1. Pulsar "Vaciar"
+                     2. Confirmar en el JOptionPane
+Datos de entrada:    carritoActivo con 2 líneas
+Resultado esperado:  carritoActivo vacío. Tabla sin filas.
+                     Total muestra 0.00 EUR.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V26
+Nombre:              Vaciar carrito ya vacío
+Vista:               VCarritoCompra
+Precondición:        carritoActivo vacío
+Pasos:               1. Pulsar "Vaciar" con el carrito vacío
+Datos de entrada:    carritoActivo: []
+Resultado esperado:  JOptionPane informativo: "Tu carrito ya
+                     está vacío."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V27
+Nombre:              Finalizar compra con carrito vacío
+Vista:               VCarritoCompra
+Precondición:        carritoActivo vacío
+Pasos:               1. Pulsar "Finalizar compra"
+Datos de entrada:    carritoActivo: []
+Resultado esperado:  JOptionPane de aviso: "No puedes finalizar
+                     la compra porque tu carrito está vacío."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V28
+Nombre:              Finalizar compra con productos
+Vista:               VCarritoCompra
+Precondición:        carritoActivo con productos
+Pasos:               1. Tener productos en el carrito
+                     2. Pulsar "Finalizar compra"
+Datos de entrada:    2 líneas en carritoActivo
+Resultado esperado:  Navega a VPago. Resumen muestra número
+                     de perfumes y total correcto.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+-------------------------------------------------------------------------------------------------------
+-3.5 VPago — Confirmación de pago-
+-------------------------------------------------------------------------------------------------------
+
+
+
+ID:                  PT-V29
+Nombre:              Confirmar pago con datos válidos
+Vista:               VPago
+Precondición:        carritoActivo con productos, usuario autenticado
+Pasos:               1. Seleccionar forma de pago
+                     2. Introducir dirección válida
+                     3. Pulsar "Confirmar"
+                     4. Confirmar en el JOptionPane
+Datos de entrada:    formaPago: Tarjeta
+                     dirección: Calle Mayor 5
+Resultado esperado:  JOptionPane de éxito. carritoActivo vaciado.
+                     Navega al catálogo. Pedido y pago registrados
+                     en BD. Stock de los perfumes descontado.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V30
+Nombre:              Confirmar pago con dirección vacía
+Vista:               VPago
+Precondición:        carritoActivo con productos
+Pasos:               1. Dejar dirección vacía
+                     2. Pulsar "Confirmar"
+Datos de entrada:    dirección: (vacía)
+Resultado esperado:  lblError: "La dirección de entrega no puede
+                     estar vacía."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V31
+Nombre:              Confirmar pago con dirección muy corta
+Vista:               VPago
+Precondición:        carritoActivo con productos
+Pasos:               1. Introducir dirección de menos de 5 chars
+                     2. Pulsar "Confirmar"
+Datos de entrada:    dirección: Ca
+Resultado esperado:  lblError: "La dirección parece demasiado
+                     corta. Revísala por favor."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V32
+Nombre:              Cancelar pago y volver al carrito
+Vista:               VPago
+Precondición:        En vista VPago
+Pasos:               1. Pulsar "Cancelar"
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega de vuelta a VCarritoCompra.
+                     carritoActivo sin cambios.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V33
+Nombre:              Stock se descuenta tras pago exitoso
+Vista:               VPago
+Precondición:        Perfume con stock = 5 en BD
+Pasos:               1. Comprar 2 unidades de un perfume
+                     2. Confirmar el pago
+                     3. Verificar stock en VStock (empleado)
+Datos de entrada:    cantidad comprada: 2
+                     stock inicial: 5
+Resultado esperado:  Stock del perfume en BD = 3 tras el pago.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+-------------------------------------------------------------------------------------------------------
+-3.6 VMisPedidos — Historial de pedidos-
+-------------------------------------------------------------------------------------------------------
+
+
+
+ID:                  PT-V34
+Nombre:              Carga del historial de pedidos
+Vista:               VMisPedidos
+Precondición:        Cliente con pedidos en BD
+Pasos:               1. Hacer login como cliente con pedidos
+                     2. Pulsar "Mis pedidos" en el sidebar
+Datos de entrada:    Usuario con 3 pedidos en BD
+Resultado esperado:  Tabla muestra los pedidos del cliente
+                     ordenados por fecha descendente. Columnas:
+                     Ref., Fecha, Estado, Total.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V35
+Nombre:              Filtrar pedidos por estado
+Vista:               VMisPedidos
+Precondición:        Cliente con pedidos de distintos estados
+Pasos:               1. Seleccionar "Pendiente" en el combo
+                     2. Pulsar "Filtrar"
+Datos de entrada:    comboFiltroEstado: Pendiente
+Resultado esperado:  Tabla muestra solo pedidos con estado
+                     Pendiente.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V36
+Nombre:              Filtrar pedidos — Todos
+Vista:               VMisPedidos
+Precondición:        Filtro activo con un estado concreto
+Pasos:               1. Seleccionar "Todos" en el combo
+                     2. Pulsar "Filtrar"
+Datos de entrada:    comboFiltroEstado: Todos
+Resultado esperado:  Tabla muestra todos los pedidos del cliente.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V37
+Nombre:              Ver detalle de un pedido
+Vista:               VMisPedidos
+Precondición:        Pedido seleccionado en la tabla principal
+Pasos:               1. Seleccionar una fila de la tabla
+                     2. Pulsar "Ver detalle"
+Datos de entrada:    Fila con pedido #3
+Resultado esperado:  Tabla de detalle muestra las líneas del
+                     pedido: perfume (nombre + ml), cantidad,
+                     precio unitario y subtotal.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V38
+Nombre:              Ver detalle sin seleccionar pedido
+Vista:               VMisPedidos
+Precondición:        Tabla de pedidos cargada
+Pasos:               1. No seleccionar ninguna fila
+                     2. Pulsar "Ver detalle"
+Datos de entrada:    (ninguna fila seleccionada)
+Resultado esperado:  JOptionPane de aviso: "Selecciona un pedido
+                     para ver su detalle."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+-------------------------------------------------------------------------------------------------------
+-3.7 VEmpleadoDashboard — Dashboard del empleado-
+-------------------------------------------------------------------------------------------------------
+
+
+
+ID:                  PT-V39
+Nombre:              Carga de métricas al hacer login como empleado
+Vista:               VEmpleadoDashboard
+Precondición:        Usuario empleado en BD con pedidos y stock
+Pasos:               1. Hacer login como empleado
+                     2. Observar las tres tarjetas de métricas
+Datos de entrada:    email/password de empleado válidos
+Resultado esperado:  "Pedidos hoy" muestra valor real de BD.
+                     "Pendientes" muestra pedidos en estado
+                     Pendiente. "Stock bajo" muestra perfumes
+                     con cantidad entre 1 y 4 unidades.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V40
+Nombre:              Métricas se actualizan al volver al dashboard
+Vista:               VEmpleadoDashboard
+Precondición:        Empleado autenticado, se ha realizado una
+                     compra de cliente que modifica el stock
+Pasos:               1. Desde otra vista, volver al dashboard
+                        pulsando "Dashboard" en el sidebar
+Datos de entrada:    Nueva compra realizada por cliente
+Resultado esperado:  Las métricas se recalculan al entrar,
+                     mostrando los valores actualizados de BD.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V41
+Nombre:              Botones de acceso rápido navegan correctamente
+Vista:               VEmpleadoDashboard
+Precondición:        Empleado en el dashboard
+Pasos:               1. Pulsar "Añadir" → verificar vista
+                     2. Volver al dashboard
+                     3. Pulsar "Modificar" → verificar vista
+                     4. Volver al dashboard
+                     5. Pulsar "Stock" → verificar vista
+Datos de entrada:    Ninguna
+Resultado esperado:  Cada botón navega a su vista correspondiente:
+                     VAniadirPerfume, VModificarPerfume y VStock.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+-------------------------------------------------------------------------------------------------------
+-3.8 VAniadirPerfume — Alta de perfume-
+-------------------------------------------------------------------------------------------------------
+
+
+
+ID:                  PT-V42
+Nombre:              Añadir perfume con datos válidos
+Vista:               VAniadirPerfume
+Precondición:        No existe perfume con mismo nombre y ml en BD
+Pasos:               1. Rellenar todos los campos del formulario
+                     2. Pulsar "Guardar"
+Datos de entrada:    nombre: Nuevo Oud, marca: TestMarca,
+                     precio: 75.00, ml: 100, stock: 5,
+                     categoría: Oriental, público: Hombre
+Resultado esperado:  JOptionPane de éxito. Perfume insertado en BD.
+                     Stock creado con localización Estante C.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V43
+Nombre:              Localización automática según mililitros
+Vista:               VAniadirPerfume
+Precondición:        Formulario abierto
+Pasos:               1. Introducir 50 en campo ml
+                     2. Observar label de localización
+                     3. Cambiar a 75 ml y observar
+                     4. Cambiar a 100 ml y observar
+Datos de entrada:    ml: 50, luego 75, luego 100
+Resultado esperado:  50 ml → Estante A
+                     75 ml → Estante B
+                     100 ml → Estante C
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V44
+Nombre:              Añadir perfume duplicado (mismo nombre y ml)
+Vista:               VAniadirPerfume
+Precondición:        Perfume "Velvet Rose" 50ml existe en BD
+Pasos:               1. Introducir nombre y ml de perfume existente
+                     2. Pulsar "Guardar"
+Datos de entrada:    nombre: Velvet Rose
+                     ml: 50
+Resultado esperado:  lblError: "Error: Ya existe un perfume con
+                     ese nombre y esos mililitros."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V45
+Nombre:              Nombre vacío
+Vista:               VAniadirPerfume
+Precondición:        Ninguna
+Pasos:               1. Dejar nombre vacío
+                     2. Rellenar el resto de campos
+                     3. Pulsar "Guardar"
+Datos de entrada:    nombre: (vacío)
+Resultado esperado:  lblError: "El nombre del perfume no puede
+                     estar vacío."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V46
+Nombre:              Precio negativo o igual a cero
+Vista:               VAniadirPerfume
+Precondición:        Ninguna
+Pasos:               1. Introducir precio = 0
+                     2. Pulsar "Guardar"
+Datos de entrada:    precio: 0
+Resultado esperado:  lblError: "Error en Precio: Debe ser un
+                     valor mayor que 0."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V47
+Nombre:              Stock inicial negativo
+Vista:               VAniadirPerfume
+Precondición:        Ninguna
+Pasos:               1. Introducir stock negativo
+                     2. Pulsar "Guardar"
+Datos de entrada:    stock: -3
+Resultado esperado:  lblError: "Error en Stock: El stock inicial
+                     no puede ser negativo."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V48
+Nombre:              Limpiar formulario de añadir perfume
+Vista:               VAniadirPerfume
+Precondición:        Formulario con datos escritos
+Pasos:               1. Rellenar varios campos
+                     2. Pulsar "Limpiar"
+Datos de entrada:    Datos varios en los campos
+Resultado esperado:  Todos los campos quedan vacíos o en
+                     valor por defecto. Labels de feedback
+                     en blanco.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+-3.9 VModificarPerfume — Modificación de perfume-
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V49
+Nombre:              Buscar perfume existente
+Vista:               VModificarPerfume
+Precondición:        Perfume existe en BD
+Pasos:               1. Introducir nombre y ml de perfume existente
+                     2. Pulsar "Buscar"
+Datos de entrada:    nombre: Velvet Rose
+                     ml: 50
+Resultado esperado:  Panel de modificación visible. Se muestran
+                     nombre, precio actual y stock actual del
+                     perfume encontrado.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V50
+Nombre:              Buscar perfume inexistente
+Vista:               VModificarPerfume
+Precondición:        El perfume no existe en BD
+Pasos:               1. Introducir nombre y ml inexistentes
+                     2. Pulsar "Buscar"
+Datos de entrada:    nombre: PerfumeXXX
+                     ml: 999
+Resultado esperado:  lblResultado en rojo: "No se ha encontrado
+                     ningún perfume con esos datos." Panel de
+                     modificación permanece oculto.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V51
+Nombre:              Buscar con campos vacíos
+Vista:               VModificarPerfume
+Precondición:        Ninguna
+Pasos:               1. Dejar nombre y ml vacíos
+                     2. Pulsar "Buscar"
+Datos de entrada:    nombre: (vacío)
+                     ml: (vacío)
+Resultado esperado:  lblResultado: "Por favor, introduce nombre
+                     y mililitros."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V52
+Nombre:              Modificar solo el precio
+Vista:               VModificarPerfume
+Precondición:        Perfume encontrado en BD
+Pasos:               1. Buscar perfume
+                     2. Introducir nuevo precio
+                     3. Dejar cantidad vacía
+                     4. Pulsar "Guardar" y confirmar
+Datos de entrada:    nuevoPrecio: 95.00
+                     cantidad: (vacía)
+Resultado esperado:  Precio actualizado en BD. Stock sin cambios.
+                     JOptionPane de éxito. Navega a VStock.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V53
+Nombre:              Modificar solo el stock
+Vista:               VModificarPerfume
+Precondición:        Perfume encontrado en BD
+Pasos:               1. Buscar perfume
+                     2. Dejar precio vacío
+                     3. Introducir cantidad a sumar al stock
+                     4. Pulsar "Guardar" y confirmar
+Datos de entrada:    nuevoPrecio: (vacío)
+                     cantidad: 10
+Resultado esperado:  Stock actualizado en BD (stockActual + 10).
+                     Precio sin cambios.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V54
+Nombre:              Modificar precio y stock a la vez
+Vista:               VModificarPerfume
+Precondición:        Perfume encontrado en BD
+Pasos:               1. Buscar perfume
+                     2. Introducir nuevo precio y cantidad
+                     3. Pulsar "Guardar" y confirmar
+Datos de entrada:    nuevoPrecio: 110.00
+                     cantidad: 5
+Resultado esperado:  Precio y stock actualizados en BD dentro
+                     de la misma transacción.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V55
+Nombre:              Stock resultante negativo
+Vista:               VModificarPerfume
+Precondición:        Perfume con stock = 3 en BD
+Pasos:               1. Buscar perfume
+                     2. Introducir cantidad = -10
+                     3. Pulsar "Guardar"
+Datos de entrada:    cantidad: -10
+                     stockActual: 3
+Resultado esperado:  lblResultado: "El stock final no puede ser
+                     negativo (Actual: 3)."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V56
+Nombre:              Sin cambios (ambos campos vacíos)
+Vista:               VModificarPerfume
+Precondición:        Perfume encontrado en BD
+Pasos:               1. Buscar perfume
+                     2. Dejar precio y cantidad vacíos
+                     3. Pulsar "Guardar"
+Datos de entrada:    nuevoPrecio: (vacío)
+                     cantidad: (vacía)
+Resultado esperado:  lblResultado: "Rellena al menos un campo
+                     para modificar."
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+-------------------------------------------------------------------------------------------------------
+3.10 VStock — Control de stock
+-------------------------------------------------------------------------------------------------------
+
+
+
+ID:                  PT-V57
+Nombre:              Carga completa del inventario
+Vista:               VStock
+Precondición:        Empleado autenticado
+Pasos:               1. Ir a "Control stock" desde el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Tabla con todos los perfumes. Métricas
+                     actualizadas: total productos, stock bajo,
+                     sin stock.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V58
+Nombre:              Filtrar stock por nombre
+Vista:               VStock
+Precondición:        Inventario cargado
+Pasos:               1. Escribir nombre parcial en txtBuscar
+                     2. Pulsar "Filtrar"
+Datos de entrada:    txtBuscar: Black
+Resultado esperado:  Tabla muestra solo perfumes cuyo nombre
+                     contiene "Black". Métricas actualizadas.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V59
+Nombre:              Filtrar stock por ubicación
+Vista:               VStock
+Precondición:        Inventario cargado
+Pasos:               1. Seleccionar "Estante A" en combo ubicación
+                     2. Pulsar "Filtrar"
+Datos de entrada:    comboUbicacion: Estante A
+Resultado esperado:  Tabla muestra solo perfumes en Estante A.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V60
+Nombre:              Filtrar stock por estado — Stock bajo
+Vista:               VStock
+Precondición:        Inventario cargado
+Pasos:               1. Seleccionar "Stock bajo" en combo estado
+                     2. Pulsar "Filtrar"
+Datos de entrada:    comboEstado: Stock bajo
+Resultado esperado:  Tabla muestra solo perfumes con cantidad
+                     entre 1 y 4. Columna Estado = "Stock bajo".
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V61
+Nombre:              Filtrar stock por estado — Sin stock
+Vista:               VStock
+Precondición:        Inventario con perfumes agotados en BD
+Pasos:               1. Seleccionar "Sin stock" en combo estado
+                     2. Pulsar "Filtrar"
+Datos de entrada:    comboEstado: Sin stock
+Resultado esperado:  Tabla muestra solo perfumes con cantidad = 0.
+                     Columna Estado = "Sin stock".
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V62
+Nombre:              Filtrar por nombre y ubicación a la vez
+Vista:               VStock
+Precondición:        Inventario cargado
+Pasos:               1. Escribir nombre parcial en txtBuscar
+                     2. Seleccionar ubicación en combo
+                     3. Pulsar "Filtrar"
+Datos de entrada:    txtBuscar: Rose
+                     comboUbicacion: Estante A
+Resultado esperado:  Tabla muestra solo perfumes que cumplen
+                     ambos filtros simultáneamente.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V63
+Nombre:              Filtrar sin resultados
+Vista:               VStock
+Precondición:        Inventario cargado
+Pasos:               1. Combinar filtros sin coincidencia
+                     2. Pulsar "Filtrar"
+Datos de entrada:    txtBuscar: XxInexistentexX
+Resultado esperado:  Tabla vacía. Métricas en 0. Sin error
+                     ni excepción.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+-------------------------------------------------------------------------------------------------------
+-3.11 Navegación entre vistas — Botones de cambio de pantalla-
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V64
+Nombre:              Botón "Iniciar sesión" en pantalla de bienvenida
+Vista:               VPGoldenTale (panel de inicio)
+Precondición:        Aplicación recién arrancada
+Pasos:               1. Pulsar "Iniciar sesión" en el panel central
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VLogin. El formulario aparece
+                     vacío y limpio.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V65
+Nombre:              Botón "Registrarse" en pantalla de bienvenida
+Vista:               VPGoldenTale (panel de inicio)
+Precondición:        Aplicación recién arrancada
+Pasos:               1. Pulsar "Registrarse" en el panel central
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VRegistroUsuario. El formulario
+                     aparece vacío y limpio.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V66
+Nombre:              Botón "Inicio" en sidebar pre-login
+Vista:               VPGoldenTale (sidebar)
+Precondición:        Aplicación en cualquier vista pre-login
+Pasos:               1. Pulsar "Inicio" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega al panel de bienvenida. Los
+                     formularios de login y registro se limpian.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V67
+Nombre:              Botón "Iniciar sesión" en sidebar pre-login
+Vista:               VPGoldenTale (sidebar)
+Precondición:        Aplicación en vista de inicio o registro
+Pasos:               1. Pulsar "Iniciar sesión" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VLogin. El formulario de registro
+                     se limpia antes de mostrar el login.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V68
+Nombre:              Botón "Registrarse" en sidebar pre-login
+Vista:               VPGoldenTale (sidebar)
+Precondición:        Aplicación en vista de inicio o login
+Pasos:               1. Pulsar "Registrarse" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VRegistroUsuario. El formulario
+                     de login se limpia antes de mostrar el
+                     registro.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V69
+Nombre:              Botón "¿No tienes cuenta? Regístrate" en VLogin
+Vista:               VLogin
+Precondición:        En vista de login
+Pasos:               1. Pulsar el botón de registro dentro de VLogin
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VRegistroUsuario. El formulario
+                     de login se limpia.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V70
+Nombre:              Botón "Catálogo" en sidebar cliente
+Vista:               VPGoldenTale (sidebar cliente)
+Precondición:        Cliente autenticado en cualquier vista
+Pasos:               1. Pulsar "Catálogo" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VCatalogoCliente. El catálogo
+                     se recarga con datos actuales de BD.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V71
+Nombre:              Botón "Mi carrito" en sidebar cliente
+Vista:               VPGoldenTale (sidebar cliente)
+Precondición:        Cliente autenticado
+Pasos:               1. Pulsar "Mi carrito" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VCarritoCompra. La tabla muestra
+                     el estado actual del carritoActivo.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V72
+Nombre:              Botón "Mis pedidos" en sidebar cliente
+Vista:               VPGoldenTale (sidebar cliente)
+Precondición:        Cliente autenticado
+Pasos:               1. Pulsar "Mis pedidos" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VMisPedidos. La tabla se carga
+                     con los pedidos reales del cliente desde BD.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V73
+Nombre:              Botón "Ver carrito" en VCatalogoCliente
+Vista:               VCatalogoCliente
+Precondición:        Cliente autenticado
+Pasos:               1. Pulsar "Ver carrito" en la vista del catálogo
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VCarritoCompra. La tabla muestra
+                     el estado actual del carritoActivo.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V74
+Nombre:              Botón "Mis pedidos" en VCatalogoCliente
+Vista:               VCatalogoCliente
+Precondición:        Cliente autenticado
+Pasos:               1. Pulsar "Mis pedidos" en la vista del catálogo
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VMisPedidos. La tabla se carga
+                     con los pedidos reales del cliente desde BD.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V75
+Nombre:              Botón "Cerrar sesión" cliente — confirmación
+Vista:               VPGoldenTale (sidebar cliente)
+Precondición:        Cliente autenticado
+Pasos:               1. Pulsar "Cerrar sesión"
+                     2. Confirmar en el JOptionPane
+Datos de entrada:    Ninguna
+Resultado esperado:  usuarioAutenticado = null. carritoActivo
+                     vacío. Sidebar vuelve al estado pre-login.
+                     Navega al panel de bienvenida. Navbar
+                     muestra "Bienvenido a Golden Tale".
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V76
+Nombre:              Botón "Cerrar sesión" cliente — cancelar
+Vista:               VPGoldenTale (sidebar cliente)
+Precondición:        Cliente autenticado
+Pasos:               1. Pulsar "Cerrar sesión"
+                     2. Cancelar en el JOptionPane
+Datos de entrada:    Ninguna
+Resultado esperado:  Sesión sigue activa. Vista sin cambios.
+                     carritoActivo sin cambios.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V77
+Nombre:              Botón "Dashboard" en sidebar empleado
+Vista:               VPGoldenTale (sidebar empleado)
+Precondición:        Empleado autenticado en cualquier vista
+Pasos:               1. Pulsar "Dashboard" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VEmpleadoDashboard. Las métricas
+                     se recalculan con datos actuales de BD.
+                     Formularios de añadir y modificar se limpian.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V78
+Nombre:              Botón "Añadir perfume" en sidebar empleado
+Vista:               VPGoldenTale (sidebar empleado)
+Precondición:        Empleado autenticado
+Pasos:               1. Pulsar "Añadir perfume" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VAniadirPerfume. El formulario
+                     aparece vacío y limpio.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V79
+Nombre:              Botón "Modificar stock" en sidebar empleado
+Vista:               VPGoldenTale (sidebar empleado)
+Precondición:        Empleado autenticado
+Pasos:               1. Pulsar "Modificar stock" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VModificarPerfume. El formulario
+                     de búsqueda aparece vacío. Panel de
+                     modificación oculto.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V80
+Nombre:              Botón "Control stock" en sidebar empleado
+Vista:               VPGoldenTale (sidebar empleado)
+Precondición:        Empleado autenticado
+Pasos:               1. Pulsar "Control stock" en el sidebar
+Datos de entrada:    Ninguna
+Resultado esperado:  Navega a VStock. La tabla se carga con
+                     todos los perfumes. Métricas actualizadas.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V81
+Nombre:              Botón "Cerrar sesión" empleado — confirmación
+Vista:               VPGoldenTale (sidebar empleado)
+Precondición:        Empleado autenticado
+Pasos:               1. Pulsar "Cerrar sesión"
+                     2. Confirmar en el JOptionPane
+Datos de entrada:    Ninguna
+Resultado esperado:  usuarioAutenticado = null. Sidebar vuelve
+                     al estado pre-login. Navega al panel de
+                     bienvenida. Navbar muestra "Bienvenido a
+                     Golden Tale". Formularios limpios.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+-------------------------------------------------------------------------------------------------------
+
+ID:                  PT-V82
+Nombre:              Botón "Cancelar" en VModificarPerfume
+Vista:               VModificarPerfume
+Precondición:        Perfume encontrado, panel de modificación visible
+Pasos:               1. Pulsar "Cancelar" en el panel de modificación
+Datos de entrada:    Ninguna
+Resultado esperado:  Formulario limpio. Panel de modificación
+                     oculto. Sin cambios en BD.
+Resultado obtenido:  Correcto
+Estado:              PASA
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------
+4. RESUMEN DE RESULTADOS
+-------------------------------------------------------------------------------------------------------
+
+Vista                        Total   PASA   FALLA
+------------------------------------------------------
+VLogin                         6       6      0
+VRegistroUsuario               6       6      0
+VCatalogoCliente               9       9      0
+VCarritoCompra                 7       7      0
+VPago                          5       5      0
+VMisPedidos                    5       5      0
+VEmpleadoDashboard             3       3      0
+VAniadirPerfume                7       7      0
+VModificarPerfume              8       8      0
+VStock                         7       7      0
+Navegación entre vistas       19      19      0
+------------------------------------------------------
+TOTAL                         82      82      0
+
+Conclusión: Los 82 casos de prueba de integración de vistas
+han resultado satisfactorios. Todos los flujos de usuario
+verificados (autenticación, catálogo, carrito, pago, pedidos,
+gestión de empleado, stock y navegación entre vistas) funcionan
+correctamente y producen los resultados esperados tanto en la
+interfaz gráfica como en la base de datos SQLite.
