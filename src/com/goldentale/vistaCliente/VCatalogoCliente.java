@@ -82,12 +82,7 @@ public class VCatalogoCliente extends JPanel {
 				return false;
 			}
 		};
-		modeloTablaCatalogo
-				.addRow(new Object[] { "Velvet Rose", "Maison Luxe", "Floral", "Mujer", "50", "89.99", "12" });
-		modeloTablaCatalogo
-				.addRow(new Object[] { "Black Oud", "Orient Noir", "Oriental", "Hombre", "100", "120.00", "8" });
-		modeloTablaCatalogo
-				.addRow(new Object[] { "Golden Amber", "Orient Noir", "Amaderado", "Unisex", "75", "145.00", "4" });
+		
 
 		tablaCatalogo = new JTable(modeloTablaCatalogo);
 		ComponentesUI.prepararTabla(tablaCatalogo);
