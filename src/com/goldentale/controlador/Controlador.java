@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import com.goldentale.model.data.Constantes;
+import com.goldentale.model.db.AccesoDBProp;
 import com.goldentale.model.db.CarritoCompra;
 import com.goldentale.model.db.InfoPerfumeConStock;
 import com.goldentale.model.db.LineaPedido;
@@ -80,9 +81,10 @@ public class Controlador implements ActionListener {
 	 */
 	public Controlador(VPGoldenTale ventana) {
 		this.ventana = ventana;
-		usuarioDAO = new UsuarioDAO();
-		perfumesDAO = new PerfumesDAO();
-		pedidosDAO = new PedidosDAO();
+		AccesoDBProp a = new AccesoDBProp(); 
+		usuarioDAO = new UsuarioDAO(a);
+		perfumesDAO = new PerfumesDAO(a);
+		pedidosDAO = new PedidosDAO(a);
 	}
 
 	// ── Setters ───────────────────────────────────────────────────────
@@ -521,7 +523,7 @@ public class Controlador implements ActionListener {
 	 *               {@code "Con stock"}, {@code "Stock bajo"} o {@code "Sin stock"}
 	 * @return lista filtrada según el estado indicado
 	 */
-	private ArrayList<InfoPerfumeConStock> filtrarPorEstado(ArrayList<InfoPerfumeConStock> lista, String estado) {
+	public ArrayList<InfoPerfumeConStock> filtrarPorEstado(ArrayList<InfoPerfumeConStock> lista, String estado) {
 		if (estado.equals("Todos los estados")) {
 			return lista;
 		}
@@ -587,7 +589,7 @@ public class Controlador implements ActionListener {
 	 *         del umbral definido en {@link Constantes#STOCK_MINIMO_ALERTA},
 	 *         o {@code "OK"} en caso contrario
 	 */
-	private String calcularEstado(int cantidad) {
+	public String calcularEstado(int cantidad) {
 		if (cantidad == 0) {
 			return "Sin stock";
 		} else if (cantidad < Constantes.STOCK_MINIMO_ALERTA) {
@@ -849,7 +851,7 @@ public class Controlador implements ActionListener {
 	 * @param lista lista de perfumes con información de stock
 	 * @return matriz de filas lista para ser mostrada en la tabla del catálogo
 	 */
-	private Object[][] construirFilasCatalogo(ArrayList<InfoPerfumeConStock> lista) {
+	public Object[][] construirFilasCatalogo(ArrayList<InfoPerfumeConStock> lista) {
 		Object[][] filas = new Object[lista.size()][7];
 
 		for (int i = 0; i < lista.size(); i++) {
@@ -1190,7 +1192,7 @@ public class Controlador implements ActionListener {
 	 * @param lista lista de pedidos a representar
 	 * @return matriz de filas lista para ser mostrada en la tabla de pedidos
 	 */
-	private Object[][] construirFilasPedidos(ArrayList<Pedido> lista) {
+	public Object[][] construirFilasPedidos(ArrayList<Pedido> lista) {
 		Object[][] filas = new Object[lista.size()][4];
 
 		for (int i = 0; i < lista.size(); i++) {
