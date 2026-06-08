@@ -22,9 +22,9 @@ public class PerfumesDAO {
 	// ATRIBUTO QUE REPRESENTA LA CLASE QUE ME VA A FACILITAR LA CONEXIÓN
 	private AccesoDBProp acc;
 
-	public PerfumesDAO() {
-		acc = new AccesoDBProp();
-	}
+	public PerfumesDAO(AccesoDBProp a) {
+			acc = a;
+		}
 	// SENTENCIAS Y MÉTODOS QUE SE VAN A NECESITAR
 
 	// GET ALL: devuelve todos los perfumes del catálogo (sin info de stock)

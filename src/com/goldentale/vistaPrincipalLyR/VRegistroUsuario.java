@@ -213,7 +213,7 @@ public class VRegistroUsuario extends JPanel {
 	 * @return {@code null} si todo es válido, o un mensaje de error
 	 *         describiendo el primer problema encontrado.
 	 */
-	private String validar(String nombre, String apellido, String direccion, String telefono, String email,
+	public String validar(String nombre, String apellido, String direccion, String telefono, String email,
 			String password) {
 
 		if (nombre.isEmpty() || apellido.isEmpty() || direccion.isEmpty() || telefono.isEmpty() || email.isEmpty()

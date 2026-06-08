@@ -28,8 +28,8 @@ public class PedidosDAO {
 	/**
 	 * Crea una nueva instancia del DAO inicializando el acceso a la base de datos.
 	 */
-	public PedidosDAO() {
-		acc = new AccesoDBProp();
+	public PedidosDAO(AccesoDBProp a) {
+		acc = a;
 	}
 
 	/**

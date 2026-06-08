@@ -25,8 +25,8 @@ public class UsuarioDAO {
 	/**
 	 * Inicializa el acceso a la base de datos.
 	 */
-	public UsuarioDAO() {
-		acc = new AccesoDBProp();
+	public UsuarioDAO(AccesoDBProp a) {
+		acc = a;
 	}
 
 	/**
