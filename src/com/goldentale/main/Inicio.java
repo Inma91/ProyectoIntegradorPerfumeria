@@ -20,11 +20,11 @@ import com.goldentale.vistaEmpleado.VStock;
 
 /**
  * Punto de entrada de la aplicación Golden Tale.
- * <p>
+ * 
  * Inicializa todas las vistas, el controlador y la ventana principal, los
  * conecta entre sí y arranca la interfaz gráfica en el hilo de eventos de
  * Swing.
- * </p>
+ * 
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
