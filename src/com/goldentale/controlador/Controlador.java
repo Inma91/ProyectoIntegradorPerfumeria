@@ -29,6 +29,7 @@ import com.goldentale.vistaEmpleado.VEmpleadoDashboard;
 import com.goldentale.vistaEmpleado.VAniadirPerfume;
 import com.goldentale.vistaEmpleado.VModificarPerfume;
 import com.goldentale.vistaEmpleado.VStock;
+
 /**
  * Controlador principal de Golden Tale.
  * <p>
@@ -244,8 +245,8 @@ public class Controlador implements ActionListener {
 				ventana.mostrarVista(Constantes.VISTA_CARRITO);
 
 			} else if (ev.getSource().equals(ventana.getBtnClienteMisPedidos())) {
-			    cargarMisPedidos();
-			    ventana.mostrarVista(Constantes.VISTA_MIS_PEDIDOS);
+				cargarMisPedidos();
+				ventana.mostrarVista(Constantes.VISTA_MIS_PEDIDOS);
 
 			} else if (ev.getSource().equals(ventana.getBtnClienteCerrarSesion())) {
 				cerrarSesion();
@@ -257,8 +258,8 @@ public class Controlador implements ActionListener {
 				anadirAlCarrito();
 
 			} else if (ev.getSource().equals(panelCatalogo.getBtnMisPedidos())) {
-			    cargarMisPedidos();
-			    ventana.mostrarVista(Constantes.VISTA_MIS_PEDIDOS);
+				cargarMisPedidos();
+				ventana.mostrarVista(Constantes.VISTA_MIS_PEDIDOS);
 
 			} else if (ev.getSource().equals(panelCarrito.getBtnEliminarLinea())) {
 				eliminarLineaCarrito();
@@ -270,10 +271,10 @@ public class Controlador implements ActionListener {
 				finalizarCompraCarrito();
 
 			} else if (ev.getSource().equals(panelMisPedidos.getBtnVerDetalle())) {
-			    mostrarDetallePedido();
+				mostrarDetallePedido();
 
 			} else if (ev.getSource().equals(panelMisPedidos.getBtnFiltrar())) {
-			    filtrarMisPedidos();
+				filtrarMisPedidos();
 
 			} else if (ev.getSource().equals(panelPago.getBtnConfirmarPago())) {
 				procesarPago();
@@ -287,6 +288,7 @@ public class Controlador implements ActionListener {
 				panelModificar.limpiarFormulario();
 				panelStock.limpiarFiltros();
 				perfumeEnEdicion = null;
+				cargarMetricasDashboard();
 				ventana.mostrarVista(Constantes.VISTA_DASHBOARD);
 
 			} else if (ev.getSource().equals(ventana.getBtnEmpleadoAnadir())) {
@@ -395,6 +397,7 @@ public class Controlador implements ActionListener {
 			ventana.mostrarVista(Constantes.VISTA_CATALOGO);
 		} else {
 			ventana.mostrarSidebarEmpleado(usuario.getNombreCompleto(), this);
+			cargarMetricasDashboard();
 			ventana.mostrarVista(Constantes.VISTA_DASHBOARD);
 		}
 	}
@@ -404,8 +407,8 @@ public class Controlador implements ActionListener {
 	/**
 	 * Solicita confirmación al usuario y, si acepta, cierra la sesión activa.
 	 * <p>
-	 * Limpia todos los formularios y vistas, vacía el carrito en memoria, restablece
-	 * el sidebar al estado pre-login y navega a la vista de inicio.
+	 * Limpia todos los formularios y vistas, vacía el carrito en memoria,
+	 * restablece el sidebar al estado pre-login y navega a la vista de inicio.
 	 * </p>
 	 */
 	private void cerrarSesion() {
@@ -480,8 +483,8 @@ public class Controlador implements ActionListener {
 	// ── Stock (empleado) ──────────────────────────────────────────────
 
 	/**
-	 * Carga todos los perfumes con su stock desde la base de datos y los muestra
-	 * en la vista de stock junto con las métricas calculadas.
+	 * Carga todos los perfumes con su stock desde la base de datos y los muestra en
+	 * la vista de stock junto con las métricas calculadas.
 	 */
 	private void cargarStock() {
 		ArrayList<InfoPerfumeConStock> lista = perfumesDAO.getInfoPerfumesConStock();
@@ -546,7 +549,8 @@ public class Controlador implements ActionListener {
 
 	/**
 	 * Construye la matriz de filas para la tabla de stock y actualiza las métricas
-	 * del panel (total de referencias, artículos con stock bajo y artículos sin stock).
+	 * del panel (total de referencias, artículos con stock bajo y artículos sin
+	 * stock).
 	 *
 	 * @param lista lista de perfumes con stock a representar
 	 */
@@ -584,8 +588,8 @@ public class Controlador implements ActionListener {
 	 *
 	 * @param cantidad unidades disponibles en almacén
 	 * @return {@code "Sin stock"} si es 0, {@code "Stock bajo"} si está por debajo
-	 *         del umbral definido en {@link Constantes#STOCK_MINIMO_ALERTA},
-	 *         o {@code "OK"} en caso contrario
+	 *         del umbral definido en {@link Constantes#STOCK_MINIMO_ALERTA}, o
+	 *         {@code "OK"} en caso contrario
 	 */
 	private String calcularEstado(int cantidad) {
 		if (cantidad == 0) {
@@ -687,8 +691,8 @@ public class Controlador implements ActionListener {
 	}
 
 	/**
-	 * Valida y persiste los cambios de precio y/o stock sobre el perfume actualmente
-	 * en edición ({@link #perfumeEnEdicion}).
+	 * Valida y persiste los cambios de precio y/o stock sobre el perfume
+	 * actualmente en edición ({@link #perfumeEnEdicion}).
 	 * <p>
 	 * Requiere que al menos uno de los dos campos esté relleno. Impide que el stock
 	 * resultante sea negativo. Muestra un resumen de los cambios al empleado antes
@@ -764,9 +768,9 @@ public class Controlador implements ActionListener {
 	/**
 	 * Comprueba que una cadena tenga formato de correo electrónico válido.
 	 * <p>
-	 * Verifica que exista exactamente un símbolo {@code @}, que haya texto antes
-	 * de él, y que la parte del dominio contenga un punto que no sea ni el primer
-	 * ni el último carácter.
+	 * Verifica que exista exactamente un símbolo {@code @}, que haya texto antes de
+	 * él, y que la parte del dominio contenga un punto que no sea ni el primer ni
+	 * el último carácter.
 	 * </p>
 	 *
 	 * @param email cadena a validar
@@ -988,8 +992,8 @@ public class Controlador implements ActionListener {
 	}
 
 	/**
-	 * Elimina del carrito la línea seleccionada por el cliente, previa confirmación.
-	 * Refresca la vista del carrito tras la eliminación.
+	 * Elimina del carrito la línea seleccionada por el cliente, previa
+	 * confirmación. Refresca la vista del carrito tras la eliminación.
 	 */
 	private void eliminarLineaCarrito() {
 		int filaSeleccionada = panelCarrito.getTablaCarrito().getSelectedRow();
@@ -1068,10 +1072,10 @@ public class Controlador implements ActionListener {
 	/**
 	 * Procesa el pago del carrito activo.
 	 * <p>
-	 * Recoge los datos del formulario de pago, revalida el stock real de cada
-	 * línea antes de confirmar, y persiste el pedido en la base de datos a través
-	 * del DAO. Si la operación es correcta, vacía el carrito y vuelve al catálogo;
-	 * si falla, informa al usuario sin perder el carrito.
+	 * Recoge los datos del formulario de pago, revalida el stock real de cada línea
+	 * antes de confirmar, y persiste el pedido en la base de datos a través del
+	 * DAO. Si la operación es correcta, vacía el carrito y vuelve al catálogo; si
+	 * falla, informa al usuario sin perder el carrito.
 	 * </p>
 	 */
 	private void procesarPago() {
@@ -1105,13 +1109,10 @@ public class Controlador implements ActionListener {
 			int stockReal = perfumesDAO.obtenerStockDisponible(item.getPerfume().getIdPerfume());
 
 			if (item.getCantidad() > stockReal) {
-				JOptionPane.showMessageDialog(
-						ventana,
-						"El perfume '" + item.getPerfume().getNombre()
-								+ "' ya no tiene suficiente stock disponible.\n"
+				JOptionPane.showMessageDialog(ventana,
+						"El perfume '" + item.getPerfume().getNombre() + "' ya no tiene suficiente stock disponible.\n"
 								+ "Stock actual: " + stockReal + " unidades.",
-						"Stock insuficiente",
-						JOptionPane.WARNING_MESSAGE);
+						"Stock insuficiente", JOptionPane.WARNING_MESSAGE);
 
 				cargarCatalogoCliente();
 				ventana.mostrarVista(Constantes.VISTA_CATALOGO);
@@ -1270,5 +1271,24 @@ public class Controlador implements ActionListener {
 			panelRegistro.getTxtConfirmarPassword().setEchoChar('•');
 			panelRegistro.getBtnMostrarPassword().setText("Mostrar");
 		}
+	}
+
+	/**
+	 * Carga y actualiza las tres métricas del dashboard del empleado consultando la
+	 * base de datos en tiempo real.
+	 * <p>
+	 * Recupera el número de pedidos realizados hoy, los pedidos en estado pendiente
+	 * y los perfumes con stock bajo, y los vuelca en las tarjetas de resumen del
+	 * panel {@link VEmpleadoDashboard}.
+	 * </p>
+	 */
+	private void cargarMetricasDashboard() {
+		int pedidosHoy = pedidosDAO.contarPedidosHoy();
+		int pendientes = pedidosDAO.contarPedidosPendientes();
+		int stockBajo = perfumesDAO.contarStockBajo();
+
+		panelDashboard.getLblPedidosHoyValor().setText(String.valueOf(pedidosHoy));
+		panelDashboard.getLblPendientesValor().setText(String.valueOf(pendientes));
+		panelDashboard.getLblStockBajoValor().setText(String.valueOf(stockBajo));
 	}
 }

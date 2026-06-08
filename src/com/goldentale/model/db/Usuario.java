@@ -194,7 +194,7 @@ public class Usuario {
 	 * @return Nombre y apellido concatenados.
 	 */
 	public String getNombreCompleto() {
-		return "Nombre: " + nombre + " " + "Apellido: " + apellido;
+	    return nombre + " " + apellido;
 	}
 
 	/**
