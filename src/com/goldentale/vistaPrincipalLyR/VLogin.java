@@ -42,7 +42,7 @@ public class VLogin extends JPanel {
 
 		PanelRedondeado tarjeta = new PanelRedondeado(16, Color.WHITE, Tema.BORDE);
 		tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
-		tarjeta.setPreferredSize(new Dimension(340, 380));
+		tarjeta.setPreferredSize(new Dimension(380, 380));
 		tarjeta.setBorder(BorderFactory.createEmptyBorder(28, 38, 24, 38));
 
 		JLabel lblNombreApp = new JLabel(Constantes.TITULO_APLICACION);

@@ -241,6 +241,10 @@ public class Controlador implements ActionListener {
 			} else if (ev.getSource().equals(ventana.getBtnClienteCatalogo())) {
 				cargarCatalogoCliente();
 				ventana.mostrarVista(Constantes.VISTA_CATALOGO);
+				
+			} else if (ev.getSource().equals(ventana.getBtnClienteCarrito())) {
+			    cargarCarritoCliente();
+			    ventana.mostrarVista(Constantes.VISTA_CARRITO);
 
 			} else if (ev.getSource().equals(panelCatalogo.getBtnVerCarrito())) {
 				cargarCarritoCliente();
@@ -421,6 +425,7 @@ public class Controlador implements ActionListener {
 
 		panelLogin.limpiarFormulario();
 		panelRegistro.limpiarFormulario();
+		panelCatalogo.limpiarFiltros();
 		panelAnadir.limpiarFormulario();
 		panelModificar.limpiarFormulario();
 		panelStock.limpiarFiltros();
@@ -810,6 +815,7 @@ public class Controlador implements ActionListener {
 	 * ("Disponible" / "Agotado").
 	 */
 	private void cargarCatalogoCliente() {
+		panelCatalogo.limpiarFiltros();
 		ArrayList<InfoPerfumeConStock> listaPerfumes = perfumesDAO.getInfoPerfumesConStock();
 		Object[][] filas = construirFilasCatalogo(listaPerfumes);
 		panelCatalogo.mostrarCatalogo(filas);

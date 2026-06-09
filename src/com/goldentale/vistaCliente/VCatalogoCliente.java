@@ -172,4 +172,13 @@ public class VCatalogoCliente extends JPanel {
 	        modeloTablaCatalogo.addRow(fila);
 	    }
 	}
+	
+	/**
+	 * Restablece los campos de búsqueda y el combo de categoría a su estado
+	 * inicial. Útil al navegar a la vista o al cerrar sesión.
+	 */
+	public void limpiarFiltros() {
+	    txtBuscar.setText("Buscar perfume o marca...");
+	    comboCategoria.setSelectedIndex(0);
+	}
 }
