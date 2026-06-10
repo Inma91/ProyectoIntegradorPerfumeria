@@ -10,9 +10,9 @@ import java.awt.*;
 
 /**
  * Panel del empleado para modificar un perfume existente. Permite buscar por
- * nombre y mililitros y, una vez encontrado, modificar su precio y/o ajustar
- * el stock. El panel de modificación permanece oculto hasta que la búsqueda
- * tiene éxito. Las validaciones de los campos se realizan internamente.
+ * nombre y mililitros y, una vez encontrado, modificar su precio y/o ajustar el
+ * stock. El panel de modificación permanece oculto hasta que la búsqueda tiene
+ * éxito. Las validaciones de los campos se realizan internamente.
  *
  * @author Brandon Gaviria
  * @author Inmaculada Gil
@@ -51,8 +51,11 @@ public class VModificarPerfume extends JPanel {
 		setLayout(new BorderLayout());
 		setBackground(Tema.FONDO);
 
+		JPanel centrador = new JPanel(new GridBagLayout());
+		centrador.setBackground(Tema.FONDO);
+
 		PanelRedondeado tarjeta = new PanelRedondeado(16, Color.WHITE, Tema.BORDE);
-		tarjeta.setPreferredSize(new Dimension(560, 700));
+		tarjeta.setPreferredSize(new Dimension(620, 920));
 		tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
 		tarjeta.setBorder(BorderFactory.createEmptyBorder(24, 28, 24, 28));
 
@@ -101,6 +104,9 @@ public class VModificarPerfume extends JPanel {
 		lblResultado.setFont(Tema.fuenteNormal(12));
 		lblResultado.setForeground(Tema.MORADO);
 		lblResultado.setAlignmentX(LEFT_ALIGNMENT);
+		lblResultado.setPreferredSize(new Dimension(Integer.MAX_VALUE, 20));
+		lblResultado.setMinimumSize(new Dimension(0, 20));
+		lblResultado.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20));
 		tarjeta.add(lblResultado);
 		tarjeta.add(Box.createVerticalStrut(14));
 
@@ -108,6 +114,7 @@ public class VModificarPerfume extends JPanel {
 		panelModificacion.setLayout(new BoxLayout(panelModificacion, BoxLayout.Y_AXIS));
 		panelModificacion.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
 		panelModificacion.setVisible(false);
+		panelModificacion.setMaximumSize(new Dimension(Integer.MAX_VALUE, 320));
 
 		lblDatosPerfume = new JLabel("Perfume encontrado");
 		lblDatosPerfume.setFont(Tema.fuenteNegrita(13));
@@ -148,21 +155,18 @@ public class VModificarPerfume extends JPanel {
 
 		panelModificacion.add(lblDatosPerfume);
 		panelModificacion.add(Box.createVerticalStrut(12));
-
 		panelModificacion.add(lblPrecioActual);
 		panelModificacion.add(Box.createVerticalStrut(4));
 		panelModificacion.add(lblNuevoPrecioTitulo);
 		panelModificacion.add(Box.createVerticalStrut(4));
 		panelModificacion.add(txtNuevoPrecio);
 		panelModificacion.add(Box.createVerticalStrut(12));
-
 		panelModificacion.add(lblStockActual);
 		panelModificacion.add(Box.createVerticalStrut(4));
 		panelModificacion.add(lblCantidadTitulo);
 		panelModificacion.add(Box.createVerticalStrut(4));
 		panelModificacion.add(txtCantidadAnadir);
 		panelModificacion.add(Box.createVerticalStrut(8));
-
 		panelModificacion.add(lblError);
 		panelModificacion.add(lblExito);
 		panelModificacion.add(Box.createVerticalStrut(8));
@@ -180,10 +184,12 @@ public class VModificarPerfume extends JPanel {
 
 		tarjeta.add(panelModificacion);
 
-		JScrollPane scroll = new JScrollPane(tarjeta);
+		centrador.add(tarjeta);
+
+		JScrollPane scroll = new JScrollPane(centrador);
 		scroll.setBorder(null);
 		scroll.setOpaque(false);
-		scroll.getViewport().setOpaque(false);
+		scroll.getViewport().setBackground(Tema.FONDO);
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		add(scroll, BorderLayout.CENTER);
 	}
@@ -269,25 +275,25 @@ public class VModificarPerfume extends JPanel {
 
 	/**
 	 * Indica si la última llamada a {@link #obtenerNuevoPrecio()} o a
-	 * {@link #obtenerCantidadASumar(int)} encontró un error de validación.
-	 * Permite al controlador distinguir un campo vacío (no modificar) de un
-	 * error de formato (parar el proceso).
+	 * {@link #obtenerCantidadASumar(int)} encontró un error de validación. Permite
+	 * al controlador distinguir un campo vacío (no modificar) de un error de
+	 * formato (parar el proceso).
 	 *
-	 * @return {@code true} si la última validación falló, {@code false} en
-	 *         caso contrario.
+	 * @return {@code true} si la última validación falló, {@code false} en caso
+	 *         contrario.
 	 */
 	public boolean tieneError() {
 		return tieneError;
 	}
 
 	/**
-	 * Valida el campo de nuevo precio y lo devuelve como {@link Double}.
-	 * Devuelve {@code null} tanto si el campo está vacío (no se quiere
-	 * modificar) como si hay un error de formato; el controlador debe usar
-	 * {@link #tieneError()} para distinguir entre ambos casos.
+	 * Valida el campo de nuevo precio y lo devuelve como {@link Double}. Devuelve
+	 * {@code null} tanto si el campo está vacío (no se quiere modificar) como si
+	 * hay un error de formato; el controlador debe usar {@link #tieneError()} para
+	 * distinguir entre ambos casos.
 	 *
-	 * @return Nuevo precio si es válido, o {@code null} si el campo está
-	 *         vacío o la validación falla.
+	 * @return Nuevo precio si es válido, o {@code null} si el campo está vacío o la
+	 *         validación falla.
 	 */
 	public Double obtenerNuevoPrecio() {
 		tieneError = false;
@@ -315,16 +321,16 @@ public class VModificarPerfume extends JPanel {
 	}
 
 	/**
-	 * Valida el campo de cantidad a sumar (puede ser negativa para restar
-	 * stock) y lo devuelve como {@link Integer}. Verifica además que el stock
-	 * resultante (actual + cantidad) no sea negativo. Devuelve {@code null}
-	 * tanto si el campo está vacío como si hay un error de formato; el
-	 * controlador debe usar {@link #tieneError()} para distinguir entre ambos.
+	 * Valida el campo de cantidad a sumar (puede ser negativa para restar stock) y
+	 * lo devuelve como {@link Integer}. Verifica además que el stock resultante
+	 * (actual + cantidad) no sea negativo. Devuelve {@code null} tanto si el campo
+	 * está vacío como si hay un error de formato; el controlador debe usar
+	 * {@link #tieneError()} para distinguir entre ambos.
 	 *
-	 * @param stockActual Stock actual del perfume, usado para impedir que el
-	 *                    stock resultante quede en negativo.
-	 * @return Cantidad a sumar al stock si es válida, o {@code null} si el
-	 *         campo está vacío o la validación falla.
+	 * @param stockActual Stock actual del perfume, usado para impedir que el stock
+	 *                    resultante quede en negativo.
+	 * @return Cantidad a sumar al stock si es válida, o {@code null} si el campo
+	 *         está vacío o la validación falla.
 	 */
 	public Integer obtenerCantidadASumar(int stockActual) {
 		tieneError = false;
@@ -351,20 +357,61 @@ public class VModificarPerfume extends JPanel {
 		}
 	}
 
-	public JTextField getTxtBuscarNombre() { return txtBuscarNombre; }
-	public JTextField getTxtBuscarMl() { return txtBuscarMl; }
-	public JButton getBtnBuscar() { return btnBuscar; }
-	public JLabel getLblResultado() { return lblResultado; }
-	public JPanel getPanelModificacion() { return panelModificacion; }
-	public JLabel getLblDatosPerfume() { return lblDatosPerfume; }
-	public JLabel getLblPrecioActual() { return lblPrecioActual; }
-	public JTextField getTxtNuevoPrecio() { return txtNuevoPrecio; }
-	public JLabel getLblStockActual() { return lblStockActual; }
-	public JTextField getTxtCantidadAnadir() { return txtCantidadAnadir; }
-	public JLabel getLblError() { return lblError; }
-	public JLabel getLblExito() { return lblExito; }
-	public JButton getBtnGuardar() { return btnGuardar; }
-	public JButton getBtnCancelar() { return btnCancelar; }
+	public JTextField getTxtBuscarNombre() {
+		return txtBuscarNombre;
+	}
+
+	public JTextField getTxtBuscarMl() {
+		return txtBuscarMl;
+	}
+
+	public JButton getBtnBuscar() {
+		return btnBuscar;
+	}
+
+	public JLabel getLblResultado() {
+		return lblResultado;
+	}
+
+	public JPanel getPanelModificacion() {
+		return panelModificacion;
+	}
+
+	public JLabel getLblDatosPerfume() {
+		return lblDatosPerfume;
+	}
+
+	public JLabel getLblPrecioActual() {
+		return lblPrecioActual;
+	}
+
+	public JTextField getTxtNuevoPrecio() {
+		return txtNuevoPrecio;
+	}
+
+	public JLabel getLblStockActual() {
+		return lblStockActual;
+	}
+
+	public JTextField getTxtCantidadAnadir() {
+		return txtCantidadAnadir;
+	}
+
+	public JLabel getLblError() {
+		return lblError;
+	}
+
+	public JLabel getLblExito() {
+		return lblExito;
+	}
+
+	public JButton getBtnGuardar() {
+		return btnGuardar;
+	}
+
+	public JButton getBtnCancelar() {
+		return btnCancelar;
+	}
 
 	/**
 	 * Registra el controlador como listener de los botones de la vista.
