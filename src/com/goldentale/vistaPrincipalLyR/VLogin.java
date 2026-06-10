@@ -49,17 +49,23 @@ public class VLogin extends JPanel {
 		lblNombreApp.setFont(Tema.fuenteNegrita(24));
 		lblNombreApp.setForeground(Tema.TEXTO_OSCURO);
 		lblNombreApp.setAlignmentX(CENTER_ALIGNMENT);
+		lblNombreApp.setHorizontalAlignment(SwingConstants.CENTER); 
+		lblNombreApp.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
 		tarjeta.add(lblNombreApp);
 
 		JLabel lblSubtitulo = new JLabel("Sistema de perfumería");
 		lblSubtitulo.setFont(Tema.fuenteNormal(12));
 		lblSubtitulo.setForeground(Tema.TEXTO_CLARO);
 		lblSubtitulo.setAlignmentX(CENTER_ALIGNMENT);
+		lblSubtitulo.setHorizontalAlignment(SwingConstants.CENTER); 
+		lblSubtitulo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 		tarjeta.add(lblSubtitulo);
 		tarjeta.add(Box.createVerticalStrut(28));
 
 		JLabel lblEmail = ComponentesUI.etiquetaFormulario("Correo electrónico");
-		lblEmail.setAlignmentX(LEFT_ALIGNMENT);
+		lblEmail.setAlignmentX(CENTER_ALIGNMENT);
+		lblEmail.setHorizontalAlignment(SwingConstants.CENTER); 
+		lblEmail.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20)); 
 		tarjeta.add(lblEmail);
 		tarjeta.add(Box.createVerticalStrut(4));
 		txtEmail = ComponentesUI.campoTexto("correo@goldentale.com");
@@ -68,7 +74,9 @@ public class VLogin extends JPanel {
 		tarjeta.add(Box.createVerticalStrut(14));
 
 		JLabel lblPassword = ComponentesUI.etiquetaFormulario("Contraseña");
-		lblPassword.setAlignmentX(LEFT_ALIGNMENT);
+		lblPassword.setAlignmentX(CENTER_ALIGNMENT);
+		lblPassword.setHorizontalAlignment(SwingConstants.CENTER); 
+		lblPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 20)); 
 		tarjeta.add(lblPassword);
 		tarjeta.add(Box.createVerticalStrut(4));
 		txtPassword = ComponentesUI.campoPassword();

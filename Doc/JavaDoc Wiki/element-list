@@ -1,0 +1,9 @@
+com.goldentale.controlador
+com.goldentale.main
+com.goldentale.model.data
+com.goldentale.model.db
+com.goldentale.model.util
+com.goldentale.test
+com.goldentale.vistaCliente
+com.goldentale.vistaEmpleado
+com.goldentale.vistaPrincipalLyR
